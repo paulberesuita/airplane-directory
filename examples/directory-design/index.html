@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DesignVault — Curated Design Resources</title>
+  <meta name="description" content="Hand-picked collection of fonts, icons, UI kits, and design inspiration for creators.">
+
+  <!-- OG Tags -->
+  <meta property="og:title" content="DesignVault — Curated Design Resources">
+  <meta property="og:description" content="Hand-picked collection of fonts, icons, UI kits, and design inspiration.">
+  <meta property="og:type" content="website">
+
+  <!-- Fonts & Tailwind -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Space Grotesk', 'system-ui', 'sans-serif'],
+            display: ['Instrument Serif', 'Georgia', 'serif'],
+          },
+          colors: {
+            'brand': '#4f46e5',
+            'brand-light': '#6366f1',
+            'brand-dark': '#3730a3',
+            'surface': '#f8fafc',
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.6s ease-out forwards',
+            'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            fadeInUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    .stagger-1 { animation-delay: 0ms; }
+    .stagger-2 { animation-delay: 50ms; }
+    .stagger-3 { animation-delay: 100ms; }
+    .stagger-4 { animation-delay: 150ms; }
+    .stagger-5 { animation-delay: 200ms; }
+    .stagger-6 { animation-delay: 250ms; }
+    .stagger-7 { animation-delay: 300ms; }
+    .stagger-8 { animation-delay: 350ms; }
+    .stagger-9 { animation-delay: 400ms; }
+    [class*="animate-fade"] { opacity: 0; }
+    input[type="search"]::-webkit-search-cancel-button {
+      -webkit-appearance: none;
+      height: 16px;
+      width: 16px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M18 6L6 18M6 6l12 12'/%3E%3C/svg%3E") center/contain no-repeat;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="bg-surface font-sans text-slate-900 antialiased">
+
+  <!-- Navigation -->
+  <nav class="bg-brand text-white sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex items-center justify-between h-16">
+        <a href="/" class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+            <div class="w-4 h-4 bg-brand rounded"></div>
+          </div>
+          <span class="font-semibold text-lg">DesignVault</span>
+        </a>
+        <div class="flex items-center gap-8">
+          <a href="/browse" class="text-sm text-white/80 hover:text-white transition-colors">Browse</a>
+          <a href="/collections" class="text-sm text-white/80 hover:text-white transition-colors">Collections</a>
+          <button
+            onclick="document.getElementById('submit-modal').classList.remove('hidden')"
+            class="bg-white text-brand text-sm font-semibold px-4 py-2 rounded-lg transition-all hover:bg-indigo-50"
+          >
+            Submit Resource
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="bg-brand text-white">
+    <div class="max-w-6xl mx-auto px-6 py-20 text-center">
+      <p class="text-sm font-semibold text-indigo-200 uppercase tracking-widest mb-4 animate-fade-in stagger-1">800+ Curated Resources</p>
+      <h1 class="font-display text-5xl md:text-6xl tracking-tight mb-6 animate-fade-in-up stagger-2">
+        <span class="italic">Beautiful</span> design resources
+      </h1>
+      <p class="text-lg text-indigo-200 max-w-xl mx-auto mb-10 animate-fade-in stagger-3">Fonts, icons, UI kits, templates, and inspiration — all hand-picked for quality.</p>
+
+      <!-- Search -->
+      <div class="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto mb-10 animate-fade-in-up stagger-4">
+        <input
+          type="search"
+          placeholder="Search resources..."
+          class="flex-1 bg-white text-slate-900 border-0 rounded-xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-white/20 transition-all shadow-lg"
+          id="search-input"
+        >
+        <button class="bg-brand-dark hover:bg-indigo-950 text-white font-semibold px-8 py-4 rounded-xl transition-all shadow-lg">
+          Search
+        </button>
+      </div>
+
+      <!-- Category Pills -->
+      <div class="flex flex-wrap justify-center gap-2 animate-fade-in stagger-5">
+        <button class="bg-white text-brand text-sm font-semibold px-5 py-2.5 rounded-full">All</button>
+        <button class="bg-white/10 hover:bg-white/20 text-white text-sm font-medium px-5 py-2.5 rounded-full transition-colors border border-white/20">Fonts</button>
+        <button class="bg-white/10 hover:bg-white/20 text-white text-sm font-medium px-5 py-2.5 rounded-full transition-colors border border-white/20">Icons</button>
+        <button class="bg-white/10 hover:bg-white/20 text-white text-sm font-medium px-5 py-2.5 rounded-full transition-colors border border-white/20">UI Kits</button>
+        <button class="bg-white/10 hover:bg-white/20 text-white text-sm font-medium px-5 py-2.5 rounded-full transition-colors border border-white/20">Templates</button>
+        <button class="bg-white/10 hover:bg-white/20 text-white text-sm font-medium px-5 py-2.5 rounded-full transition-colors border border-white/20">Mockups</button>
+        <button class="bg-white/10 hover:bg-white/20 text-white text-sm font-medium px-5 py-2.5 rounded-full transition-colors border border-white/20">Inspiration</button>
+        <button class="bg-white/10 hover:bg-white/20 text-white text-sm font-medium px-5 py-2.5 rounded-full transition-colors border border-white/20">Colors</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="max-w-6xl mx-auto px-6 py-12">
+    <!-- Results Header -->
+    <div class="flex items-center justify-between mb-8 animate-fade-in stagger-6">
+      <p class="text-sm text-slate-500"><span class="text-slate-900 font-semibold">847</span> resources</p>
+      <select class="text-sm border border-slate-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand">
+        <option>Most Popular</option>
+        <option>Recently Added</option>
+        <option>Alphabetical</option>
+      </select>
+    </div>
+
+    <!-- Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- Inter Font -->
+      <a href="/resource/inter" class="group bg-white rounded-2xl border border-slate-200 hover:border-brand hover:shadow-xl hover:shadow-brand/10 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-1">
+        <div class="aspect-[16/10] bg-slate-100 relative overflow-hidden">
+          <img src="https://placehold.co/600x400/f1f5f9/cbd5e1" alt="Inter" class="w-full h-full object-cover">
+          <div class="absolute top-3 left-3">
+            <span class="text-xs bg-brand text-white px-3 py-1 rounded-full font-semibold">Fonts</span>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-semibold text-lg group-hover:text-brand transition-colors">Inter</h3>
+            <span class="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">Free</span>
+          </div>
+          <p class="text-sm text-slate-500 line-clamp-2">A carefully crafted variable font family optimized for screens.</p>
+        </div>
+      </a>
+
+      <!-- Lucide Icons -->
+      <a href="/resource/lucide" class="group bg-white rounded-2xl border border-slate-200 hover:border-brand hover:shadow-xl hover:shadow-brand/10 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-2">
+        <div class="aspect-[16/10] bg-slate-100 relative overflow-hidden">
+          <img src="https://placehold.co/600x400/f1f5f9/cbd5e1" alt="Lucide Icons" class="w-full h-full object-cover">
+          <div class="absolute top-3 left-3">
+            <span class="text-xs bg-emerald-500 text-white px-3 py-1 rounded-full font-semibold">Icons</span>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-semibold text-lg group-hover:text-brand transition-colors">Lucide Icons</h3>
+            <span class="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">Free</span>
+          </div>
+          <p class="text-sm text-slate-500 line-clamp-2">Beautiful & consistent icons. Fork of Feather with 1000+ icons.</p>
+        </div>
+      </a>
+
+      <!-- shadcn/ui -->
+      <a href="/resource/shadcn" class="group bg-white rounded-2xl border border-slate-200 hover:border-brand hover:shadow-xl hover:shadow-brand/10 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-3">
+        <div class="aspect-[16/10] bg-slate-100 relative overflow-hidden">
+          <img src="https://placehold.co/600x400/f1f5f9/cbd5e1" alt="shadcn/ui" class="w-full h-full object-cover">
+          <div class="absolute top-3 left-3">
+            <span class="text-xs bg-orange-500 text-white px-3 py-1 rounded-full font-semibold">UI Kits</span>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-semibold text-lg group-hover:text-brand transition-colors">shadcn/ui</h3>
+            <span class="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">Free</span>
+          </div>
+          <p class="text-sm text-slate-500 line-clamp-2">Beautifully designed components built with Radix UI and Tailwind.</p>
+        </div>
+      </a>
+
+      <!-- Untitled UI -->
+      <a href="/resource/untitled-ui" class="group bg-white rounded-2xl border border-slate-200 hover:border-brand hover:shadow-xl hover:shadow-brand/10 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-4">
+        <div class="aspect-[16/10] bg-slate-100 relative overflow-hidden">
+          <img src="https://placehold.co/600x400/f1f5f9/cbd5e1" alt="Untitled UI" class="w-full h-full object-cover">
+          <div class="absolute top-3 left-3">
+            <span class="text-xs bg-pink-500 text-white px-3 py-1 rounded-full font-semibold">Templates</span>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-semibold text-lg group-hover:text-brand transition-colors">Untitled UI</h3>
+            <span class="text-xs text-white bg-brand px-2 py-1 rounded font-medium">Paid</span>
+          </div>
+          <p class="text-sm text-slate-500 line-clamp-2">The largest Figma UI kit and design system. 10,000+ components.</p>
+        </div>
+      </a>
+
+      <!-- Realtime Colors -->
+      <a href="/resource/realtime-colors" class="group bg-white rounded-2xl border border-slate-200 hover:border-brand hover:shadow-xl hover:shadow-brand/10 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-5">
+        <div class="aspect-[16/10] bg-slate-100 relative overflow-hidden">
+          <img src="https://placehold.co/600x400/f1f5f9/cbd5e1" alt="Realtime Colors" class="w-full h-full object-cover">
+          <div class="absolute top-3 left-3">
+            <span class="text-xs bg-violet-500 text-white px-3 py-1 rounded-full font-semibold">Colors</span>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-semibold text-lg group-hover:text-brand transition-colors">Realtime Colors</h3>
+            <span class="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">Free</span>
+          </div>
+          <p class="text-sm text-slate-500 line-clamp-2">Visualize your color palette on a real website. Generate and export.</p>
+        </div>
+      </a>
+
+      <!-- Mobbin -->
+      <a href="/resource/mobbin" class="group bg-white rounded-2xl border border-slate-200 hover:border-brand hover:shadow-xl hover:shadow-brand/10 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-6">
+        <div class="aspect-[16/10] bg-slate-100 relative overflow-hidden">
+          <img src="https://placehold.co/600x400/f1f5f9/cbd5e1" alt="Mobbin" class="w-full h-full object-cover">
+          <div class="absolute top-3 left-3">
+            <span class="text-xs bg-amber-500 text-white px-3 py-1 rounded-full font-semibold">Inspiration</span>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-semibold text-lg group-hover:text-brand transition-colors">Mobbin</h3>
+            <span class="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">Freemium</span>
+          </div>
+          <p class="text-sm text-slate-500 line-clamp-2">Hand-picked collection of mobile & web design patterns from real apps.</p>
+        </div>
+      </a>
+
+      <!-- Device Frames -->
+      <a href="/resource/device-frames" class="group bg-white rounded-2xl border border-slate-200 hover:border-brand hover:shadow-xl hover:shadow-brand/10 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-7">
+        <div class="aspect-[16/10] bg-slate-100 relative overflow-hidden">
+          <img src="https://placehold.co/600x400/f1f5f9/cbd5e1" alt="Device Frames" class="w-full h-full object-cover">
+          <div class="absolute top-3 left-3">
+            <span class="text-xs bg-cyan-500 text-white px-3 py-1 rounded-full font-semibold">Mockups</span>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-semibold text-lg group-hover:text-brand transition-colors">Device Frames</h3>
+            <span class="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">Free</span>
+          </div>
+          <p class="text-sm text-slate-500 line-clamp-2">High-quality device mockups for iPhone, MacBook, and more.</p>
+        </div>
+      </a>
+
+      <!-- Phosphor Icons -->
+      <a href="/resource/phosphor" class="group bg-white rounded-2xl border border-slate-200 hover:border-brand hover:shadow-xl hover:shadow-brand/10 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-8">
+        <div class="aspect-[16/10] bg-slate-100 relative overflow-hidden">
+          <img src="https://placehold.co/600x400/f1f5f9/cbd5e1" alt="Phosphor Icons" class="w-full h-full object-cover">
+          <div class="absolute top-3 left-3">
+            <span class="text-xs bg-emerald-500 text-white px-3 py-1 rounded-full font-semibold">Icons</span>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-semibold text-lg group-hover:text-brand transition-colors">Phosphor Icons</h3>
+            <span class="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">Free</span>
+          </div>
+          <p class="text-sm text-slate-500 line-clamp-2">Flexible icon family with 6 weights and 7,000+ icons.</p>
+        </div>
+      </a>
+
+      <!-- Cal Sans -->
+      <a href="/resource/calsans" class="group bg-white rounded-2xl border border-slate-200 hover:border-brand hover:shadow-xl hover:shadow-brand/10 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-9">
+        <div class="aspect-[16/10] bg-slate-100 relative overflow-hidden">
+          <img src="https://placehold.co/600x400/f1f5f9/cbd5e1" alt="Cal Sans" class="w-full h-full object-cover">
+          <div class="absolute top-3 left-3">
+            <span class="text-xs bg-brand text-white px-3 py-1 rounded-full font-semibold">Fonts</span>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-semibold text-lg group-hover:text-brand transition-colors">Cal Sans</h3>
+            <span class="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">Free</span>
+          </div>
+          <p class="text-sm text-slate-500 line-clamp-2">Geometric sans-serif designed for headlines. Open source by Cal.com.</p>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Load More -->
+    <div class="mt-12 text-center">
+      <button class="bg-brand hover:bg-brand-dark text-white font-semibold px-10 py-4 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-brand/20">
+        Load more resources
+      </button>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="bg-brand mx-6 rounded-2xl my-12 max-w-6xl lg:mx-auto">
+    <div class="px-8 py-12 text-center text-white">
+      <h2 class="font-display text-3xl italic mb-3">Have a resource to share?</h2>
+      <p class="text-indigo-200 mb-6">Submit your favorite design tool and help the community discover it.</p>
+      <button onclick="document.getElementById('submit-modal').classList.remove('hidden')" class="bg-white text-brand font-semibold px-6 py-3 rounded-xl hover:bg-indigo-50 transition-all">
+        Submit a Resource
+      </button>
+    </div>
+  </section>
+
+  <!-- Submit Modal -->
+  <div id="submit-modal" class="hidden fixed inset-0 z-50">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="document.getElementById('submit-modal').classList.add('hidden')"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl animate-fade-in-up">
+        <div class="flex items-center justify-between p-6 border-b border-slate-200 bg-brand text-white rounded-t-2xl">
+          <h2 class="font-display text-2xl italic">Submit Resource</h2>
+          <button onclick="document.getElementById('submit-modal').classList.add('hidden')" class="text-white/80 hover:text-white transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <form class="p-6 space-y-5">
+          <div>
+            <label class="block text-sm font-medium mb-2">Resource Name</label>
+            <input type="text" placeholder="e.g. Inter Font" class="w-full border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Website</label>
+            <input type="url" placeholder="https://..." class="w-full border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Description</label>
+            <textarea rows="3" placeholder="What makes this resource great?" class="w-full border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand resize-none transition-all"></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Category</label>
+            <select class="w-full border border-slate-200 rounded-xl px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all">
+              <option value="">Select category...</option>
+              <option>Fonts</option>
+              <option>Icons</option>
+              <option>UI Kits</option>
+              <option>Templates</option>
+              <option>Mockups</option>
+              <option>Inspiration</option>
+              <option>Colors</option>
+            </select>
+          </div>
+        </form>
+        <div class="flex justify-end gap-3 p-6 border-t border-slate-200 bg-slate-50 rounded-b-2xl">
+          <button onclick="document.getElementById('submit-modal').classList.add('hidden')" class="px-5 py-2.5 text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors">
+            Cancel
+          </button>
+          <button class="bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition-all">
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-white mt-20">
+    <div class="max-w-6xl mx-auto px-6 py-12">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-brand rounded-xl flex items-center justify-center">
+            <div class="w-5 h-5 bg-white rounded"></div>
+          </div>
+          <div>
+            <p class="font-semibold text-lg">DesignVault</p>
+            <p class="text-sm text-slate-400">Curated design resources</p>
+          </div>
+        </div>
+        <div class="flex gap-8">
+          <a href="/about" class="text-sm text-slate-400 hover:text-white transition-colors">About</a>
+          <a href="/contact" class="text-sm text-slate-400 hover:text-white transition-colors">Contact</a>
+          <a href="/sponsor" class="text-sm text-slate-400 hover:text-white transition-colors">Sponsor</a>
+        </div>
+      </div>
+      <div class="border-t border-slate-800 mt-8 pt-8 text-center">
+        <p class="text-sm text-slate-500">&copy; 2025 DesignVault. Made with care for designers.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

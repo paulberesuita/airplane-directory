@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Tools Directory — Discover the Best AI Tools</title>
+  <meta name="description" content="Curated directory of 500+ AI tools. Find the best AI apps for coding, writing, design, and more.">
+
+  <!-- OG Tags -->
+  <meta property="og:title" content="AI Tools Directory — Discover the Best AI Tools">
+  <meta property="og:description" content="Curated directory of 500+ AI tools for coding, writing, design, and more.">
+  <meta property="og:type" content="website">
+
+  <!-- Fonts & Tailwind -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['DM Serif Display', 'Georgia', 'serif'],
+          },
+          colors: {
+            'accent': '#1c1917',
+            'accent-hover': '#292524',
+            'muted': '#78716c',
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.6s ease-out forwards',
+            'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            fadeInUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    .stagger-1 { animation-delay: 0ms; }
+    .stagger-2 { animation-delay: 50ms; }
+    .stagger-3 { animation-delay: 100ms; }
+    .stagger-4 { animation-delay: 150ms; }
+    .stagger-5 { animation-delay: 200ms; }
+    .stagger-6 { animation-delay: 250ms; }
+    .stagger-7 { animation-delay: 300ms; }
+    .stagger-8 { animation-delay: 350ms; }
+    .stagger-9 { animation-delay: 400ms; }
+    [class*="animate-fade"] { opacity: 0; }
+    /* Style native search clear button */
+    input[type="search"]::-webkit-search-cancel-button {
+      -webkit-appearance: none;
+      height: 16px;
+      width: 16px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2378716c' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M18 6L6 18M6 6l12 12'/%3E%3C/svg%3E") center/contain no-repeat;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="bg-stone-50 font-sans text-stone-900 antialiased">
+
+  <!-- Navigation -->
+  <nav class="bg-white/80 backdrop-blur-md border-b border-stone-200 sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex items-center justify-between h-16">
+        <a href="/" class="font-display text-xl">AI Tools</a>
+        <div class="flex items-center gap-8">
+          <a href="/browse" class="text-sm text-muted hover:text-stone-900 transition-colors">Browse</a>
+          <a href="/categories" class="text-sm text-muted hover:text-stone-900 transition-colors">Categories</a>
+          <button
+            onclick="document.getElementById('submit-modal').classList.remove('hidden')"
+            class="bg-accent hover:bg-accent-hover text-white text-sm font-medium px-4 py-2 rounded-lg transition-all hover:-translate-y-0.5"
+          >
+            Submit Tool
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero / Search -->
+  <section class="relative overflow-hidden bg-gradient-to-b from-stone-100 to-stone-50 border-b border-stone-200">
+    <!-- Subtle grid pattern -->
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22none%22 stroke=%22%23000%22 stroke-width=%221%22 width=%2260%22 height=%2260%22/></svg>');"></div>
+
+    <div class="relative max-w-6xl mx-auto px-6 py-24 text-center">
+      <p class="text-sm font-medium text-muted uppercase tracking-widest mb-4 animate-fade-in stagger-1">500+ Curated Tools</p>
+      <h1 class="font-display text-5xl md:text-6xl tracking-tight mb-6 animate-fade-in-up stagger-2">Discover AI Tools</h1>
+      <p class="text-lg text-muted max-w-xl mx-auto mb-10 animate-fade-in stagger-3">Find the perfect AI tool for coding, writing, design, research, and everything in between.</p>
+
+      <!-- Search -->
+      <div class="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto mb-10 animate-fade-in-up stagger-4">
+        <input
+          type="search"
+          placeholder="Search AI tools..."
+          class="flex-1 bg-white border border-stone-300 rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-400 transition-all shadow-sm"
+          id="search-input"
+        >
+        <button class="bg-accent hover:bg-accent-hover text-white font-medium px-8 py-4 rounded-xl transition-all hover:-translate-y-0.5 shadow-sm">
+          Search
+        </button>
+      </div>
+
+      <!-- Category Pills -->
+      <div class="flex flex-wrap justify-center gap-2 animate-fade-in stagger-5">
+        <button class="bg-stone-900 text-white text-sm font-medium px-4 py-2 rounded-full shadow-sm">All</button>
+        <button class="bg-white hover:bg-stone-100 text-stone-700 text-sm font-medium px-4 py-2 rounded-full transition-colors border border-stone-200">Chat</button>
+        <button class="bg-white hover:bg-stone-100 text-stone-700 text-sm font-medium px-4 py-2 rounded-full transition-colors border border-stone-200">Coding</button>
+        <button class="bg-white hover:bg-stone-100 text-stone-700 text-sm font-medium px-4 py-2 rounded-full transition-colors border border-stone-200">Writing</button>
+        <button class="bg-white hover:bg-stone-100 text-stone-700 text-sm font-medium px-4 py-2 rounded-full transition-colors border border-stone-200">Image</button>
+        <button class="bg-white hover:bg-stone-100 text-stone-700 text-sm font-medium px-4 py-2 rounded-full transition-colors border border-stone-200">Video</button>
+        <button class="bg-white hover:bg-stone-100 text-stone-700 text-sm font-medium px-4 py-2 rounded-full transition-colors border border-stone-200">Audio</button>
+        <button class="bg-white hover:bg-stone-100 text-stone-700 text-sm font-medium px-4 py-2 rounded-full transition-colors border border-stone-200">Research</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="max-w-6xl mx-auto px-6 py-12">
+    <!-- Results Header -->
+    <div class="flex items-center justify-between mb-8 animate-fade-in stagger-6">
+      <p class="text-sm text-muted"><span class="text-stone-900 font-semibold">512</span> tools found</p>
+      <select class="text-sm border border-stone-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-stone-900/10">
+        <option>Most Popular</option>
+        <option>Recently Added</option>
+        <option>Alphabetical</option>
+      </select>
+    </div>
+
+    <!-- Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- ChatGPT -->
+      <a href="/directory/chatgpt" class="group bg-white rounded-2xl border border-stone-200 hover:border-stone-300 hover:shadow-lg transition-all duration-300 overflow-hidden animate-fade-in-up stagger-1">
+        <div class="aspect-[16/10] bg-gradient-to-br from-stone-100 to-stone-50 relative overflow-hidden">
+          <img src="https://placehold.co/600x400/f5f5f4/e7e5e4" alt="ChatGPT" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg mb-1 group-hover:text-stone-600 transition-colors">ChatGPT</h3>
+          <p class="text-sm text-muted mb-4 line-clamp-2">Conversational AI assistant by OpenAI. Chat, write, code, and analyze with GPT-4.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs bg-stone-100 text-stone-600 px-3 py-1 rounded-full font-medium">Chat</span>
+            <span class="text-xs text-muted">Freemium</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Claude -->
+      <a href="detail.html" class="group bg-white rounded-2xl border border-stone-200 hover:border-stone-300 hover:shadow-lg transition-all duration-300 overflow-hidden animate-fade-in-up stagger-2">
+        <div class="aspect-[16/10] bg-gradient-to-br from-stone-100 to-stone-50 relative overflow-hidden">
+          <img src="https://placehold.co/600x400/f5f5f4/e7e5e4" alt="Claude" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg mb-1 group-hover:text-stone-600 transition-colors">Claude</h3>
+          <p class="text-sm text-muted mb-4 line-clamp-2">AI assistant by Anthropic. Excels at analysis, writing, coding, and complex reasoning.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs bg-stone-100 text-stone-600 px-3 py-1 rounded-full font-medium">Chat</span>
+            <span class="text-xs text-muted">Freemium</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Cursor -->
+      <a href="/directory/cursor" class="group bg-white rounded-2xl border border-stone-200 hover:border-stone-300 hover:shadow-lg transition-all duration-300 overflow-hidden animate-fade-in-up stagger-3">
+        <div class="aspect-[16/10] bg-gradient-to-br from-stone-100 to-stone-50 relative overflow-hidden">
+          <img src="https://placehold.co/600x400/f5f5f4/e7e5e4" alt="Cursor" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg mb-1 group-hover:text-stone-600 transition-colors">Cursor</h3>
+          <p class="text-sm text-muted mb-4 line-clamp-2">AI-first code editor. Write, edit, and debug code with built-in AI assistance.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs bg-stone-100 text-stone-600 px-3 py-1 rounded-full font-medium">Coding</span>
+            <span class="text-xs text-muted">Freemium</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Midjourney -->
+      <a href="/directory/midjourney" class="group bg-white rounded-2xl border border-stone-200 hover:border-stone-300 hover:shadow-lg transition-all duration-300 overflow-hidden animate-fade-in-up stagger-4">
+        <div class="aspect-[16/10] bg-gradient-to-br from-stone-100 to-stone-50 relative overflow-hidden">
+          <img src="https://placehold.co/600x400/f5f5f4/e7e5e4" alt="Midjourney" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg mb-1 group-hover:text-stone-600 transition-colors">Midjourney</h3>
+          <p class="text-sm text-muted mb-4 line-clamp-2">AI image generator creating stunning artwork from text prompts. Industry-leading quality.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs bg-stone-100 text-stone-600 px-3 py-1 rounded-full font-medium">Image</span>
+            <span class="text-xs text-muted">Paid</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Perplexity -->
+      <a href="/directory/perplexity" class="group bg-white rounded-2xl border border-stone-200 hover:border-stone-300 hover:shadow-lg transition-all duration-300 overflow-hidden animate-fade-in-up stagger-5">
+        <div class="aspect-[16/10] bg-gradient-to-br from-stone-100 to-stone-50 relative overflow-hidden">
+          <img src="https://placehold.co/600x400/f5f5f4/e7e5e4" alt="Perplexity" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg mb-1 group-hover:text-stone-600 transition-colors">Perplexity</h3>
+          <p class="text-sm text-muted mb-4 line-clamp-2">AI-powered search engine. Get answers with citations from across the web.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs bg-stone-100 text-stone-600 px-3 py-1 rounded-full font-medium">Research</span>
+            <span class="text-xs text-muted">Freemium</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- v0 -->
+      <a href="/directory/v0" class="group bg-white rounded-2xl border border-stone-200 hover:border-stone-300 hover:shadow-lg transition-all duration-300 overflow-hidden animate-fade-in-up stagger-6">
+        <div class="aspect-[16/10] bg-gradient-to-br from-stone-100 to-stone-50 relative overflow-hidden">
+          <img src="https://placehold.co/600x400/f5f5f4/e7e5e4" alt="v0" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg mb-1 group-hover:text-stone-600 transition-colors">v0</h3>
+          <p class="text-sm text-muted mb-4 line-clamp-2">AI UI generator by Vercel. Describe your interface and get production-ready React code.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs bg-stone-100 text-stone-600 px-3 py-1 rounded-full font-medium">Coding</span>
+            <span class="text-xs text-muted">Freemium</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Runway -->
+      <a href="/directory/runway" class="group bg-white rounded-2xl border border-stone-200 hover:border-stone-300 hover:shadow-lg transition-all duration-300 overflow-hidden animate-fade-in-up stagger-7">
+        <div class="aspect-[16/10] bg-gradient-to-br from-stone-100 to-stone-50 relative overflow-hidden">
+          <img src="https://placehold.co/600x400/f5f5f4/e7e5e4" alt="Runway" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg mb-1 group-hover:text-stone-600 transition-colors">Runway</h3>
+          <p class="text-sm text-muted mb-4 line-clamp-2">AI video generation and editing. Create videos from text, images, or extend existing clips.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs bg-stone-100 text-stone-600 px-3 py-1 rounded-full font-medium">Video</span>
+            <span class="text-xs text-muted">Freemium</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- ElevenLabs -->
+      <a href="/directory/elevenlabs" class="group bg-white rounded-2xl border border-stone-200 hover:border-stone-300 hover:shadow-lg transition-all duration-300 overflow-hidden animate-fade-in-up stagger-8">
+        <div class="aspect-[16/10] bg-gradient-to-br from-stone-100 to-stone-50 relative overflow-hidden">
+          <img src="https://placehold.co/600x400/f5f5f4/e7e5e4" alt="ElevenLabs" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg mb-1 group-hover:text-stone-600 transition-colors">ElevenLabs</h3>
+          <p class="text-sm text-muted mb-4 line-clamp-2">AI voice synthesis and cloning. Generate realistic speech in any voice or language.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs bg-stone-100 text-stone-600 px-3 py-1 rounded-full font-medium">Audio</span>
+            <span class="text-xs text-muted">Freemium</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Jasper -->
+      <a href="/directory/jasper" class="group bg-white rounded-2xl border border-stone-200 hover:border-stone-300 hover:shadow-lg transition-all duration-300 overflow-hidden animate-fade-in-up stagger-9">
+        <div class="aspect-[16/10] bg-gradient-to-br from-stone-100 to-stone-50 relative overflow-hidden">
+          <img src="https://placehold.co/600x400/f5f5f4/e7e5e4" alt="Jasper" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg mb-1 group-hover:text-stone-600 transition-colors">Jasper</h3>
+          <p class="text-sm text-muted mb-4 line-clamp-2">AI marketing copywriter. Generate blog posts, ads, emails, and social content at scale.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs bg-stone-100 text-stone-600 px-3 py-1 rounded-full font-medium">Writing</span>
+            <span class="text-xs text-muted">Paid</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Load More -->
+    <div class="mt-12 text-center">
+      <button class="bg-white border border-stone-300 hover:border-stone-400 hover:shadow-md text-stone-700 font-medium px-10 py-4 rounded-xl transition-all">
+        Load more tools
+      </button>
+    </div>
+  </section>
+
+  <!-- Submit Modal -->
+  <div id="submit-modal" class="hidden fixed inset-0 z-50">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="document.getElementById('submit-modal').classList.add('hidden')"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl w-full max-w-lg border border-stone-200 shadow-2xl animate-fade-in-up">
+        <div class="flex items-center justify-between p-6 border-b border-stone-200">
+          <h2 class="font-display text-2xl">Submit AI Tool</h2>
+          <button onclick="document.getElementById('submit-modal').classList.add('hidden')" class="text-muted hover:text-stone-900 transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <form class="p-6 space-y-5">
+          <div>
+            <label class="block text-sm font-medium mb-2">Tool Name</label>
+            <input type="text" placeholder="e.g. ChatGPT" class="w-full border border-stone-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-400 transition-all">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Website</label>
+            <input type="url" placeholder="https://..." class="w-full border border-stone-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-400 transition-all">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Description</label>
+            <textarea rows="3" placeholder="What does this AI tool do?" class="w-full border border-stone-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-stone-900/10 focus:border-stone-400 resize-none transition-all"></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Category</label>
+            <select class="w-full border border-stone-300 rounded-xl px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-stone-900/10 transition-all">
+              <option value="">Select category...</option>
+              <option>Chat</option>
+              <option>Coding</option>
+              <option>Writing</option>
+              <option>Image</option>
+              <option>Video</option>
+              <option>Audio</option>
+              <option>Research</option>
+            </select>
+          </div>
+        </form>
+        <div class="flex justify-end gap-3 p-6 border-t border-stone-200 bg-stone-50 rounded-b-2xl">
+          <button onclick="document.getElementById('submit-modal').classList.add('hidden')" class="px-5 py-2.5 text-sm font-medium text-stone-700 hover:text-stone-900 transition-colors">
+            Cancel
+          </button>
+          <button class="bg-accent hover:bg-accent-hover text-white text-sm font-medium px-6 py-2.5 rounded-lg transition-all hover:-translate-y-0.5">
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-stone-200 mt-20">
+    <div class="max-w-6xl mx-auto px-6 py-12">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div>
+          <p class="font-display text-lg mb-1">AI Tools Directory</p>
+          <p class="text-sm text-muted">Curated collection of the best AI tools.</p>
+        </div>
+        <div class="flex gap-8">
+          <a href="/about" class="text-sm text-muted hover:text-stone-900 transition-colors">About</a>
+          <a href="/contact" class="text-sm text-muted hover:text-stone-900 transition-colors">Contact</a>
+          <a href="/privacy" class="text-sm text-muted hover:text-stone-900 transition-colors">Privacy</a>
+        </div>
+      </div>
+      <div class="border-t border-stone-200 mt-8 pt-8 text-center">
+        <p class="text-sm text-muted">&copy; 2025 AI Tools Directory. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

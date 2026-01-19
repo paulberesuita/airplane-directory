@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Specter — Ghost Tours & Haunted Places</title>
+  <meta name="description" content="Discover ghost tours and haunted locations. Curated encounters with the other side.">
+
+  <!-- OG Tags -->
+  <meta property="og:title" content="Specter — Ghost Tours & Haunted Places">
+  <meta property="og:description" content="Curated encounters with the other side.">
+  <meta property="og:type" content="website">
+
+  <!-- Fonts & Tailwind -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Crimson Pro', 'Georgia', 'serif'],
+          },
+          colors: {
+            'void': '#09090b',
+            'night': '#18181b',
+            'mist': '#71717a',
+            'fog': '#a1a1aa',
+            'ghost': '#e4e4e7',
+            'phantom': '#8b5cf6',
+            'phantom-dim': '#7c3aed',
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.8s ease-out forwards',
+            'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            fadeInUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    .stagger-1 { animation-delay: 0ms; }
+    .stagger-2 { animation-delay: 100ms; }
+    .stagger-3 { animation-delay: 200ms; }
+    .stagger-4 { animation-delay: 300ms; }
+    .stagger-5 { animation-delay: 400ms; }
+    .stagger-6 { animation-delay: 500ms; }
+    .stagger-7 { animation-delay: 600ms; }
+    .stagger-8 { animation-delay: 700ms; }
+    .stagger-9 { animation-delay: 800ms; }
+    [class*="animate-fade"] { opacity: 0; }
+  </style>
+</head>
+<body class="bg-void font-sans text-ghost antialiased">
+
+  <!-- Navigation -->
+  <nav class="bg-void/80 backdrop-blur-md border-b border-white/5 sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex items-center justify-between h-16">
+        <a href="/" class="font-display text-xl text-ghost tracking-wide">Specter</a>
+        <div class="flex items-center gap-8">
+          <a href="/tours" class="text-sm text-mist hover:text-ghost transition-colors">Tours</a>
+          <a href="/locations" class="text-sm text-mist hover:text-ghost transition-colors">Locations</a>
+          <a href="/stories" class="text-sm text-mist hover:text-ghost transition-colors">Stories</a>
+          <button
+            onclick="document.getElementById('submit-modal').classList.remove('hidden')"
+            class="text-sm text-ghost font-medium bg-white/5 hover:bg-white/10 border border-white/10 px-4 py-2 rounded transition-colors"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="bg-void relative overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-phantom/5 via-transparent to-transparent"></div>
+    <div class="max-w-6xl mx-auto px-6 py-28 text-center relative">
+      <p class="text-sm text-phantom font-medium uppercase tracking-[0.3em] mb-6 animate-fade-in stagger-1">Into the Unknown</p>
+      <h1 class="font-display text-5xl md:text-6xl text-ghost mb-6 leading-tight animate-fade-in-up stagger-2">
+        Ghost tours & haunted places
+      </h1>
+      <p class="text-lg text-mist max-w-lg mx-auto mb-12 animate-fade-in stagger-3">Curated encounters with the other side. Find tours, explore haunted locations, discover what lingers.</p>
+
+      <!-- Search -->
+      <div class="max-w-lg mx-auto mb-12 animate-fade-in-up stagger-4">
+        <input
+          type="search"
+          placeholder="Search by city or haunted site..."
+          class="w-full bg-night text-ghost border border-white/10 rounded-lg px-5 py-4 focus:outline-none focus:border-phantom/50 focus:ring-2 focus:ring-phantom/20 transition-all placeholder:text-mist"
+          id="search-input"
+        >
+      </div>
+
+      <!-- Filter Pills -->
+      <div class="flex flex-wrap justify-center gap-2 animate-fade-in stagger-5">
+        <button class="bg-phantom text-white text-sm font-medium px-4 py-2 rounded-full">All</button>
+        <button class="bg-white/5 hover:bg-white/10 text-mist text-sm px-4 py-2 rounded-full border border-white/10 transition-colors">Walking Tours</button>
+        <button class="bg-white/5 hover:bg-white/10 text-mist text-sm px-4 py-2 rounded-full border border-white/10 transition-colors">Haunted Houses</button>
+        <button class="bg-white/5 hover:bg-white/10 text-mist text-sm px-4 py-2 rounded-full border border-white/10 transition-colors">Cemeteries</button>
+        <button class="bg-white/5 hover:bg-white/10 text-mist text-sm px-4 py-2 rounded-full border border-white/10 transition-colors">Paranormal</button>
+        <button class="bg-white/5 hover:bg-white/10 text-mist text-sm px-4 py-2 rounded-full border border-white/10 transition-colors">Historical</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="max-w-6xl mx-auto px-6 py-16">
+    <!-- Results Header -->
+    <div class="flex items-center justify-between mb-10 animate-fade-in stagger-6">
+      <p class="text-sm text-mist"><span class="text-ghost">67</span> haunted experiences</p>
+      <select class="text-sm bg-night border border-white/10 rounded-lg px-3 py-2 text-mist focus:outline-none focus:border-phantom/50">
+        <option>Most Popular</option>
+        <option>Recently Added</option>
+        <option>Highest Rated</option>
+      </select>
+    </div>
+
+    <!-- Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- Tour 1 -->
+      <a href="detail.html" class="group bg-night border border-white/5 rounded-xl overflow-hidden hover:border-phantom/30 transition-all duration-500 animate-fade-in-up stagger-1">
+        <div class="aspect-[4/3] bg-void relative overflow-hidden">
+          <img src="https://placehold.co/600x450/18181b/3f3f46" alt="Savannah Ghost Tour" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-void/80 to-transparent"></div>
+          <div class="absolute bottom-4 left-4 right-4">
+            <div class="flex items-center gap-2">
+              <span class="text-xs bg-phantom/80 text-white px-2 py-1 rounded">Walking Tour</span>
+              <span class="text-xs bg-white/10 text-ghost px-2 py-1 rounded">2 hours</span>
+            </div>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center gap-2 text-xs text-mist mb-2">
+            <span>Savannah, GA</span>
+            <span class="text-white/20">•</span>
+            <span>After dark</span>
+          </div>
+          <h3 class="font-display text-xl text-ghost group-hover:text-phantom transition-colors mb-2">Savannah Shadows Tour</h3>
+          <p class="text-sm text-mist line-clamp-2">Wander through America's most haunted city. Colonial ghosts, tragic tales, and documented apparitions.</p>
+          <div class="flex items-center gap-3 mt-4 pt-4 border-t border-white/5">
+            <div class="flex items-center gap-1 text-xs text-mist">
+              <svg class="w-4 h-4 text-phantom" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+              </svg>
+              <span>4.9</span>
+            </div>
+            <div class="text-xs text-mist">847 souls toured</div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Tour 2 -->
+      <a href="detail.html" class="group bg-night border border-white/5 rounded-xl overflow-hidden hover:border-phantom/30 transition-all duration-500 animate-fade-in-up stagger-2">
+        <div class="aspect-[4/3] bg-void relative overflow-hidden">
+          <img src="https://placehold.co/600x450/18181b/3f3f46" alt="Eastern State Penitentiary" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-void/80 to-transparent"></div>
+          <div class="absolute bottom-4 left-4 right-4">
+            <div class="flex items-center gap-2">
+              <span class="text-xs bg-phantom/80 text-white px-2 py-1 rounded">Haunted House</span>
+              <span class="text-xs bg-white/10 text-ghost px-2 py-1 rounded">1.5 hours</span>
+            </div>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center gap-2 text-xs text-mist mb-2">
+            <span>Philadelphia, PA</span>
+            <span class="text-white/20">•</span>
+            <span>Day & Night</span>
+          </div>
+          <h3 class="font-display text-xl text-ghost group-hover:text-phantom transition-colors mb-2">Eastern State Penitentiary</h3>
+          <p class="text-sm text-mist line-clamp-2">Explore the crumbling cellblocks where Al Capone once stayed. Paranormal activity documented extensively.</p>
+          <div class="flex items-center gap-3 mt-4 pt-4 border-t border-white/5">
+            <div class="flex items-center gap-1 text-xs text-mist">
+              <svg class="w-4 h-4 text-phantom" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+              </svg>
+              <span>4.8</span>
+            </div>
+            <div class="text-xs text-mist">2.1k souls toured</div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Tour 3 -->
+      <a href="detail.html" class="group bg-night border border-white/5 rounded-xl overflow-hidden hover:border-phantom/30 transition-all duration-500 animate-fade-in-up stagger-3">
+        <div class="aspect-[4/3] bg-void relative overflow-hidden">
+          <img src="https://placehold.co/600x450/18181b/3f3f46" alt="New Orleans Cemetery" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-void/80 to-transparent"></div>
+          <div class="absolute bottom-4 left-4 right-4">
+            <div class="flex items-center gap-2">
+              <span class="text-xs bg-phantom/80 text-white px-2 py-1 rounded">Cemetery</span>
+              <span class="text-xs bg-white/10 text-ghost px-2 py-1 rounded">1.5 hours</span>
+            </div>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center gap-2 text-xs text-mist mb-2">
+            <span>New Orleans, LA</span>
+            <span class="text-white/20">•</span>
+            <span>Twilight</span>
+          </div>
+          <h3 class="font-display text-xl text-ghost group-hover:text-phantom transition-colors mb-2">St. Louis Cemetery No. 1</h3>
+          <p class="text-sm text-mist line-clamp-2">Above-ground tombs, voodoo queens, and restless spirits in the city of the dead.</p>
+          <div class="flex items-center gap-3 mt-4 pt-4 border-t border-white/5">
+            <div class="flex items-center gap-1 text-xs text-mist">
+              <svg class="w-4 h-4 text-phantom" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+              </svg>
+              <span>4.7</span>
+            </div>
+            <div class="text-xs text-mist">1.3k souls toured</div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Tour 4 -->
+      <a href="detail.html" class="group bg-night border border-white/5 rounded-xl overflow-hidden hover:border-phantom/30 transition-all duration-500 animate-fade-in-up stagger-4">
+        <div class="aspect-[4/3] bg-void relative overflow-hidden">
+          <img src="https://placehold.co/600x450/18181b/3f3f46" alt="Winchester Mystery House" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-void/80 to-transparent"></div>
+          <div class="absolute bottom-4 left-4 right-4">
+            <div class="flex items-center gap-2">
+              <span class="text-xs bg-phantom/80 text-white px-2 py-1 rounded">Haunted House</span>
+              <span class="text-xs bg-white/10 text-ghost px-2 py-1 rounded">1 hour</span>
+            </div>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center gap-2 text-xs text-mist mb-2">
+            <span>San Jose, CA</span>
+            <span class="text-white/20">•</span>
+            <span>Day & Night</span>
+          </div>
+          <h3 class="font-display text-xl text-ghost group-hover:text-phantom transition-colors mb-2">Winchester Mystery House</h3>
+          <p class="text-sm text-mist line-clamp-2">160 rooms, stairs to nowhere, doors that open to walls. Built to confuse the spirits.</p>
+          <div class="flex items-center gap-3 mt-4 pt-4 border-t border-white/5">
+            <div class="flex items-center gap-1 text-xs text-mist">
+              <svg class="w-4 h-4 text-phantom" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+              </svg>
+              <span>4.6</span>
+            </div>
+            <div class="text-xs text-mist">3.2k souls toured</div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Tour 5 -->
+      <a href="detail.html" class="group bg-night border border-white/5 rounded-xl overflow-hidden hover:border-phantom/30 transition-all duration-500 animate-fade-in-up stagger-5">
+        <div class="aspect-[4/3] bg-void relative overflow-hidden">
+          <img src="https://placehold.co/600x450/18181b/3f3f46" alt="Edinburgh Vaults" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-void/80 to-transparent"></div>
+          <div class="absolute bottom-4 left-4 right-4">
+            <div class="flex items-center gap-2">
+              <span class="text-xs bg-phantom/80 text-white px-2 py-1 rounded">Paranormal</span>
+              <span class="text-xs bg-white/10 text-ghost px-2 py-1 rounded">2 hours</span>
+            </div>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center gap-2 text-xs text-mist mb-2">
+            <span>Edinburgh, UK</span>
+            <span class="text-white/20">•</span>
+            <span>After dark</span>
+          </div>
+          <h3 class="font-display text-xl text-ghost group-hover:text-phantom transition-colors mb-2">Edinburgh Underground Vaults</h3>
+          <p class="text-sm text-mist line-clamp-2">Descend beneath the Royal Mile into chambers sealed for centuries. Not for the faint of heart.</p>
+          <div class="flex items-center gap-3 mt-4 pt-4 border-t border-white/5">
+            <div class="flex items-center gap-1 text-xs text-mist">
+              <svg class="w-4 h-4 text-phantom" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+              </svg>
+              <span>4.9</span>
+            </div>
+            <div class="text-xs text-mist">956 souls toured</div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Tour 6 -->
+      <a href="detail.html" class="group bg-night border border-white/5 rounded-xl overflow-hidden hover:border-phantom/30 transition-all duration-500 animate-fade-in-up stagger-6">
+        <div class="aspect-[4/3] bg-void relative overflow-hidden">
+          <img src="https://placehold.co/600x450/18181b/3f3f46" alt="Salem Night Tour" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-void/80 to-transparent"></div>
+          <div class="absolute bottom-4 left-4 right-4">
+            <div class="flex items-center gap-2">
+              <span class="text-xs bg-phantom/80 text-white px-2 py-1 rounded">Historical</span>
+              <span class="text-xs bg-white/10 text-ghost px-2 py-1 rounded">1.5 hours</span>
+            </div>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center gap-2 text-xs text-mist mb-2">
+            <span>Salem, MA</span>
+            <span class="text-white/20">•</span>
+            <span>Evening</span>
+          </div>
+          <h3 class="font-display text-xl text-ghost group-hover:text-phantom transition-colors mb-2">Salem Witch Trial Walk</h3>
+          <p class="text-sm text-mist line-clamp-2">Walk where the accused walked. 1692 comes alive in whispers and shadows.</p>
+          <div class="flex items-center gap-3 mt-4 pt-4 border-t border-white/5">
+            <div class="flex items-center gap-1 text-xs text-mist">
+              <svg class="w-4 h-4 text-phantom" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+              </svg>
+              <span>4.8</span>
+            </div>
+            <div class="text-xs text-mist">1.8k souls toured</div>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Load More -->
+    <div class="mt-16 text-center">
+      <button class="text-sm text-ghost font-medium bg-white/5 hover:bg-white/10 border border-white/10 px-8 py-3 rounded-lg transition-colors">
+        Reveal more
+      </button>
+    </div>
+  </section>
+
+  <!-- Cities Section -->
+  <section class="bg-night py-16">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="font-display text-2xl text-ghost mb-8 text-center">Most Haunted Cities</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a href="#" class="bg-void border border-white/5 rounded-lg p-5 text-center hover:border-phantom/30 transition-all group">
+          <p class="font-display text-ghost group-hover:text-phantom transition-colors mb-1">New Orleans</p>
+          <p class="text-xs text-mist">12 tours</p>
+        </a>
+        <a href="#" class="bg-void border border-white/5 rounded-lg p-5 text-center hover:border-phantom/30 transition-all group">
+          <p class="font-display text-ghost group-hover:text-phantom transition-colors mb-1">Savannah</p>
+          <p class="text-xs text-mist">9 tours</p>
+        </a>
+        <a href="#" class="bg-void border border-white/5 rounded-lg p-5 text-center hover:border-phantom/30 transition-all group">
+          <p class="font-display text-ghost group-hover:text-phantom transition-colors mb-1">Salem</p>
+          <p class="text-xs text-mist">8 tours</p>
+        </a>
+        <a href="#" class="bg-void border border-white/5 rounded-lg p-5 text-center hover:border-phantom/30 transition-all group">
+          <p class="font-display text-ghost group-hover:text-phantom transition-colors mb-1">Edinburgh</p>
+          <p class="text-xs text-mist">7 tours</p>
+        </a>
+        <a href="#" class="bg-void border border-white/5 rounded-lg p-5 text-center hover:border-phantom/30 transition-all group">
+          <p class="font-display text-ghost group-hover:text-phantom transition-colors mb-1">Gettysburg</p>
+          <p class="text-xs text-mist">6 tours</p>
+        </a>
+        <a href="#" class="bg-void border border-white/5 rounded-lg p-5 text-center hover:border-phantom/30 transition-all group">
+          <p class="font-display text-ghost group-hover:text-phantom transition-colors mb-1">St. Augustine</p>
+          <p class="text-xs text-mist">5 tours</p>
+        </a>
+        <a href="#" class="bg-void border border-white/5 rounded-lg p-5 text-center hover:border-phantom/30 transition-all group">
+          <p class="font-display text-ghost group-hover:text-phantom transition-colors mb-1">Charleston</p>
+          <p class="text-xs text-mist">5 tours</p>
+        </a>
+        <a href="#" class="bg-void border border-white/5 rounded-lg p-5 text-center hover:border-phantom/30 transition-all group">
+          <p class="font-display text-ghost group-hover:text-phantom transition-colors mb-1">London</p>
+          <p class="text-xs text-mist">4 tours</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="bg-phantom my-16 mx-6 max-w-6xl lg:mx-auto rounded-xl">
+    <div class="px-12 py-14 text-center text-white">
+      <h2 class="font-display text-3xl mb-4">Know a haunted place?</h2>
+      <p class="text-purple-200 mb-8 max-w-md mx-auto">Help others discover the unknown. Share a tour or location that gave you chills.</p>
+      <button onclick="document.getElementById('submit-modal').classList.remove('hidden')" class="text-sm font-medium bg-white text-phantom hover:bg-purple-100 px-6 py-3 rounded-lg transition-colors">
+        Submit a Haunt
+      </button>
+    </div>
+  </section>
+
+  <!-- Submit Modal -->
+  <div id="submit-modal" class="hidden fixed inset-0 z-50">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="document.getElementById('submit-modal').classList.add('hidden')"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="bg-night border border-white/10 rounded-xl w-full max-w-lg shadow-2xl animate-fade-in-up overflow-hidden">
+        <div class="flex items-center justify-between p-6 border-b border-white/5">
+          <h2 class="font-display text-2xl text-ghost">Submit a Haunt</h2>
+          <button onclick="document.getElementById('submit-modal').classList.add('hidden')" class="text-mist hover:text-ghost transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <form class="p-6 space-y-5">
+          <div>
+            <label class="block text-sm text-mist mb-2">Tour or Location Name</label>
+            <input type="text" placeholder="e.g. Eastern State Penitentiary" class="w-full bg-void text-ghost border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-phantom/50 transition-all placeholder:text-mist">
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm text-mist mb-2">City</label>
+              <input type="text" placeholder="e.g. Philadelphia" class="w-full bg-void text-ghost border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-phantom/50 transition-all placeholder:text-mist">
+            </div>
+            <div>
+              <label class="block text-sm text-mist mb-2">Type</label>
+              <select class="w-full bg-void text-mist border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-phantom/50 transition-all">
+                <option value="">Select...</option>
+                <option>Walking Tour</option>
+                <option>Haunted House</option>
+                <option>Cemetery</option>
+                <option>Paranormal</option>
+                <option>Historical</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm text-mist mb-2">Website</label>
+            <input type="url" placeholder="https://..." class="w-full bg-void text-ghost border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-phantom/50 transition-all placeholder:text-mist">
+          </div>
+          <div>
+            <label class="block text-sm text-mist mb-2">What makes it haunting?</label>
+            <textarea rows="3" placeholder="The history, the atmosphere, any encounters..." class="w-full bg-void text-ghost border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-phantom/50 resize-none transition-all placeholder:text-mist"></textarea>
+          </div>
+        </form>
+        <div class="flex justify-end gap-3 p-6 border-t border-white/5">
+          <button onclick="document.getElementById('submit-modal').classList.add('hidden')" class="text-sm text-mist hover:text-ghost px-4 py-2 transition-colors">
+            Cancel
+          </button>
+          <button class="text-sm text-white bg-phantom hover:bg-phantom-dim px-6 py-2 rounded-lg transition-colors">
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-night border-t border-white/5">
+    <div class="max-w-6xl mx-auto px-6 py-12">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="text-center md:text-left">
+          <p class="font-display text-xl text-ghost mb-1">Specter</p>
+          <p class="text-sm text-mist">Ghost tours & haunted places</p>
+        </div>
+        <div class="flex gap-8">
+          <a href="/about" class="text-sm text-mist hover:text-ghost transition-colors">About</a>
+          <a href="/contact" class="text-sm text-mist hover:text-ghost transition-colors">Contact</a>
+          <a href="/submit" class="text-sm text-mist hover:text-ghost transition-colors">Submit</a>
+        </div>
+      </div>
+      <div class="border-t border-white/5 mt-8 pt-8 text-center">
+        <p class="text-xs text-mist">&copy; 2025 Specter. For those who seek the unseen.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Memory Palace — PodScout</title>
+  <meta name="description" content="Short, surprising stories of the past. Tiny histories that stick with you. Hosted by Nate DiMeo.">
+
+  <!-- OG Tags -->
+  <meta property="og:title" content="The Memory Palace — PodScout">
+  <meta property="og:description" content="Short, surprising stories of the past. Tiny histories that stick with you.">
+  <meta property="og:type" content="website">
+
+  <!-- Fonts & Tailwind -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+            display: ['Fraunces', 'Georgia', 'serif'],
+          },
+          colors: {
+            'brand': '#ea580c',
+            'brand-light': '#f97316',
+            'brand-dark': '#c2410c',
+            'surface': '#fffbf7',
+            'surface-warm': '#fef3e7',
+            'warm-gray': '#78716c',
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.6s ease-out forwards',
+            'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            fadeInUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    .stagger-1 { animation-delay: 0ms; }
+    .stagger-2 { animation-delay: 50ms; }
+    .stagger-3 { animation-delay: 100ms; }
+    .stagger-4 { animation-delay: 150ms; }
+    .stagger-5 { animation-delay: 200ms; }
+    .stagger-6 { animation-delay: 250ms; }
+    [class*="animate-fade"] { opacity: 0; }
+  </style>
+</head>
+<body class="bg-surface font-sans text-stone-900 antialiased">
+
+  <!-- Navigation -->
+  <nav class="bg-surface-warm border-b border-orange-100 sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex items-center justify-between h-16">
+        <a href="/" class="flex items-center gap-2">
+          <div class="w-9 h-9 bg-brand rounded-full flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="23"/>
+              <line x1="8" y1="23" x2="16" y2="23"/>
+            </svg>
+          </div>
+          <span class="font-semibold text-lg text-stone-800">PodScout</span>
+        </a>
+        <div class="flex items-center gap-8">
+          <a href="/browse" class="text-sm text-warm-gray hover:text-stone-900 transition-colors">Browse</a>
+          <a href="/collections" class="text-sm text-warm-gray hover:text-stone-900 transition-colors">Collections</a>
+          <button class="bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-4 py-2 rounded-full transition-all">
+            Submit Podcast
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Back Link -->
+  <div class="max-w-6xl mx-auto px-6 pt-6">
+    <a href="index.html" class="inline-flex items-center gap-2 text-sm text-warm-gray hover:text-brand transition-colors animate-fade-in stagger-1">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+      Back to all podcasts
+    </a>
+  </div>
+
+  <!-- Podcast Header -->
+  <section class="max-w-6xl mx-auto px-6 py-8">
+    <div class="flex flex-col md:flex-row gap-8 animate-fade-in-up stagger-2">
+      <!-- Artwork -->
+      <div class="flex-shrink-0">
+        <div class="w-64 h-64 md:w-72 md:h-72 rounded-3xl overflow-hidden shadow-2xl shadow-orange-500/20 mx-auto md:mx-0">
+          <img src="https://placehold.co/400x400/fef3c7/f59e0b" alt="The Memory Palace" class="w-full h-full object-cover">
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="flex-1 text-center md:text-left">
+        <span class="inline-block text-xs bg-amber-500 text-white px-3 py-1 rounded-full font-semibold mb-4">History</span>
+        <h1 class="font-display text-4xl md:text-5xl text-stone-900 mb-3">The Memory Palace</h1>
+        <p class="text-lg text-warm-gray mb-6">by <span class="text-stone-700 font-medium">Nate DiMeo</span></p>
+
+        <p class="text-stone-600 text-lg leading-relaxed mb-8 max-w-2xl">
+          Short, surprising stories of the past. The Memory Palace is a storytelling podcast about forgotten moments in history — tiny, poetic tales that stick with you long after the episode ends.
+        </p>
+
+        <!-- Listen Buttons -->
+        <div class="flex flex-wrap gap-3 justify-center md:justify-start mb-8">
+          <a href="#" class="inline-flex items-center gap-2 bg-stone-900 hover:bg-stone-800 text-white font-semibold px-6 py-3 rounded-full transition-all">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+            </svg>
+            Apple Podcasts
+          </a>
+          <a href="#" class="inline-flex items-center gap-2 bg-[#1DB954] hover:bg-[#1aa34a] text-white font-semibold px-6 py-3 rounded-full transition-all">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+            </svg>
+            Spotify
+          </a>
+          <a href="#" class="inline-flex items-center gap-2 bg-white hover:bg-orange-50 text-stone-700 font-semibold px-6 py-3 rounded-full transition-all border border-orange-200">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z"/>
+            </svg>
+            RSS Feed
+          </a>
+        </div>
+
+        <!-- Stats -->
+        <div class="flex flex-wrap gap-6 justify-center md:justify-start text-sm">
+          <div class="flex items-center gap-2 text-warm-gray">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+            </svg>
+            <span>180+ episodes</span>
+          </div>
+          <div class="flex items-center gap-2 text-warm-gray">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span>5-15 min episodes</span>
+          </div>
+          <div class="flex items-center gap-2 text-warm-gray">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            <span>Since 2008</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="max-w-6xl mx-auto px-6 py-8">
+    <div class="bg-white rounded-3xl border border-orange-100 p-8 animate-fade-in-up stagger-3">
+      <h2 class="font-display text-2xl text-stone-900 mb-4">About the show</h2>
+      <div class="prose prose-stone max-w-none text-stone-600 leading-relaxed space-y-4">
+        <p>
+          The Memory Palace is a podcast about history — but not the kind you learned in school. Host Nate DiMeo finds the forgotten corners of the past: the small moments, the overlooked people, the stories that fell through the cracks of time.
+        </p>
+        <p>
+          Each episode is a tiny, self-contained story — usually under 15 minutes — told with the care and craft of a short story. DiMeo's writing is poetic and evocative, turning historical footnotes into something that feels both ancient and achingly present.
+        </p>
+        <p>
+          Perfect for: History lovers who want something different. People who like their podcasts short and sweet. Anyone who appreciates beautiful storytelling.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Episodes -->
+  <section class="max-w-6xl mx-auto px-6 py-8">
+    <h2 class="font-display text-2xl text-stone-900 mb-6 animate-fade-in stagger-4">Start here</h2>
+    <div class="grid gap-4 animate-fade-in-up stagger-5">
+
+      <!-- Episode 1 -->
+      <a href="#" class="group bg-white rounded-2xl border border-orange-100 hover:border-brand hover:shadow-lg transition-all p-5 flex gap-5 items-center">
+        <div class="w-16 h-16 bg-surface-warm rounded-xl flex-shrink-0 flex items-center justify-center group-hover:scale-105 transition-transform">
+          <svg class="w-6 h-6 text-brand" fill="currentColor" viewBox="0 0 24 24">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h3 class="font-semibold text-stone-900 group-hover:text-brand transition-colors mb-1">Distance</h3>
+          <p class="text-sm text-warm-gray line-clamp-1">A story about a man who walked across America, and what he found along the way.</p>
+        </div>
+        <div class="text-sm text-warm-gray flex-shrink-0 hidden sm:block">12 min</div>
+      </a>
+
+      <!-- Episode 2 -->
+      <a href="#" class="group bg-white rounded-2xl border border-orange-100 hover:border-brand hover:shadow-lg transition-all p-5 flex gap-5 items-center">
+        <div class="w-16 h-16 bg-surface-warm rounded-xl flex-shrink-0 flex items-center justify-center group-hover:scale-105 transition-transform">
+          <svg class="w-6 h-6 text-brand" fill="currentColor" viewBox="0 0 24 24">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h3 class="font-semibold text-stone-900 group-hover:text-brand transition-colors mb-1">Notes on an Imagined Plaque</h3>
+          <p class="text-sm text-warm-gray line-clamp-1">The story of a forgotten corner of New York City and the people who lived there.</p>
+        </div>
+        <div class="text-sm text-warm-gray flex-shrink-0 hidden sm:block">8 min</div>
+      </a>
+
+      <!-- Episode 3 -->
+      <a href="#" class="group bg-white rounded-2xl border border-orange-100 hover:border-brand hover:shadow-lg transition-all p-5 flex gap-5 items-center">
+        <div class="w-16 h-16 bg-surface-warm rounded-xl flex-shrink-0 flex items-center justify-center group-hover:scale-105 transition-transform">
+          <svg class="w-6 h-6 text-brand" fill="currentColor" viewBox="0 0 24 24">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h3 class="font-semibold text-stone-900 group-hover:text-brand transition-colors mb-1">The Glowing Orbs</h3>
+          <p class="text-sm text-warm-gray line-clamp-1">In 1965, something strange appeared in the skies over Texas. This is what happened next.</p>
+        </div>
+        <div class="text-sm text-warm-gray flex-shrink-0 hidden sm:block">11 min</div>
+      </a>
+
+      <!-- Episode 4 -->
+      <a href="#" class="group bg-white rounded-2xl border border-orange-100 hover:border-brand hover:shadow-lg transition-all p-5 flex gap-5 items-center">
+        <div class="w-16 h-16 bg-surface-warm rounded-xl flex-shrink-0 flex items-center justify-center group-hover:scale-105 transition-transform">
+          <svg class="w-6 h-6 text-brand" fill="currentColor" viewBox="0 0 24 24">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h3 class="font-semibold text-stone-900 group-hover:text-brand transition-colors mb-1">Dreamland</h3>
+          <p class="text-sm text-warm-gray line-clamp-1">The rise and fall of Coney Island's greatest amusement park.</p>
+        </div>
+        <div class="text-sm text-warm-gray flex-shrink-0 hidden sm:block">14 min</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Similar Podcasts -->
+  <section class="max-w-6xl mx-auto px-6 py-8">
+    <h2 class="font-display text-2xl text-stone-900 mb-6 animate-fade-in stagger-5">You might also like</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 animate-fade-in-up stagger-6">
+
+      <!-- Similar 1 -->
+      <a href="#" class="group bg-white rounded-2xl border border-orange-100 hover:border-brand hover:shadow-lg transition-all overflow-hidden">
+        <div class="aspect-square bg-surface-warm">
+          <img src="https://placehold.co/200x200/fef3e7/ea580c" alt="99% Invisible" class="w-full h-full object-cover">
+        </div>
+        <div class="p-4">
+          <h3 class="font-semibold text-sm group-hover:text-brand transition-colors line-clamp-1">99% Invisible</h3>
+          <p class="text-xs text-warm-gray">Roman Mars</p>
+        </div>
+      </a>
+
+      <!-- Similar 2 -->
+      <a href="#" class="group bg-white rounded-2xl border border-orange-100 hover:border-brand hover:shadow-lg transition-all overflow-hidden">
+        <div class="aspect-square bg-surface-warm">
+          <img src="https://placehold.co/200x200/fef3e7/ea580c" alt="Radiolab" class="w-full h-full object-cover">
+        </div>
+        <div class="p-4">
+          <h3 class="font-semibold text-sm group-hover:text-brand transition-colors line-clamp-1">Radiolab</h3>
+          <p class="text-xs text-warm-gray">WNYC Studios</p>
+        </div>
+      </a>
+
+      <!-- Similar 3 -->
+      <a href="#" class="group bg-white rounded-2xl border border-orange-100 hover:border-brand hover:shadow-lg transition-all overflow-hidden">
+        <div class="aspect-square bg-surface-warm">
+          <img src="https://placehold.co/200x200/fef3e7/ea580c" alt="Revisionist History" class="w-full h-full object-cover">
+        </div>
+        <div class="p-4">
+          <h3 class="font-semibold text-sm group-hover:text-brand transition-colors line-clamp-1">Revisionist History</h3>
+          <p class="text-xs text-warm-gray">Malcolm Gladwell</p>
+        </div>
+      </a>
+
+      <!-- Similar 4 -->
+      <a href="#" class="group bg-white rounded-2xl border border-orange-100 hover:border-brand hover:shadow-lg transition-all overflow-hidden">
+        <div class="aspect-square bg-surface-warm">
+          <img src="https://placehold.co/200x200/fef3e7/ea580c" alt="This American Life" class="w-full h-full object-cover">
+        </div>
+        <div class="p-4">
+          <h3 class="font-semibold text-sm group-hover:text-brand transition-colors line-clamp-1">This American Life</h3>
+          <p class="text-xs text-warm-gray">Ira Glass</p>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Share Banner -->
+  <section class="bg-brand mx-6 rounded-3xl my-12 max-w-6xl lg:mx-auto">
+    <div class="px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-6 text-white">
+      <div class="text-center sm:text-left">
+        <h2 class="font-display text-2xl mb-1">Love this podcast?</h2>
+        <p class="text-orange-100">Share it with a friend who needs something good to listen to.</p>
+      </div>
+      <div class="flex gap-3">
+        <button class="bg-white/20 hover:bg-white/30 backdrop-blur-sm p-3 rounded-full transition-all">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+          </svg>
+        </button>
+        <button class="bg-white/20 hover:bg-white/30 backdrop-blur-sm p-3 rounded-full transition-all">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+          </svg>
+        </button>
+        <button class="bg-white/20 hover:bg-white/30 backdrop-blur-sm p-3 rounded-full transition-all">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-stone-900 text-white mt-20">
+    <div class="max-w-6xl mx-auto px-6 py-12">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-brand rounded-full flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="23"/>
+              <line x1="8" y1="23" x2="16" y2="23"/>
+            </svg>
+          </div>
+          <div>
+            <p class="font-semibold text-lg">PodScout</p>
+            <p class="text-sm text-stone-400">Find your next favorite show</p>
+          </div>
+        </div>
+        <div class="flex gap-8">
+          <a href="/about" class="text-sm text-stone-400 hover:text-white transition-colors">About</a>
+          <a href="/contact" class="text-sm text-stone-400 hover:text-white transition-colors">Contact</a>
+          <a href="/sponsor" class="text-sm text-stone-400 hover:text-white transition-colors">Sponsor</a>
+        </div>
+      </div>
+      <div class="border-t border-stone-800 mt-8 pt-8 text-center">
+        <p class="text-sm text-stone-500">&copy; 2025 PodScout. Made with love for podcast fans.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

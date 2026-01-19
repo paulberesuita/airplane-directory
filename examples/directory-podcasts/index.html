@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PodScout — Discover Indie Podcasts</title>
+  <meta name="description" content="Hand-picked indie podcasts worth your ears. Find hidden gems in comedy, storytelling, true crime, and more.">
+
+  <!-- OG Tags -->
+  <meta property="og:title" content="PodScout — Discover Indie Podcasts">
+  <meta property="og:description" content="Hand-picked indie podcasts worth your ears. Find your next favorite show.">
+  <meta property="og:type" content="website">
+
+  <!-- Fonts & Tailwind -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+            display: ['Fraunces', 'Georgia', 'serif'],
+          },
+          colors: {
+            'brand': '#ea580c',
+            'brand-light': '#f97316',
+            'brand-dark': '#c2410c',
+            'surface': '#fffbf7',
+            'surface-warm': '#fef3e7',
+            'warm-gray': '#78716c',
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.6s ease-out forwards',
+            'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            fadeInUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    .stagger-1 { animation-delay: 0ms; }
+    .stagger-2 { animation-delay: 50ms; }
+    .stagger-3 { animation-delay: 100ms; }
+    .stagger-4 { animation-delay: 150ms; }
+    .stagger-5 { animation-delay: 200ms; }
+    .stagger-6 { animation-delay: 250ms; }
+    .stagger-7 { animation-delay: 300ms; }
+    .stagger-8 { animation-delay: 350ms; }
+    .stagger-9 { animation-delay: 400ms; }
+    [class*="animate-fade"] { opacity: 0; }
+    input[type="search"]::-webkit-search-cancel-button {
+      -webkit-appearance: none;
+      height: 16px;
+      width: 16px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2378716c' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M18 6L6 18M6 6l12 12'/%3E%3C/svg%3E") center/contain no-repeat;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="bg-surface font-sans text-stone-900 antialiased">
+
+  <!-- Navigation -->
+  <nav class="bg-surface-warm border-b border-orange-100 sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex items-center justify-between h-16">
+        <a href="/" class="flex items-center gap-2">
+          <div class="w-9 h-9 bg-brand rounded-full flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="23"/>
+              <line x1="8" y1="23" x2="16" y2="23"/>
+            </svg>
+          </div>
+          <span class="font-semibold text-lg text-stone-800">PodScout</span>
+        </a>
+        <div class="flex items-center gap-8">
+          <a href="/browse" class="text-sm text-warm-gray hover:text-stone-900 transition-colors">Browse</a>
+          <a href="/collections" class="text-sm text-warm-gray hover:text-stone-900 transition-colors">Collections</a>
+          <button
+            onclick="document.getElementById('submit-modal').classList.remove('hidden')"
+            class="bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-4 py-2 rounded-full transition-all"
+          >
+            Submit Podcast
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="bg-gradient-to-b from-surface-warm to-surface">
+    <div class="max-w-6xl mx-auto px-6 py-20 text-center">
+      <p class="text-sm font-semibold text-brand uppercase tracking-widest mb-4 animate-fade-in stagger-1">500+ Indie Shows</p>
+      <h1 class="font-display text-5xl md:text-6xl tracking-tight text-stone-900 mb-6 animate-fade-in-up stagger-2">
+        Find your next <span class="text-brand italic">favorite</span> podcast
+      </h1>
+      <p class="text-lg text-warm-gray max-w-xl mx-auto mb-10 animate-fade-in stagger-3">Hand-picked indie podcasts worth your ears. No algorithms, just good taste and great stories.</p>
+
+      <!-- Search -->
+      <div class="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto mb-10 animate-fade-in-up stagger-4">
+        <input
+          type="search"
+          placeholder="Search podcasts..."
+          class="flex-1 bg-white text-stone-900 border border-orange-200 rounded-full px-6 py-4 focus:outline-none focus:ring-4 focus:ring-brand/20 focus:border-brand transition-all shadow-sm"
+          id="search-input"
+        >
+        <button class="bg-brand hover:bg-brand-dark text-white font-semibold px-8 py-4 rounded-full transition-all shadow-md hover:shadow-lg">
+          Search
+        </button>
+      </div>
+
+      <!-- Category Pills -->
+      <div class="flex flex-wrap justify-center gap-2 animate-fade-in stagger-5">
+        <button class="bg-brand text-white text-sm font-semibold px-5 py-2.5 rounded-full">All</button>
+        <button class="bg-white hover:bg-orange-50 text-stone-700 text-sm font-medium px-5 py-2.5 rounded-full transition-colors border border-orange-200">Comedy</button>
+        <button class="bg-white hover:bg-orange-50 text-stone-700 text-sm font-medium px-5 py-2.5 rounded-full transition-colors border border-orange-200">True Crime</button>
+        <button class="bg-white hover:bg-orange-50 text-stone-700 text-sm font-medium px-5 py-2.5 rounded-full transition-colors border border-orange-200">Storytelling</button>
+        <button class="bg-white hover:bg-orange-50 text-stone-700 text-sm font-medium px-5 py-2.5 rounded-full transition-colors border border-orange-200">Tech</button>
+        <button class="bg-white hover:bg-orange-50 text-stone-700 text-sm font-medium px-5 py-2.5 rounded-full transition-colors border border-orange-200">Culture</button>
+        <button class="bg-white hover:bg-orange-50 text-stone-700 text-sm font-medium px-5 py-2.5 rounded-full transition-colors border border-orange-200">Business</button>
+        <button class="bg-white hover:bg-orange-50 text-stone-700 text-sm font-medium px-5 py-2.5 rounded-full transition-colors border border-orange-200">History</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="max-w-6xl mx-auto px-6 py-12">
+    <!-- Results Header -->
+    <div class="flex items-center justify-between mb-8 animate-fade-in stagger-6">
+      <p class="text-sm text-warm-gray"><span class="text-stone-900 font-semibold">523</span> podcasts</p>
+      <select class="text-sm border border-orange-200 rounded-full px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand">
+        <option>Most Popular</option>
+        <option>Recently Added</option>
+        <option>Alphabetical</option>
+      </select>
+    </div>
+
+    <!-- Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- The Memory Palace -->
+      <a href="/podcast/memory-palace" class="group bg-white rounded-3xl border border-orange-100 hover:border-brand hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-1">
+        <div class="aspect-square bg-surface-warm relative overflow-hidden">
+          <img src="https://placehold.co/400x400/fef3e7/ea580c" alt="The Memory Palace" class="w-full h-full object-cover">
+          <div class="absolute top-3 left-3">
+            <span class="text-xs bg-amber-500 text-white px-3 py-1 rounded-full font-semibold">History</span>
+          </div>
+          <div class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <svg class="w-6 h-6 text-brand" fill="currentColor" viewBox="0 0 24 24">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </div>
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg group-hover:text-brand transition-colors mb-1">The Memory Palace</h3>
+          <p class="text-sm text-warm-gray mb-3">by Nate DiMeo</p>
+          <p class="text-sm text-stone-600 line-clamp-2">Short, surprising stories of the past. Tiny histories that stick with you.</p>
+        </div>
+      </a>
+
+      <!-- Welcome to Night Vale -->
+      <a href="/podcast/night-vale" class="group bg-white rounded-3xl border border-orange-100 hover:border-brand hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-2">
+        <div class="aspect-square bg-surface-warm relative overflow-hidden">
+          <img src="https://placehold.co/400x400/fef3e7/ea580c" alt="Welcome to Night Vale" class="w-full h-full object-cover">
+          <div class="absolute top-3 left-3">
+            <span class="text-xs bg-violet-500 text-white px-3 py-1 rounded-full font-semibold">Storytelling</span>
+          </div>
+          <div class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <svg class="w-6 h-6 text-brand" fill="currentColor" viewBox="0 0 24 24">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </div>
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg group-hover:text-brand transition-colors mb-1">Welcome to Night Vale</h3>
+          <p class="text-sm text-warm-gray mb-3">by Night Vale Presents</p>
+          <p class="text-sm text-stone-600 line-clamp-2">Community updates for a small desert town where every conspiracy theory is true.</p>
+        </div>
+      </a>
+
+      <!-- My Brother, My Brother and Me -->
+      <a href="/podcast/mbmbam" class="group bg-white rounded-3xl border border-orange-100 hover:border-brand hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-3">
+        <div class="aspect-square bg-surface-warm relative overflow-hidden">
+          <img src="https://placehold.co/400x400/fef3e7/ea580c" alt="MBMBaM" class="w-full h-full object-cover">
+          <div class="absolute top-3 left-3">
+            <span class="text-xs bg-emerald-500 text-white px-3 py-1 rounded-full font-semibold">Comedy</span>
+          </div>
+          <div class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <svg class="w-6 h-6 text-brand" fill="currentColor" viewBox="0 0 24 24">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </div>
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg group-hover:text-brand transition-colors mb-1">My Brother, My Brother and Me</h3>
+          <p class="text-sm text-warm-gray mb-3">by The McElroys</p>
+          <p class="text-sm text-stone-600 line-clamp-2">An advice show for the modern era. Questions from Yahoo Answers, wisdom optional.</p>
+        </div>
+      </a>
+
+      <!-- Casefile -->
+      <a href="/podcast/casefile" class="group bg-white rounded-3xl border border-orange-100 hover:border-brand hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-4">
+        <div class="aspect-square bg-surface-warm relative overflow-hidden">
+          <img src="https://placehold.co/400x400/fef3e7/ea580c" alt="Casefile" class="w-full h-full object-cover">
+          <div class="absolute top-3 left-3">
+            <span class="text-xs bg-slate-700 text-white px-3 py-1 rounded-full font-semibold">True Crime</span>
+          </div>
+          <div class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <svg class="w-6 h-6 text-brand" fill="currentColor" viewBox="0 0 24 24">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </div>
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg group-hover:text-brand transition-colors mb-1">Casefile True Crime</h3>
+          <p class="text-sm text-warm-gray mb-3">by Casefile Presents</p>
+          <p class="text-sm text-stone-600 line-clamp-2">Fact-based, thoroughly researched true crime stories. No sensationalism.</p>
+        </div>
+      </a>
+
+      <!-- Indie Hackers -->
+      <a href="/podcast/indie-hackers" class="group bg-white rounded-3xl border border-orange-100 hover:border-brand hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-5">
+        <div class="aspect-square bg-surface-warm relative overflow-hidden">
+          <img src="https://placehold.co/400x400/fef3e7/ea580c" alt="Indie Hackers" class="w-full h-full object-cover">
+          <div class="absolute top-3 left-3">
+            <span class="text-xs bg-blue-500 text-white px-3 py-1 rounded-full font-semibold">Business</span>
+          </div>
+          <div class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <svg class="w-6 h-6 text-brand" fill="currentColor" viewBox="0 0 24 24">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </div>
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg group-hover:text-brand transition-colors mb-1">Indie Hackers</h3>
+          <p class="text-sm text-warm-gray mb-3">by Courtland Allen</p>
+          <p class="text-sm text-stone-600 line-clamp-2">Founders share the stories behind their profitable online businesses.</p>
+        </div>
+      </a>
+
+      <!-- Reply All -->
+      <a href="/podcast/reply-all" class="group bg-white rounded-3xl border border-orange-100 hover:border-brand hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-6">
+        <div class="aspect-square bg-surface-warm relative overflow-hidden">
+          <img src="https://placehold.co/400x400/fef3e7/ea580c" alt="Reply All" class="w-full h-full object-cover">
+          <div class="absolute top-3 left-3">
+            <span class="text-xs bg-rose-500 text-white px-3 py-1 rounded-full font-semibold">Tech</span>
+          </div>
+          <div class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <svg class="w-6 h-6 text-brand" fill="currentColor" viewBox="0 0 24 24">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </div>
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg group-hover:text-brand transition-colors mb-1">Reply All</h3>
+          <p class="text-sm text-warm-gray mb-3">by Gimlet Media</p>
+          <p class="text-sm text-stone-600 line-clamp-2">A show about the internet. Stories about how people shape the web, and vice versa.</p>
+        </div>
+      </a>
+
+      <!-- 99% Invisible -->
+      <a href="/podcast/99pi" class="group bg-white rounded-3xl border border-orange-100 hover:border-brand hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-7">
+        <div class="aspect-square bg-surface-warm relative overflow-hidden">
+          <img src="https://placehold.co/400x400/fef3e7/ea580c" alt="99% Invisible" class="w-full h-full object-cover">
+          <div class="absolute top-3 left-3">
+            <span class="text-xs bg-cyan-500 text-white px-3 py-1 rounded-full font-semibold">Culture</span>
+          </div>
+          <div class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <svg class="w-6 h-6 text-brand" fill="currentColor" viewBox="0 0 24 24">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </div>
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg group-hover:text-brand transition-colors mb-1">99% Invisible</h3>
+          <p class="text-sm text-warm-gray mb-3">by Roman Mars</p>
+          <p class="text-sm text-stone-600 line-clamp-2">Design is everywhere. Stories about the unnoticed architecture and design around us.</p>
+        </div>
+      </a>
+
+      <!-- The Adventure Zone -->
+      <a href="/podcast/adventure-zone" class="group bg-white rounded-3xl border border-orange-100 hover:border-brand hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-8">
+        <div class="aspect-square bg-surface-warm relative overflow-hidden">
+          <img src="https://placehold.co/400x400/fef3e7/ea580c" alt="The Adventure Zone" class="w-full h-full object-cover">
+          <div class="absolute top-3 left-3">
+            <span class="text-xs bg-brand text-white px-3 py-1 rounded-full font-semibold">Storytelling</span>
+          </div>
+          <div class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <svg class="w-6 h-6 text-brand" fill="currentColor" viewBox="0 0 24 24">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </div>
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg group-hover:text-brand transition-colors mb-1">The Adventure Zone</h3>
+          <p class="text-sm text-warm-gray mb-3">by The McElroys</p>
+          <p class="text-sm text-stone-600 line-clamp-2">A family plays D&D together. Chaos, heart, and surprisingly good storytelling.</p>
+        </div>
+      </a>
+
+      <!-- Song Exploder -->
+      <a href="/podcast/song-exploder" class="group bg-white rounded-3xl border border-orange-100 hover:border-brand hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300 overflow-hidden animate-fade-in-up stagger-9">
+        <div class="aspect-square bg-surface-warm relative overflow-hidden">
+          <img src="https://placehold.co/400x400/fef3e7/ea580c" alt="Song Exploder" class="w-full h-full object-cover">
+          <div class="absolute top-3 left-3">
+            <span class="text-xs bg-fuchsia-500 text-white px-3 py-1 rounded-full font-semibold">Culture</span>
+          </div>
+          <div class="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <svg class="w-6 h-6 text-brand" fill="currentColor" viewBox="0 0 24 24">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </div>
+        </div>
+        <div class="p-5">
+          <h3 class="font-semibold text-lg group-hover:text-brand transition-colors mb-1">Song Exploder</h3>
+          <p class="text-sm text-warm-gray mb-3">by Hrishikesh Hirway</p>
+          <p class="text-sm text-stone-600 line-clamp-2">Musicians take apart their songs piece by piece. How the magic gets made.</p>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Load More -->
+    <div class="mt-12 text-center">
+      <button class="bg-brand hover:bg-brand-dark text-white font-semibold px-10 py-4 rounded-full transition-all hover:-translate-y-0.5 shadow-lg shadow-orange-500/20">
+        Load more podcasts
+      </button>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="bg-brand mx-6 rounded-3xl my-12 max-w-6xl lg:mx-auto">
+    <div class="px-8 py-12 text-center text-white">
+      <h2 class="font-display text-3xl mb-3">Know a great indie podcast?</h2>
+      <p class="text-orange-100 mb-6">Help fellow listeners discover hidden gems. Share your favorites with the community.</p>
+      <button onclick="document.getElementById('submit-modal').classList.remove('hidden')" class="bg-white text-brand font-semibold px-6 py-3 rounded-full hover:bg-orange-50 transition-all">
+        Submit a Podcast
+      </button>
+    </div>
+  </section>
+
+  <!-- Submit Modal -->
+  <div id="submit-modal" class="hidden fixed inset-0 z-50">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="document.getElementById('submit-modal').classList.add('hidden')"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="bg-white rounded-3xl w-full max-w-lg shadow-2xl animate-fade-in-up overflow-hidden">
+        <div class="flex items-center justify-between p-6 border-b border-orange-100 bg-surface-warm">
+          <h2 class="font-display text-2xl text-stone-900">Submit a Podcast</h2>
+          <button onclick="document.getElementById('submit-modal').classList.add('hidden')" class="text-warm-gray hover:text-stone-900 transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <form class="p-6 space-y-5">
+          <div>
+            <label class="block text-sm font-medium mb-2 text-stone-700">Podcast Name</label>
+            <input type="text" placeholder="e.g. The Memory Palace" class="w-full border border-orange-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2 text-stone-700">Host(s)</label>
+            <input type="text" placeholder="e.g. Nate DiMeo" class="w-full border border-orange-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2 text-stone-700">Link (Apple, Spotify, or website)</label>
+            <input type="url" placeholder="https://..." class="w-full border border-orange-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2 text-stone-700">Why do you love it?</label>
+            <textarea rows="3" placeholder="What makes this podcast special?" class="w-full border border-orange-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand resize-none transition-all"></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2 text-stone-700">Category</label>
+            <select class="w-full border border-orange-200 rounded-xl px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all">
+              <option value="">Select category...</option>
+              <option>Comedy</option>
+              <option>True Crime</option>
+              <option>Storytelling</option>
+              <option>Tech</option>
+              <option>Culture</option>
+              <option>Business</option>
+              <option>History</option>
+            </select>
+          </div>
+        </form>
+        <div class="flex justify-end gap-3 p-6 border-t border-orange-100 bg-surface-warm">
+          <button onclick="document.getElementById('submit-modal').classList.add('hidden')" class="px-5 py-2.5 text-sm font-medium text-warm-gray hover:text-stone-900 transition-colors">
+            Cancel
+          </button>
+          <button class="bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-6 py-2.5 rounded-full transition-all">
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-stone-900 text-white mt-20">
+    <div class="max-w-6xl mx-auto px-6 py-12">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-brand rounded-full flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="23"/>
+              <line x1="8" y1="23" x2="16" y2="23"/>
+            </svg>
+          </div>
+          <div>
+            <p class="font-semibold text-lg">PodScout</p>
+            <p class="text-sm text-stone-400">Find your next favorite show</p>
+          </div>
+        </div>
+        <div class="flex gap-8">
+          <a href="/about" class="text-sm text-stone-400 hover:text-white transition-colors">About</a>
+          <a href="/contact" class="text-sm text-stone-400 hover:text-white transition-colors">Contact</a>
+          <a href="/sponsor" class="text-sm text-stone-400 hover:text-white transition-colors">Sponsor</a>
+        </div>
+      </div>
+      <div class="border-t border-stone-800 mt-8 pt-8 text-center">
+        <p class="text-sm text-stone-500">&copy; 2025 PodScout. Made with love for podcast fans.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

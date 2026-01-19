@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roast — Curated Coffee Shops</title>
+  <meta name="description" content="A curated guide to exceptional coffee shops. Discover cafes worth visiting in cities around the world.">
+
+  <!-- OG Tags -->
+  <meta property="og:title" content="Roast — Curated Coffee Shops">
+  <meta property="og:description" content="A curated guide to exceptional coffee shops worth visiting.">
+  <meta property="og:type" content="website">
+
+  <!-- Fonts & Tailwind -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Cormorant Garamond', 'Georgia', 'serif'],
+          },
+          colors: {
+            'brand': '#78716c',
+            'brand-dark': '#57534e',
+            'surface': '#fafaf9',
+            'surface-warm': '#f5f5f4',
+            'cream': '#fafaf9',
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.6s ease-out forwards',
+            'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            fadeInUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    .stagger-1 { animation-delay: 0ms; }
+    .stagger-2 { animation-delay: 50ms; }
+    .stagger-3 { animation-delay: 100ms; }
+    .stagger-4 { animation-delay: 150ms; }
+    .stagger-5 { animation-delay: 200ms; }
+    .stagger-6 { animation-delay: 250ms; }
+    .stagger-7 { animation-delay: 300ms; }
+    .stagger-8 { animation-delay: 350ms; }
+    .stagger-9 { animation-delay: 400ms; }
+    [class*="animate-fade"] { opacity: 0; }
+  </style>
+</head>
+<body class="bg-cream font-sans text-stone-800 antialiased">
+
+  <!-- Navigation -->
+  <nav class="bg-cream border-b border-stone-200 sticky top-0 z-40">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="flex items-center justify-between h-16">
+        <a href="/" class="font-display text-2xl text-stone-800">Roast</a>
+        <div class="flex items-center gap-8">
+          <a href="/cities" class="text-sm text-stone-500 hover:text-stone-800 transition-colors">Cities</a>
+          <a href="/about" class="text-sm text-stone-500 hover:text-stone-800 transition-colors">About</a>
+          <button
+            onclick="document.getElementById('submit-modal').classList.remove('hidden')"
+            class="text-sm text-stone-800 font-medium border border-stone-300 hover:border-stone-400 px-4 py-2 transition-colors"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="bg-cream">
+    <div class="max-w-5xl mx-auto px-6 py-24 text-center">
+      <p class="text-sm text-stone-400 uppercase tracking-[0.2em] mb-6 animate-fade-in stagger-1">Est. 2025</p>
+      <h1 class="font-display text-5xl md:text-6xl text-stone-800 mb-6 animate-fade-in-up stagger-2">
+        Coffee shops<br><em>worth visiting</em>
+      </h1>
+      <p class="text-lg text-stone-500 max-w-md mx-auto mb-12 animate-fade-in stagger-3">A curated guide to exceptional cafes in cities around the world.</p>
+
+      <!-- Search -->
+      <div class="max-w-md mx-auto mb-12 animate-fade-in-up stagger-4">
+        <input
+          type="search"
+          placeholder="Search by name or city..."
+          class="w-full bg-white text-stone-800 border border-stone-200 px-5 py-4 focus:outline-none focus:border-stone-400 transition-colors"
+          id="search-input"
+        >
+      </div>
+
+      <!-- City Pills -->
+      <div class="flex flex-wrap justify-center gap-2 animate-fade-in stagger-5">
+        <button class="bg-stone-800 text-white text-sm px-4 py-2">All</button>
+        <button class="bg-white hover:bg-stone-50 text-stone-600 text-sm px-4 py-2 border border-stone-200 transition-colors">New York</button>
+        <button class="bg-white hover:bg-stone-50 text-stone-600 text-sm px-4 py-2 border border-stone-200 transition-colors">Los Angeles</button>
+        <button class="bg-white hover:bg-stone-50 text-stone-600 text-sm px-4 py-2 border border-stone-200 transition-colors">London</button>
+        <button class="bg-white hover:bg-stone-50 text-stone-600 text-sm px-4 py-2 border border-stone-200 transition-colors">Tokyo</button>
+        <button class="bg-white hover:bg-stone-50 text-stone-600 text-sm px-4 py-2 border border-stone-200 transition-colors">Paris</button>
+        <button class="bg-white hover:bg-stone-50 text-stone-600 text-sm px-4 py-2 border border-stone-200 transition-colors">Melbourne</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Divider -->
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="border-t border-stone-200"></div>
+  </div>
+
+  <!-- Main Content -->
+  <section class="max-w-5xl mx-auto px-6 py-16">
+    <!-- Results Header -->
+    <div class="flex items-center justify-between mb-12 animate-fade-in stagger-6">
+      <p class="text-sm text-stone-400"><span class="text-stone-600">124</span> cafes</p>
+      <select class="text-sm border border-stone-200 px-3 py-2 bg-white focus:outline-none focus:border-stone-400 text-stone-600">
+        <option>Recently Added</option>
+        <option>Most Popular</option>
+        <option>Alphabetical</option>
+      </select>
+    </div>
+
+    <!-- Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <!-- Cafe 1 -->
+      <a href="detail.html" class="group animate-fade-in-up stagger-1">
+        <div class="aspect-[4/3] bg-surface-warm mb-4 overflow-hidden">
+          <img src="https://placehold.co/600x450/f5f5f4/a8a29e" alt="Sey Coffee" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h3 class="font-display text-xl text-stone-800 group-hover:text-brand transition-colors">Sey Coffee</h3>
+            <p class="text-sm text-stone-400">Brooklyn, New York</p>
+          </div>
+          <span class="text-xs text-stone-400 border border-stone-200 px-2 py-1">$$</span>
+        </div>
+      </a>
+
+      <!-- Cafe 2 -->
+      <a href="detail.html" class="group animate-fade-in-up stagger-2">
+        <div class="aspect-[4/3] bg-surface-warm mb-4 overflow-hidden">
+          <img src="https://placehold.co/600x450/f5f5f4/a8a29e" alt="Blue Bottle" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h3 class="font-display text-xl text-stone-800 group-hover:text-brand transition-colors">Blue Bottle</h3>
+            <p class="text-sm text-stone-400">Mint Plaza, San Francisco</p>
+          </div>
+          <span class="text-xs text-stone-400 border border-stone-200 px-2 py-1">$$</span>
+        </div>
+      </a>
+
+      <!-- Cafe 3 -->
+      <a href="detail.html" class="group animate-fade-in-up stagger-3">
+        <div class="aspect-[4/3] bg-surface-warm mb-4 overflow-hidden">
+          <img src="https://placehold.co/600x450/f5f5f4/a8a29e" alt="Onibus Coffee" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h3 class="font-display text-xl text-stone-800 group-hover:text-brand transition-colors">Onibus Coffee</h3>
+            <p class="text-sm text-stone-400">Nakameguro, Tokyo</p>
+          </div>
+          <span class="text-xs text-stone-400 border border-stone-200 px-2 py-1">$$</span>
+        </div>
+      </a>
+
+      <!-- Cafe 4 -->
+      <a href="detail.html" class="group animate-fade-in-up stagger-4">
+        <div class="aspect-[4/3] bg-surface-warm mb-4 overflow-hidden">
+          <img src="https://placehold.co/600x450/f5f5f4/a8a29e" alt="Prufrock Coffee" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h3 class="font-display text-xl text-stone-800 group-hover:text-brand transition-colors">Prufrock Coffee</h3>
+            <p class="text-sm text-stone-400">Clerkenwell, London</p>
+          </div>
+          <span class="text-xs text-stone-400 border border-stone-200 px-2 py-1">$$$</span>
+        </div>
+      </a>
+
+      <!-- Cafe 5 -->
+      <a href="detail.html" class="group animate-fade-in-up stagger-5">
+        <div class="aspect-[4/3] bg-surface-warm mb-4 overflow-hidden">
+          <img src="https://placehold.co/600x450/f5f5f4/a8a29e" alt="Stumptown" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h3 class="font-display text-xl text-stone-800 group-hover:text-brand transition-colors">Stumptown Coffee</h3>
+            <p class="text-sm text-stone-400">Downtown, Portland</p>
+          </div>
+          <span class="text-xs text-stone-400 border border-stone-200 px-2 py-1">$$</span>
+        </div>
+      </a>
+
+      <!-- Cafe 6 -->
+      <a href="detail.html" class="group animate-fade-in-up stagger-6">
+        <div class="aspect-[4/3] bg-surface-warm mb-4 overflow-hidden">
+          <img src="https://placehold.co/600x450/f5f5f4/a8a29e" alt="Coutume" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h3 class="font-display text-xl text-stone-800 group-hover:text-brand transition-colors">Coutume Café</h3>
+            <p class="text-sm text-stone-400">Saint-Germain, Paris</p>
+          </div>
+          <span class="text-xs text-stone-400 border border-stone-200 px-2 py-1">$$$</span>
+        </div>
+      </a>
+
+      <!-- Cafe 7 -->
+      <a href="detail.html" class="group animate-fade-in-up stagger-7">
+        <div class="aspect-[4/3] bg-surface-warm mb-4 overflow-hidden">
+          <img src="https://placehold.co/600x450/f5f5f4/a8a29e" alt="Patricia Coffee" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h3 class="font-display text-xl text-stone-800 group-hover:text-brand transition-colors">Patricia Coffee</h3>
+            <p class="text-sm text-stone-400">CBD, Melbourne</p>
+          </div>
+          <span class="text-xs text-stone-400 border border-stone-200 px-2 py-1">$</span>
+        </div>
+      </a>
+
+      <!-- Cafe 8 -->
+      <a href="detail.html" class="group animate-fade-in-up stagger-8">
+        <div class="aspect-[4/3] bg-surface-warm mb-4 overflow-hidden">
+          <img src="https://placehold.co/600x450/f5f5f4/a8a29e" alt="Intelligentsia" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h3 class="font-display text-xl text-stone-800 group-hover:text-brand transition-colors">Intelligentsia</h3>
+            <p class="text-sm text-stone-400">Silver Lake, Los Angeles</p>
+          </div>
+          <span class="text-xs text-stone-400 border border-stone-200 px-2 py-1">$$</span>
+        </div>
+      </a>
+
+      <!-- Cafe 9 -->
+      <a href="detail.html" class="group animate-fade-in-up stagger-9">
+        <div class="aspect-[4/3] bg-surface-warm mb-4 overflow-hidden">
+          <img src="https://placehold.co/600x450/f5f5f4/a8a29e" alt="Fuglen" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h3 class="font-display text-xl text-stone-800 group-hover:text-brand transition-colors">Fuglen Tokyo</h3>
+            <p class="text-sm text-stone-400">Shibuya, Tokyo</p>
+          </div>
+          <span class="text-xs text-stone-400 border border-stone-200 px-2 py-1">$$</span>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Load More -->
+    <div class="mt-16 text-center">
+      <button class="text-sm text-stone-800 font-medium border border-stone-300 hover:border-stone-400 px-8 py-3 transition-colors">
+        Load more
+      </button>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="bg-stone-800 my-16 max-w-5xl mx-auto">
+    <div class="px-12 py-16 text-center text-white">
+      <h2 class="font-display text-3xl mb-4">Know a great cafe?</h2>
+      <p class="text-stone-400 mb-8 max-w-md mx-auto">Help fellow coffee lovers discover their next favorite spot.</p>
+      <button onclick="document.getElementById('submit-modal').classList.remove('hidden')" class="text-sm font-medium border border-white/30 hover:bg-white hover:text-stone-800 px-6 py-3 transition-all">
+        Submit a Cafe
+      </button>
+    </div>
+  </section>
+
+  <!-- Submit Modal -->
+  <div id="submit-modal" class="hidden fixed inset-0 z-50">
+    <div class="absolute inset-0 bg-black/40" onclick="document.getElementById('submit-modal').classList.add('hidden')"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="bg-white w-full max-w-lg shadow-2xl animate-fade-in-up">
+        <div class="flex items-center justify-between p-6 border-b border-stone-100">
+          <h2 class="font-display text-2xl text-stone-800">Submit a Cafe</h2>
+          <button onclick="document.getElementById('submit-modal').classList.add('hidden')" class="text-stone-400 hover:text-stone-600 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <form class="p-6 space-y-5">
+          <div>
+            <label class="block text-sm text-stone-500 mb-2">Cafe Name</label>
+            <input type="text" placeholder="e.g. Blue Bottle Coffee" class="w-full border border-stone-200 px-4 py-3 focus:outline-none focus:border-stone-400 transition-colors">
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm text-stone-500 mb-2">City</label>
+              <input type="text" placeholder="e.g. San Francisco" class="w-full border border-stone-200 px-4 py-3 focus:outline-none focus:border-stone-400 transition-colors">
+            </div>
+            <div>
+              <label class="block text-sm text-stone-500 mb-2">Neighborhood</label>
+              <input type="text" placeholder="e.g. Hayes Valley" class="w-full border border-stone-200 px-4 py-3 focus:outline-none focus:border-stone-400 transition-colors">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm text-stone-500 mb-2">Website or Instagram</label>
+            <input type="url" placeholder="https://..." class="w-full border border-stone-200 px-4 py-3 focus:outline-none focus:border-stone-400 transition-colors">
+          </div>
+          <div>
+            <label class="block text-sm text-stone-500 mb-2">What makes it special?</label>
+            <textarea rows="3" placeholder="The atmosphere, the coffee, the pastries..." class="w-full border border-stone-200 px-4 py-3 focus:outline-none focus:border-stone-400 resize-none transition-colors"></textarea>
+          </div>
+        </form>
+        <div class="flex justify-end gap-3 p-6 border-t border-stone-100">
+          <button onclick="document.getElementById('submit-modal').classList.add('hidden')" class="text-sm text-stone-500 hover:text-stone-700 px-4 py-2 transition-colors">
+            Cancel
+          </button>
+          <button class="text-sm text-white bg-stone-800 hover:bg-stone-700 px-6 py-2 transition-colors">
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-stone-200">
+    <div class="max-w-5xl mx-auto px-6 py-12">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="text-center md:text-left">
+          <p class="font-display text-xl text-stone-800 mb-1">Roast</p>
+          <p class="text-sm text-stone-400">Curated coffee shops</p>
+        </div>
+        <div class="flex gap-8">
+          <a href="/about" class="text-sm text-stone-400 hover:text-stone-600 transition-colors">About</a>
+          <a href="/contact" class="text-sm text-stone-400 hover:text-stone-600 transition-colors">Contact</a>
+          <a href="/submit" class="text-sm text-stone-400 hover:text-stone-600 transition-colors">Submit</a>
+        </div>
+      </div>
+      <div class="border-t border-stone-100 mt-8 pt-8 text-center">
+        <p class="text-xs text-stone-400">&copy; 2025 Roast. Made for coffee lovers.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gagosian — Exhibit</title>
+  <meta name="description" content="Gagosian Gallery in New York. One of the world's leading contemporary art galleries.">
+
+  <!-- OG Tags -->
+  <meta property="og:title" content="Gagosian — Exhibit">
+  <meta property="og:description" content="One of the world's leading contemporary art galleries.">
+  <meta property="og:type" content="website">
+
+  <!-- Fonts & Tailwind -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['DM Sans', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            'gallery': '#ffffff',
+            'wall': '#fafafa',
+            'frame': '#171717',
+            'caption': '#737373',
+            'line': '#e5e5e5',
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.8s ease-out forwards',
+            'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            fadeInUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    .stagger-1 { animation-delay: 0ms; }
+    .stagger-2 { animation-delay: 100ms; }
+    .stagger-3 { animation-delay: 200ms; }
+    .stagger-4 { animation-delay: 300ms; }
+    .stagger-5 { animation-delay: 400ms; }
+    [class*="animate-fade"] { opacity: 0; }
+  </style>
+</head>
+<body class="bg-gallery font-sans text-frame antialiased">
+
+  <!-- Navigation -->
+  <nav class="bg-gallery border-b border-line fixed w-full top-0 z-40">
+    <div class="max-w-7xl mx-auto px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="index.html" class="text-sm tracking-widest uppercase">Exhibit</a>
+        <div class="flex items-center gap-10">
+          <a href="/galleries" class="text-sm text-caption hover:text-frame transition-colors">Galleries</a>
+          <a href="/cities" class="text-sm text-caption hover:text-frame transition-colors">Cities</a>
+          <a href="/about" class="text-sm text-caption hover:text-frame transition-colors">About</a>
+          <button class="text-sm text-frame">Submit</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Spacer for fixed nav -->
+  <div class="h-16"></div>
+
+  <!-- Back Link -->
+  <div class="max-w-7xl mx-auto px-8 pt-8">
+    <a href="index.html" class="inline-flex items-center gap-2 text-sm text-caption hover:text-frame transition-colors animate-fade-in stagger-1">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 19l-7-7 7-7"/>
+      </svg>
+      Back
+    </a>
+  </div>
+
+  <!-- Hero Image -->
+  <section class="max-w-7xl mx-auto px-8 py-12">
+    <div class="aspect-[2/1] bg-wall overflow-hidden animate-fade-in-up stagger-2">
+      <img src="https://placehold.co/1400x700/fafafa/e5e5e5" alt="Gagosian Gallery" class="w-full h-full object-cover">
+    </div>
+  </section>
+
+  <!-- Gallery Header -->
+  <section class="max-w-7xl mx-auto px-8">
+    <div class="max-w-2xl animate-fade-in-up stagger-3">
+      <h1 class="text-4xl md:text-5xl font-normal tracking-tight mb-4">Gagosian</h1>
+      <p class="text-lg text-caption mb-8">New York — Contemporary</p>
+      <p class="text-frame leading-relaxed mb-12">
+        One of the world's most influential contemporary art galleries, representing artists who have shaped the discourse of art since the late 20th century. Founded by Larry Gagosian in Los Angeles in 1980.
+      </p>
+
+      <a href="#" class="inline-block text-sm text-frame border-b border-frame pb-0.5 hover:text-caption hover:border-caption transition-colors">
+        Visit website
+      </a>
+    </div>
+  </section>
+
+  <!-- Details -->
+  <section class="max-w-7xl mx-auto px-8 py-24">
+    <div class="grid md:grid-cols-3 gap-16 animate-fade-in-up stagger-4">
+
+      <div>
+        <p class="text-sm text-caption mb-4">Location</p>
+        <p class="mb-1">980 Madison Avenue</p>
+        <p class="text-caption">New York, NY 10075</p>
+      </div>
+
+      <div>
+        <p class="text-sm text-caption mb-4">Hours</p>
+        <p class="mb-1">Tuesday – Saturday</p>
+        <p class="text-caption">10:00 – 18:00</p>
+      </div>
+
+      <div>
+        <p class="text-sm text-caption mb-4">Admission</p>
+        <p class="mb-1">Free</p>
+        <p class="text-caption">No appointment needed</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Current Exhibition -->
+  <section class="border-t border-line">
+    <div class="max-w-7xl mx-auto px-8 py-24">
+      <p class="text-sm text-caption mb-12">Current Exhibition</p>
+
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+        <div class="aspect-[4/3] bg-wall overflow-hidden">
+          <img src="https://placehold.co/800x600/fafafa/e5e5e5" alt="Current Exhibition" class="w-full h-full object-cover">
+        </div>
+        <div>
+          <h2 class="text-2xl mb-4">Richard Serra: Transmitter</h2>
+          <p class="text-caption mb-6">Through March 15, 2025</p>
+          <p class="text-frame leading-relaxed mb-8">
+            Large-scale steel sculptures that transform the gallery space, inviting visitors to experience weight, balance, and the passage of time through material.
+          </p>
+          <a href="#" class="text-sm text-frame border-b border-frame pb-0.5">
+            Learn more
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Notable Artists -->
+  <section class="bg-wall">
+    <div class="max-w-7xl mx-auto px-8 py-24">
+      <p class="text-sm text-caption mb-12">Represented Artists</p>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div>
+          <p class="mb-1">Damien Hirst</p>
+          <p class="text-sm text-caption">British, b. 1965</p>
+        </div>
+        <div>
+          <p class="mb-1">Jeff Koons</p>
+          <p class="text-sm text-caption">American, b. 1955</p>
+        </div>
+        <div>
+          <p class="mb-1">Takashi Murakami</p>
+          <p class="text-sm text-caption">Japanese, b. 1962</p>
+        </div>
+        <div>
+          <p class="mb-1">Richard Serra</p>
+          <p class="text-sm text-caption">American, 1938–2024</p>
+        </div>
+        <div>
+          <p class="mb-1">Cy Twombly</p>
+          <p class="text-sm text-caption">American, 1928–2011</p>
+        </div>
+        <div>
+          <p class="mb-1">Jean-Michel Basquiat</p>
+          <p class="text-sm text-caption">American, 1960–1988</p>
+        </div>
+        <div>
+          <p class="mb-1">Helen Frankenthaler</p>
+          <p class="text-sm text-caption">American, 1928–2011</p>
+        </div>
+        <div>
+          <p class="mb-1">Ed Ruscha</p>
+          <p class="text-sm text-caption">American, b. 1937</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Images -->
+  <section class="max-w-7xl mx-auto px-8 py-24">
+    <p class="text-sm text-caption mb-12">The Space</p>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div class="aspect-square bg-wall">
+        <img src="https://placehold.co/600x600/fafafa/e5e5e5" alt="Gallery interior" class="w-full h-full object-cover">
+      </div>
+      <div class="aspect-square bg-wall">
+        <img src="https://placehold.co/600x600/fafafa/e5e5e5" alt="Gallery interior" class="w-full h-full object-cover">
+      </div>
+      <div class="aspect-square bg-wall">
+        <img src="https://placehold.co/600x600/fafafa/e5e5e5" alt="Gallery interior" class="w-full h-full object-cover">
+      </div>
+      <div class="aspect-square bg-wall">
+        <img src="https://placehold.co/600x600/fafafa/e5e5e5" alt="Gallery interior" class="w-full h-full object-cover">
+      </div>
+      <div class="aspect-square bg-wall">
+        <img src="https://placehold.co/600x600/fafafa/e5e5e5" alt="Gallery interior" class="w-full h-full object-cover">
+      </div>
+      <div class="aspect-square bg-wall">
+        <img src="https://placehold.co/600x600/fafafa/e5e5e5" alt="Gallery interior" class="w-full h-full object-cover">
+      </div>
+    </div>
+  </section>
+
+  <!-- Other Locations -->
+  <section class="border-t border-line">
+    <div class="max-w-7xl mx-auto px-8 py-24">
+      <p class="text-sm text-caption mb-12">Other Locations</p>
+
+      <div class="grid md:grid-cols-4 gap-8">
+        <div>
+          <p class="mb-1">London</p>
+          <p class="text-sm text-caption">Britannia Street</p>
+        </div>
+        <div>
+          <p class="mb-1">Paris</p>
+          <p class="text-sm text-caption">Rue de Ponthieu</p>
+        </div>
+        <div>
+          <p class="mb-1">Hong Kong</p>
+          <p class="text-sm text-caption">Pedder Building</p>
+        </div>
+        <div>
+          <p class="mb-1">Los Angeles</p>
+          <p class="text-sm text-caption">Beverly Hills</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Similar Galleries -->
+  <section class="bg-wall">
+    <div class="max-w-7xl mx-auto px-8 py-24">
+      <p class="text-sm text-caption mb-12">Similar Galleries</p>
+
+      <div class="grid md:grid-cols-3 gap-8">
+
+        <a href="#" class="group bg-gallery">
+          <div class="aspect-[4/3] bg-wall mb-6 overflow-hidden">
+            <img src="https://placehold.co/800x600/fafafa/e5e5e5" alt="Pace Gallery" class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700">
+          </div>
+          <div class="px-6 pb-6">
+            <h3 class="mb-1 group-hover:underline underline-offset-4">Pace Gallery</h3>
+            <p class="text-sm text-caption">New York</p>
+          </div>
+        </a>
+
+        <a href="#" class="group bg-gallery">
+          <div class="aspect-[4/3] bg-wall mb-6 overflow-hidden">
+            <img src="https://placehold.co/800x600/fafafa/e5e5e5" alt="David Zwirner" class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700">
+          </div>
+          <div class="px-6 pb-6">
+            <h3 class="mb-1 group-hover:underline underline-offset-4">David Zwirner</h3>
+            <p class="text-sm text-caption">New York</p>
+          </div>
+        </a>
+
+        <a href="#" class="group bg-gallery">
+          <div class="aspect-[4/3] bg-wall mb-6 overflow-hidden">
+            <img src="https://placehold.co/800x600/fafafa/e5e5e5" alt="Hauser & Wirth" class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700">
+          </div>
+          <div class="px-6 pb-6">
+            <h3 class="mb-1 group-hover:underline underline-offset-4">Hauser & Wirth</h3>
+            <p class="text-sm text-caption">New York</p>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-line">
+    <div class="max-w-7xl mx-auto px-8 py-12">
+      <div class="flex items-center justify-between">
+        <p class="text-sm tracking-widest uppercase">Exhibit</p>
+        <div class="flex gap-10">
+          <a href="/about" class="text-sm text-caption hover:text-frame transition-colors">About</a>
+          <a href="/contact" class="text-sm text-caption hover:text-frame transition-colors">Contact</a>
+          <a href="/submit" class="text-sm text-caption hover:text-frame transition-colors">Submit</a>
+        </div>
+      </div>
+      <div class="border-t border-line mt-8 pt-8">
+        <p class="text-sm text-caption text-center">&copy; 2025</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Counter Culture Coffee — Origin</title>
+  <meta name="description" content="Counter Culture Coffee. Pioneering direct trade since 1995. Exceptional Ethiopian and Colombian lots roasted in Durham, North Carolina.">
+
+  <!-- OG Tags -->
+  <meta property="og:title" content="Counter Culture Coffee — Origin">
+  <meta property="og:description" content="Pioneering direct trade since 1995. Exceptional Ethiopian and Colombian lots.">
+  <meta property="og:type" content="website">
+
+  <!-- Fonts & Tailwind -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Source Sans 3', 'system-ui', 'sans-serif'],
+            display: ['Lora', 'Georgia', 'serif'],
+          },
+          colors: {
+            'brand': '#92400e',
+            'brand-light': '#b45309',
+            'surface': '#fefdfb',
+            'surface-warm': '#faf6f1',
+            'paper': '#f5efe6',
+            'ink': '#292524',
+            'muted': '#78716c',
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.6s ease-out forwards',
+            'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            fadeInUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    .stagger-1 { animation-delay: 0ms; }
+    .stagger-2 { animation-delay: 50ms; }
+    .stagger-3 { animation-delay: 100ms; }
+    .stagger-4 { animation-delay: 150ms; }
+    .stagger-5 { animation-delay: 200ms; }
+    .stagger-6 { animation-delay: 250ms; }
+    [class*="animate-fade"] { opacity: 0; }
+  </style>
+</head>
+<body class="bg-surface font-sans text-ink antialiased">
+
+  <!-- Navigation -->
+  <nav class="bg-surface border-b border-amber-100 sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex items-center justify-between h-16">
+        <a href="index.html" class="font-display text-xl text-ink">Origin</a>
+        <div class="flex items-center gap-8">
+          <a href="/roasters" class="text-sm text-muted hover:text-ink transition-colors">Roasters</a>
+          <a href="/origins" class="text-sm text-muted hover:text-ink transition-colors">Origins</a>
+          <a href="/about" class="text-sm text-muted hover:text-ink transition-colors">About</a>
+          <button class="text-sm text-ink font-medium bg-paper hover:bg-amber-100 px-4 py-2 rounded-lg transition-colors">
+            Submit Roaster
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Back Link -->
+  <div class="max-w-6xl mx-auto px-6 pt-8">
+    <a href="index.html" class="inline-flex items-center gap-2 text-sm text-muted hover:text-ink transition-colors animate-fade-in stagger-1">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7"/>
+      </svg>
+      Back to all roasters
+    </a>
+  </div>
+
+  <!-- Roaster Header -->
+  <section class="max-w-6xl mx-auto px-6 py-10">
+    <div class="grid lg:grid-cols-2 gap-12 items-start">
+
+      <!-- Image -->
+      <div class="aspect-[4/3] bg-surface-warm rounded-xl overflow-hidden animate-fade-in-up stagger-2">
+        <img src="https://placehold.co/800x600/faf6f1/92400e" alt="Counter Culture Coffee" class="w-full h-full object-cover">
+      </div>
+
+      <!-- Info -->
+      <div class="animate-fade-in-up stagger-3">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="text-xs bg-paper text-brand font-medium px-2 py-1 rounded">North Carolina</span>
+          <span class="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded">Single Origin</span>
+          <span class="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded">Direct Trade</span>
+        </div>
+
+        <h1 class="font-display text-3xl md:text-4xl text-ink mb-4">Counter Culture Coffee</h1>
+
+        <p class="text-lg text-muted leading-relaxed mb-8">
+          Pioneering direct trade since 1995. Counter Culture has been at the forefront of specialty coffee, building long-term relationships with farmers and pushing for transparency across the supply chain.
+        </p>
+
+        <!-- Quick Info -->
+        <div class="grid grid-cols-2 gap-6 mb-8">
+          <div>
+            <p class="text-xs text-muted uppercase tracking-wider mb-1">Founded</p>
+            <p class="text-ink font-medium">1995</p>
+          </div>
+          <div>
+            <p class="text-xs text-muted uppercase tracking-wider mb-1">Location</p>
+            <p class="text-ink font-medium">Durham, NC</p>
+          </div>
+          <div>
+            <p class="text-xs text-muted uppercase tracking-wider mb-1">Roast Style</p>
+            <p class="text-ink font-medium">Light to Medium</p>
+          </div>
+          <div>
+            <p class="text-xs text-muted uppercase tracking-wider mb-1">Specialty</p>
+            <p class="text-ink font-medium">Single Origin</p>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-wrap gap-3">
+          <a href="#" class="inline-flex items-center gap-2 bg-brand hover:bg-brand-light text-white font-medium px-6 py-3 rounded-lg transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+            Visit Website
+          </a>
+          <a href="#" class="inline-flex items-center gap-2 bg-paper hover:bg-amber-100 text-ink font-medium px-6 py-3 rounded-lg transition-colors">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/>
+            </svg>
+            @counterculturecoffee
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="bg-paper py-16">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-3xl animate-fade-in-up stagger-4">
+        <h2 class="font-display text-2xl text-ink mb-6">About the Roaster</h2>
+        <div class="space-y-4 text-muted leading-relaxed">
+          <p>
+            Counter Culture Coffee was founded in Durham, North Carolina in 1995 by Brett Smith. From the beginning, the focus was on sourcing exceptional coffees directly from farmers — a practice that wasn't common at the time.
+          </p>
+          <p>
+            They were among the first roasters to publish detailed transparency reports, sharing exactly what they pay farmers versus the commodity market price. This commitment to openness has made them a leader in ethical sourcing.
+          </p>
+          <p>
+            Their roasting philosophy emphasizes clarity and balance. They aim to highlight the inherent characteristics of each coffee rather than imposing a house style. The result: coffees that taste distinctly of their origin.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Origin Countries -->
+  <section class="max-w-6xl mx-auto px-6 py-16">
+    <h2 class="font-display text-2xl text-ink mb-8 animate-fade-in stagger-4">Sourcing Origins</h2>
+    <div class="grid md:grid-cols-3 gap-6 animate-fade-in-up stagger-5">
+
+      <div class="bg-white border border-amber-100 rounded-xl p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 bg-surface-warm rounded-lg flex items-center justify-center">
+            <span class="text-lg">🇪🇹</span>
+          </div>
+          <div>
+            <h3 class="font-display text-ink">Ethiopia</h3>
+            <p class="text-xs text-muted">Yirgacheffe, Sidamo</p>
+          </div>
+        </div>
+        <p class="text-sm text-muted">Floral, citrus, and tea-like coffees from the birthplace of arabica.</p>
+      </div>
+
+      <div class="bg-white border border-amber-100 rounded-xl p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 bg-surface-warm rounded-lg flex items-center justify-center">
+            <span class="text-lg">🇨🇴</span>
+          </div>
+          <div>
+            <h3 class="font-display text-ink">Colombia</h3>
+            <p class="text-xs text-muted">Huila, Nariño</p>
+          </div>
+        </div>
+        <p class="text-sm text-muted">Balanced, sweet, with notes of chocolate, caramel, and red fruit.</p>
+      </div>
+
+      <div class="bg-white border border-amber-100 rounded-xl p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 bg-surface-warm rounded-lg flex items-center justify-center">
+            <span class="text-lg">🇬🇹</span>
+          </div>
+          <div>
+            <h3 class="font-display text-ink">Guatemala</h3>
+            <p class="text-xs text-muted">Huehuetenango, Antigua</p>
+          </div>
+        </div>
+        <p class="text-sm text-muted">Complex and full-bodied with chocolate, spice, and stone fruit notes.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Tasting Notes -->
+  <section class="max-w-6xl mx-auto px-6 py-16">
+    <h2 class="font-display text-2xl text-ink mb-8 animate-fade-in stagger-5">What to Expect</h2>
+    <div class="grid md:grid-cols-2 gap-8 animate-fade-in-up stagger-6">
+
+      <div class="flex gap-4">
+        <div class="w-12 h-12 bg-paper rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="font-medium text-ink mb-1">Roast Level</h3>
+          <p class="text-sm text-muted">Light to medium roasts that preserve origin character. Bright acidity, clean finish.</p>
+        </div>
+      </div>
+
+      <div class="flex gap-4">
+        <div class="w-12 h-12 bg-paper rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="font-medium text-ink mb-1">Flavor Profile</h3>
+          <p class="text-sm text-muted">Expect citrus, florals, stone fruit, and chocolate depending on the origin. Always complex.</p>
+        </div>
+      </div>
+
+      <div class="flex gap-4">
+        <div class="w-12 h-12 bg-paper rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="font-medium text-ink mb-1">Price Range</h3>
+          <p class="text-sm text-muted">$16–22 for 12oz bags. Seasonal single origins and limited releases may be higher.</p>
+        </div>
+      </div>
+
+      <div class="flex gap-4">
+        <div class="w-12 h-12 bg-paper rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="font-medium text-ink mb-1">Availability</h3>
+          <p class="text-sm text-muted">Ships nationwide. Also available at specialty retailers and their training centers.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Similar Roasters -->
+  <section class="max-w-6xl mx-auto px-6 py-16">
+    <h2 class="font-display text-2xl text-ink mb-8">Similar Roasters</h2>
+    <div class="grid md:grid-cols-3 gap-8">
+
+      <a href="#" class="group bg-white border border-amber-100 rounded-xl overflow-hidden hover:shadow-lg hover:shadow-amber-900/5 transition-all duration-300">
+        <div class="aspect-[3/2] bg-surface-warm overflow-hidden">
+          <img src="https://placehold.co/600x400/faf6f1/92400e" alt="Intelligentsia" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="p-5">
+          <h3 class="font-display text-lg text-ink group-hover:text-brand transition-colors mb-1">Intelligentsia</h3>
+          <p class="text-sm text-muted">Chicago, IL</p>
+        </div>
+      </a>
+
+      <a href="#" class="group bg-white border border-amber-100 rounded-xl overflow-hidden hover:shadow-lg hover:shadow-amber-900/5 transition-all duration-300">
+        <div class="aspect-[3/2] bg-surface-warm overflow-hidden">
+          <img src="https://placehold.co/600x400/faf6f1/92400e" alt="Stumptown" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="p-5">
+          <h3 class="font-display text-lg text-ink group-hover:text-brand transition-colors mb-1">Stumptown Coffee</h3>
+          <p class="text-sm text-muted">Portland, OR</p>
+        </div>
+      </a>
+
+      <a href="#" class="group bg-white border border-amber-100 rounded-xl overflow-hidden hover:shadow-lg hover:shadow-amber-900/5 transition-all duration-300">
+        <div class="aspect-[3/2] bg-surface-warm overflow-hidden">
+          <img src="https://placehold.co/600x400/faf6f1/92400e" alt="George Howell" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        </div>
+        <div class="p-5">
+          <h3 class="font-display text-lg text-ink group-hover:text-brand transition-colors mb-1">George Howell</h3>
+          <p class="text-sm text-muted">Boston, MA</p>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Share Banner -->
+  <section class="bg-brand my-16 mx-6 max-w-6xl lg:mx-auto rounded-xl">
+    <div class="px-12 py-12 flex flex-col sm:flex-row items-center justify-between gap-6 text-white">
+      <div>
+        <h2 class="font-display text-2xl mb-1">Tried their coffee?</h2>
+        <p class="text-amber-200">Share this roaster with a fellow coffee enthusiast.</p>
+      </div>
+      <div class="flex gap-3">
+        <button class="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+          </svg>
+        </button>
+        <button class="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-paper border-t border-amber-100">
+    <div class="max-w-6xl mx-auto px-6 py-12">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="text-center md:text-left">
+          <p class="font-display text-xl text-ink mb-1">Origin</p>
+          <p class="text-sm text-muted">Craft coffee roasters</p>
+        </div>
+        <div class="flex gap-8">
+          <a href="/about" class="text-sm text-muted hover:text-ink transition-colors">About</a>
+          <a href="/contact" class="text-sm text-muted hover:text-ink transition-colors">Contact</a>
+          <a href="/submit" class="text-sm text-muted hover:text-ink transition-colors">Submit</a>
+        </div>
+      </div>
+      <div class="border-t border-amber-100 mt-8 pt-8 text-center">
+        <p class="text-xs text-muted">&copy; 2025 Origin. Made for coffee enthusiasts.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
