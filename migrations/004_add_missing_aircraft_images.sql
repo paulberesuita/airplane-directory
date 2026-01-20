@@ -1,0 +1,25 @@
+-- Add image URLs to missing aircraft (batch 3 and 4)
+UPDATE aircraft SET image_url = '/api/images/aircraft/airbus-a220-100.jpg' WHERE slug = 'airbus-a220-100';
+UPDATE aircraft SET image_url = '/api/images/aircraft/airbus-a318.jpg' WHERE slug = 'airbus-a318';
+UPDATE aircraft SET image_url = '/api/images/aircraft/airbus-a319.jpg' WHERE slug = 'airbus-a319';
+UPDATE aircraft SET image_url = '/api/images/aircraft/airbus-a320.jpg' WHERE slug = 'airbus-a320';
+UPDATE aircraft SET image_url = '/api/images/aircraft/airbus-a321.jpg' WHERE slug = 'airbus-a321';
+UPDATE aircraft SET image_url = '/api/images/aircraft/airbus-a330-200.jpg' WHERE slug = 'airbus-a330-200';
+UPDATE aircraft SET image_url = '/api/images/aircraft/airbus-a330-800neo.jpg' WHERE slug = 'airbus-a330-800neo';
+UPDATE aircraft SET image_url = '/api/images/aircraft/airbus-a330-900neo.jpg' WHERE slug = 'airbus-a330-900neo';
+UPDATE aircraft SET image_url = '/api/images/aircraft/airbus-a340-300.jpg' WHERE slug = 'airbus-a340-300';
+UPDATE aircraft SET image_url = '/api/images/aircraft/airbus-a340-500.png' WHERE slug = 'airbus-a340-500';
+UPDATE aircraft SET image_url = '/api/images/aircraft/airbus-a340-600.jpg' WHERE slug = 'airbus-a340-600';
+UPDATE aircraft SET image_url = '/api/images/aircraft/airbus-a350-1000.jpg' WHERE slug = 'airbus-a350-1000';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-737-max-10.jpg' WHERE slug = 'boeing-737-max-10';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-737-max-7.jpg' WHERE slug = 'boeing-737-max-7';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-737-max-9.jpg' WHERE slug = 'boeing-737-max-9';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-737-700.jpg' WHERE slug = 'boeing-737-700';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-747-8i.jpg' WHERE slug = 'boeing-747-8i';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-757-300.jpg' WHERE slug = 'boeing-757-300';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-767-400er.jpg' WHERE slug = 'boeing-767-400er';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-777-200er.jpg' WHERE slug = 'boeing-777-200er';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-777-200lr.jpg' WHERE slug = 'boeing-777-200lr';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-777-8.jpg' WHERE slug = 'boeing-777-8';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-777-9.jpg' WHERE slug = 'boeing-777-9';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-787-10.jpg' WHERE slug = 'boeing-787-10';

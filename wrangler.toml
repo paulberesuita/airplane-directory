@@ -1,0 +1,12 @@
+name = "airplane-directory"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "./public"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "airplane-directory-db"
+database_id = "fea2251d-3288-41ae-a607-fce9e5950129"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "airplane-directory-assets"

@@ -1,0 +1,20 @@
+-- Add image URLs to all aircraft
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-737-800.jpg' WHERE slug = 'boeing-737-800';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-737-max-8.jpg' WHERE slug = 'boeing-737-max-8';
+UPDATE aircraft SET image_url = '/api/images/aircraft/airbus-a320neo.jpg' WHERE slug = 'airbus-a320neo';
+UPDATE aircraft SET image_url = '/api/images/aircraft/airbus-a321neo.jpg' WHERE slug = 'airbus-a321neo';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-787-9.jpg' WHERE slug = 'boeing-787-9';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-777-300er.jpg' WHERE slug = 'boeing-777-300er';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-747-400.jpg' WHERE slug = 'boeing-747-400';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-767-300er.png' WHERE slug = 'boeing-767-300er';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-757-200.jpg' WHERE slug = 'boeing-757-200';
+UPDATE aircraft SET image_url = '/api/images/aircraft/airbus-a350-900.jpg' WHERE slug = 'airbus-a350-900';
+UPDATE aircraft SET image_url = '/api/images/aircraft/airbus-a380.jpg' WHERE slug = 'airbus-a380';
+UPDATE aircraft SET image_url = '/api/images/aircraft/airbus-a330-300.jpg' WHERE slug = 'airbus-a330-300';
+UPDATE aircraft SET image_url = '/api/images/aircraft/embraer-e190-e2.jpg' WHERE slug = 'embraer-e190-e2';
+UPDATE aircraft SET image_url = '/api/images/aircraft/bombardier-crj-900.jpg' WHERE slug = 'bombardier-crj-900';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-737-900er.jpg' WHERE slug = 'boeing-737-900er';
+UPDATE aircraft SET image_url = '/api/images/aircraft/airbus-a319neo.jpg' WHERE slug = 'airbus-a319neo';
+UPDATE aircraft SET image_url = '/api/images/aircraft/boeing-787-8.jpg' WHERE slug = 'boeing-787-8';
+UPDATE aircraft SET image_url = '/api/images/aircraft/airbus-a220-300.jpg' WHERE slug = 'airbus-a220-300';
+UPDATE aircraft SET image_url = '/api/images/aircraft/embraer-e175.jpg' WHERE slug = 'embraer-e175';

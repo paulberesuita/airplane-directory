@@ -20,6 +20,4 @@ Work queue. Planner maintains, builder executes.
 
 ## Done
 
-<!-- Move completed items here:
-- [x] **Feature Name** — Description
--->
+- [x] **Directory UI** — Homepage with search/filter, detail pages, API endpoints
