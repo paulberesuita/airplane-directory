@@ -204,8 +204,8 @@ async function renderListPage(context, baseUrl) {
 <html lang="en">
 <head>
   ${renderHead({
-    title: 'US Airlines Fleet Guide | Airplane Directory',
-    description: 'Explore the aircraft fleets of major US airlines. Learn what planes American, Delta, United, Southwest, JetBlue, and Alaska fly.',
+    title: 'Airlines Fleet Guide | Airplane Directory',
+    description: 'Explore the aircraft fleets of major airlines worldwide. Learn what planes Emirates, British Airways, Lufthansa, Singapore Airlines, and more fly.',
     url: `${baseUrl}/airlines`,
     jsonLd: {
       "@context": "https://schema.org",
@@ -240,9 +240,9 @@ async function renderListPage(context, baseUrl) {
   <!-- Hero -->
   <div class="text-white">
     <div class="max-w-7xl mx-auto px-4 py-12 md:py-16">
-      <h1 class="font-display text-3xl md:text-4xl font-semibold mb-3 drop-shadow-lg">US Airlines</h1>
+      <h1 class="font-display text-3xl md:text-4xl font-semibold mb-3 drop-shadow-lg">Airlines</h1>
       <p class="text-white/80 text-lg max-w-2xl drop-shadow">
-        Explore the aircraft fleets of major US carriers. Find out what planes fly your favorite routes.
+        Explore the aircraft fleets of major carriers worldwide. Find out what planes fly your favorite routes.
       </p>
     </div>
   </div>

@@ -242,8 +242,8 @@ async function renderListPage(context, baseUrl) {
 <html lang="en">
 <head>
   ${renderHead({
-    title: 'Aircraft in US Fleets | Airplane Directory',
-    description: `Browse ${aircraft.length} commercial aircraft from ${manufacturers.join(', ')}. Every plane type flown by US carriers.`,
+    title: 'Aircraft Directory | Airplane Directory',
+    description: `Browse ${aircraft.length} commercial aircraft from ${manufacturers.join(', ')}. Every plane type flown by major airlines.`,
     url: `${baseUrl}/aircraft`,
     jsonLd: {
       "@context": "https://schema.org",
@@ -276,9 +276,9 @@ async function renderListPage(context, baseUrl) {
   <!-- Hero -->
   <div class="text-white">
     <div class="max-w-7xl mx-auto px-4 py-12 md:py-16">
-      <h1 class="font-display text-3xl md:text-4xl font-semibold mb-3 drop-shadow-lg">Aircraft in US Fleets</h1>
+      <h1 class="font-display text-3xl md:text-4xl font-semibold mb-3 drop-shadow-lg">Aircraft Directory</h1>
       <p class="text-white/80 text-lg max-w-2xl drop-shadow">
-        Every plane type flown by US carriers. Browse specs, history, and details.
+        Every plane type flown by major airlines. Browse specs, history, and details.
       </p>
     </div>
   </div>

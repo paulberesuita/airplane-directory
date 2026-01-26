@@ -255,8 +255,8 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
 <html lang="en">
 <head>
   ${renderHead({
-    title: 'Airplane Directory — Know What US Airlines Fly',
-    description: `Explore the fleets of ${airlines.length} major US airlines with ${formatNumber(totalAircraft)}+ aircraft. See which planes Delta, United, American, Southwest and more operate.`,
+    title: 'Airplane Directory — Know What Airlines Fly',
+    description: `Explore the fleets of ${airlines.length} major airlines with ${formatNumber(totalAircraft)}+ aircraft. See which planes Emirates, British Airways, Lufthansa, Singapore Airlines and more operate.`,
     url: baseUrl,
     image: aircraft[0]?.image_url ? `${baseUrl}/images/aircraft/${aircraft[0].slug}.jpg` : null
   })}
@@ -288,10 +288,10 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative">
       <div class="max-w-3xl">
         <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-4 leading-tight drop-shadow-lg">
-          Know what planes US airlines fly
+          Know what planes airlines fly
         </h1>
         <p class="text-white/90 text-lg md:text-xl mb-8 leading-relaxed drop-shadow">
-          Explore the fleets of America's major airlines. See specs, history, and details about every aircraft that Delta, United, American, Southwest and more operate.
+          Explore the fleets of major airlines worldwide. See specs, history, and details about every aircraft from carriers like Emirates, British Airways, Lufthansa, and more.
         </p>
 
         <div class="flex flex-wrap gap-4">
@@ -318,8 +318,8 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
     <section class="mb-16">
       <div class="flex items-center justify-between mb-6">
         <div>
-          <h2 class="font-display text-2xl md:text-3xl font-semibold text-white drop-shadow">US Airlines</h2>
-          <p class="text-white/70 mt-1">Explore fleets of major American carriers</p>
+          <h2 class="font-display text-2xl md:text-3xl font-semibold text-white drop-shadow">Airlines</h2>
+          <p class="text-white/70 mt-1">Explore fleets of major carriers worldwide</p>
         </div>
         <a href="/airlines" class="text-white hover:text-white/80 font-medium flex items-center gap-1 transition-colors">
           View all
@@ -338,7 +338,7 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
       <div class="flex items-center justify-between mb-6">
         <div>
           <h2 class="font-display text-2xl md:text-3xl font-semibold text-white drop-shadow">Aircraft Types</h2>
-          <p class="text-white/70 mt-1">${aircraft.length} plane types flown by US carriers</p>
+          <p class="text-white/70 mt-1">${aircraft.length} plane types in airline fleets</p>
         </div>
         <a href="/aircraft" class="text-white hover:text-white/80 font-medium flex items-center gap-1 transition-colors">
           View all

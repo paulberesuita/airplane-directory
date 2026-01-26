@@ -6,6 +6,16 @@ What we shipped. Builder appends here after each feature.
 
 ## 2026-01-26
 
+### International Airlines Expansion
+- **Added 32 international airlines** flying to/from the USA:
+  - **Europe (13):** British Airways, Lufthansa, Air France, KLM, Virgin Atlantic, Iberia, Swiss, Aer Lingus, Icelandair, TAP Portugal, Norwegian, SAS, Finnair
+  - **Middle East (5):** Emirates, Qatar Airways, Etihad Airways, Turkish Airlines, El Al
+  - **Asia-Pacific (9):** Japan Airlines, ANA, Korean Air, Singapore Airlines, Cathay Pacific, Qantas, Air New Zealand, EVA Air, China Airlines
+  - **Americas (5):** Air Canada, WestJet, Aeromexico, LATAM, Avianca, Copa Airlines
+- **233 fleet mappings** linking international airlines to aircraft types
+- Updated site messaging from "US Airlines" to global focus
+- Total airlines: 40 (8 US + 32 international)
+
 ### Homepage UI Improvements
 - **Sky background** — Added blue sky gradient background image (fixed to viewport height)
 - **Removed hero solid background** — Sky now visible through hero section
