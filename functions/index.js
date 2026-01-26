@@ -131,7 +131,7 @@ function renderAirlineCard(airline, baseUrl) {
        class="group block bg-white/20 backdrop-blur-xl rounded-2xl overflow-hidden hover:bg-white/30 hover:-translate-y-1 transition-all duration-300 border border-white/30">
       <div class="p-6">
         <div class="flex items-center gap-4 mb-4">
-          <div class="w-14 h-14 bg-white/80 rounded-xl flex items-center justify-center shrink-0 overflow-hidden">
+          <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center shrink-0 overflow-hidden">
             <img src="${baseUrl}/images/logos/${escapeHtml(airline.slug)}.png"
                  alt="${escapeHtml(airline.name)} logo"
                  class="w-10 h-10 object-contain"
@@ -161,16 +161,6 @@ function renderAirlineCard(airline, baseUrl) {
         </div>
 
         <p class="text-sm text-white/80 line-clamp-2">${escapeHtml(airline.description)}</p>
-      </div>
-
-      <div class="px-6 py-3 bg-white/10 border-t border-white/20 flex items-center justify-between">
-        <span class="text-xs text-white/60">Founded ${airline.founded}</span>
-        <span class="text-sm font-medium text-white flex items-center gap-1 group-hover:gap-2 transition-all">
-          View Fleet
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-          </svg>
-        </span>
       </div>
     </a>`;
 }
@@ -328,7 +318,7 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
           </svg>
         </a>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         ${airlineCards}
       </div>
     </section>
