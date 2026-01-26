@@ -76,8 +76,8 @@ function renderHead({ title, description, url, image, jsonLd }) {
           colors: {
             'primary': '#0EA5E9',
             'primary-hover': '#0284C7',
-            'background': '#F8FAFC',
-            'card': '#FFFFFF',
+            'background': 'rgba(248, 250, 252, 0.85)',
+            'card': 'rgba(255, 255, 255, 0.95)',
             'border': '#E2E8F0',
             'muted': '#64748B',
             'accent': '#F87171',
@@ -85,7 +85,16 @@ function renderHead({ title, description, url, image, jsonLd }) {
         }
       }
     }
-  </script>`;
+  </script>
+  <style>
+    body {
+      background-image: url('/images/sky-bg.jpg');
+      background-size: cover;
+      background-position: top center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+    }
+  </style>`;
 }
 
 function renderHeader(baseUrl) {
