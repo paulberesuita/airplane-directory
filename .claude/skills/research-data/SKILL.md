@@ -1,79 +1,167 @@
-# Research Data Skill
+---
+name: research-data
+description: Research aircraft data for this directory. Usage: /research-data [category?]
+user_invokable: false
+agent: seo
+---
 
-How to find commercial aircraft data for the airplane directory.
+# Research Data
 
-## Fields to Collect
+You've been invoked to **research aircraft data** for this directory.
 
-| Field | Required | How to Find |
-|-------|----------|-------------|
-| slug | Yes | Generate from name: "boeing-737-800" |
-| name | Yes | Official designation: "Boeing 737-800" |
-| manufacturer | Yes | Boeing, Airbus, Embraer, etc. |
-| description | Yes | 2-3 sentences about the aircraft's role and significance |
-| first_flight | Yes | Year of first flight |
-| passengers | Yes | Typical range: "162-189" |
-| range_km | Yes | Maximum range in kilometers |
-| cruise_speed_kmh | Yes | Typical cruise speed |
-| length_m | Yes | Fuselage length in meters |
-| wingspan_m | Yes | Wingspan in meters |
-| engines | Yes | Engine configuration: "2x CFM56-7B" |
-| status | Yes | "In Production" or "Out of Production" |
-| fun_fact | No | Interesting trivia for enthusiasts |
-| source_url | Yes | URL where data was found |
-| source_name | Yes | Name of source (e.g., "Boeing", "Airbus") |
-| researched_at | Yes | Today's date: YYYY-MM-DD |
+**Operation:** Research Data (from SEO agent)
 
-## Best Sources
+## Your Task
 
-1. **Manufacturer websites** (Primary)
-   - boeing.com/commercial - Official Boeing specs
-   - airbus.com/en/products-services/commercial-aircraft - Official Airbus specs
-   - embraer.com/global/en/commercial-aviation - Embraer specs
-   - Most authoritative for dimensions, performance
+Research aircraft for: **{{args}}**
 
-2. **Wikipedia** (Secondary verification)
-   - Good for first flight dates, production history
-   - Cross-reference with manufacturer data
+---
 
-3. **SeatGuru / airline websites** (Passenger configs)
-   - Realistic passenger counts by configuration
+## If No Category/Target Provided
 
-## Search Strategies
+Show the user what's been done and what's available:
 
-- "[aircraft model] specifications site:boeing.com"
-- "[aircraft model] specifications site:airbus.com"
-- "[aircraft model] first flight wikipedia"
-- "[aircraft model] range passengers"
+1. **Query current coverage:**
+   ```bash
+   npx wrangler d1 execute airplane-directory-db --remote --command "SELECT manufacturer, COUNT(*) as items FROM aircraft GROUP BY manufacturer ORDER BY items DESC;"
+   ```
 
-## Data Extraction
+2. **Show results and suggest options:**
+   ```
+   ## Current Coverage
+   | Manufacturer | Items |
+   |--------------|-------|
+   | Boeing       | 45    |
+   | Airbus       | 52    |
+   ...
 
-For each aircraft:
-1. Start with manufacturer website for official specs
-2. Verify first flight date on Wikipedia
-3. Get typical passenger range (varies by airline config)
-4. Write concise description highlighting its role
-5. Find interesting fact that enthusiasts would appreciate
+   ## Manufacturers That Need Research
+   - [Manufacturer with low coverage]
+   - [New manufacturer to add]
+   - ...
 
-## Quality Criteria
+   **Which manufacturer would you like to research?**
+   ```
 
-- All numeric specs should be from manufacturer or verified sources
-- Descriptions should mention role (short-haul, long-haul, regional)
-- Fun facts should be genuinely interesting, not generic
-- Passenger counts should be realistic ranges, not max theoretical
+3. **Wait for user to pick before proceeding.**
 
-## Incremental Research
+---
 
-When adding to existing data:
-1. Query D1 first: `SELECT slug FROM aircraft`
-2. Skip items that already exist
-3. Only research and add new aircraft
-4. Focus on gaps (missing manufacturers, popular models)
+## Process
 
-## Priority Order
+### 1. Propose Research Plan
 
-Research in this order for best coverage:
-1. **Boeing 737 family** - Most common, what people fly most
-2. **Airbus A320 family** - Second most common
-3. **Boeing 787, 777** - Popular wide-bodies
-4. **Airbus A350, A380** - Notable long-haul
-5. **Regional jets** - Embraer E-Jets, CRJ series
+```markdown
+## Research Proposal: [Manufacturer/Category]
+
+### Target Areas
+- [Aircraft type 1] (est. X aircraft) — [why important]
+- [Aircraft type 2] (est. Y aircraft) — [significance]
+
+### Primary Sources
+- Manufacturer official website
+- Aviation industry databases (planespotters.net, airfleets.net)
+- Wikipedia for specifications
+- Aviation publications (Aviation Week, Flight Global)
+
+**Does this look right?**
+```
+
+**Wait for approval before proceeding.**
+
+### 2. Research Aircraft
+
+For each aircraft, gather:
+- Name and unique identifier (for slug)
+- Manufacturer
+- First flight date
+- Passenger capacity
+- Range (km)
+- Cruise speed (km/h)
+- Length (m), Wingspan (m)
+- Number of engines
+- Status (in production, out of production, prototype)
+- Description/content
+- Fun fact
+- **Minimum 2 independent source URLs**
+
+**Good sources:**
+- Manufacturer official specs (boeing.com, airbus.com)
+- Aviation databases (planespotters.net, airfleets.net)
+- Wikipedia for factual verification
+- Aviation publications
+
+### 3. Create Seed File
+
+Create `scripts/seed-[manufacturer].sql`:
+
+```sql
+-- Seed data for [Manufacturer] aircraft
+-- Generated on YYYY-MM-DD
+
+INSERT OR REPLACE INTO aircraft (slug, name, manufacturer, description, first_flight, passengers, range_km, cruise_speed_kmh, length_m, wingspan_m, engines, status, fun_fact, source_url, sources, source_count)
+VALUES
+  ('boeing-777-300er', 'Boeing 777-300ER', 'Boeing', 'Long-range wide-body twin-engine jet airliner...',
+   '2003-02-24', 396, 13650, 905, 73.9, 64.8, 2, 'In Production',
+   'The 777 is the world''s largest twinjet.',
+   'https://www.boeing.com/commercial/777',
+   '["https://www.boeing.com/commercial/777","https://en.wikipedia.org/wiki/Boeing_777"]', 2);
+```
+
+### 4. Run Migration
+
+```bash
+npx wrangler d1 execute airplane-directory-db --file=./scripts/seed-[manufacturer].sql --remote
+```
+
+### 5. Verify and Report
+
+```bash
+npx wrangler d1 execute airplane-directory-db --remote --command "SELECT COUNT(*) as items FROM aircraft WHERE manufacturer = '[manufacturer]';"
+```
+
+Update CHANGELOG.md and CONTEXT.md, then report:
+> "[Manufacturer] now has [X] aircraft. Notable additions: [highlights]"
+
+---
+
+## Data Quality Rules
+
+- **Don't make up data** — Everything must be sourced
+- **Minimum 2 independent sources per aircraft** — Skip aircraft that can't be corroborated
+- **Track all source URLs** — Store in `sources` JSON array, set `source_count`
+- **Use established manufacturers only** — Boeing, Airbus, Embraer, Bombardier, ATR, etc.
+- **Update docs when done** — CONTEXT.md and CHANGELOG.md
+
+---
+
+## Schema Reference
+
+The `aircraft` table has these fields:
+- `slug` — URL-safe identifier (e.g., boeing-737-800)
+- `name` — Display name (e.g., Boeing 737-800)
+- `manufacturer` — Boeing, Airbus, Embraer, etc.
+- `description` — Brief content about the aircraft
+- `first_flight` — Date of first flight
+- `passengers` — Typical passenger capacity
+- `range_km` — Range in kilometers
+- `cruise_speed_kmh` — Cruise speed in km/h
+- `length_m` — Length in meters
+- `wingspan_m` — Wingspan in meters
+- `engines` — Number of engines
+- `status` — In Production, Out of Production, Prototype
+- `fun_fact` — Interesting fact about the aircraft
+- `source_url` — Primary source
+- `sources` — JSON array of all sources
+- `source_count` — Number of sources
+
+---
+
+## Sources to Search
+
+| Source Type | Examples |
+|-------------|----------|
+| Manufacturer sites | boeing.com, airbus.com, embraer.com |
+| Aviation databases | planespotters.net, airfleets.net |
+| Reference sites | Wikipedia, official airline specs |
+| Publications | Aviation Week, Flight Global |

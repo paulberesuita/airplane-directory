@@ -1,67 +1,126 @@
-# Research Images Skill
+---
+name: research-images
+description: Find and upload images for existing aircraft. Usage: /research-images [manufacturer?]
+user_invokable: false
+agent: seo
+---
 
-How to find images for commercial aircraft in the airplane directory.
+# Research Images
 
-## Image Types Needed
+You've been invoked to **research images** for existing aircraft.
 
-- **Primary image**: Clean side profile or 3/4 view of the aircraft
-- Shows the full aircraft clearly
-- Ideally in flight or on ground with minimal background clutter
+**Operation:** Research Images (from SEO agent)
 
-## Best Sources
+## Your Task
 
-1. **Manufacturer press kits**
-   - Boeing media resources
-   - Airbus newsroom/media
-   - High quality, official images
+Find and upload images for aircraft from: **{{args}}**
 
-2. **Wikimedia Commons**
-   - Search for "[aircraft model]"
-   - Look for images with permissive licenses (CC-BY, public domain)
-   - Good variety of angles
+---
 
-3. **Airline press releases**
-   - Often have clean promotional shots
-   - May need to check licensing
+## If No Manufacturer Provided
 
-## Quality Requirements
+Show the user which manufacturers need images:
 
-- Minimum size: 600x400 pixels
-- Format: PNG or JPG
-- Clear, well-lit image
-- Aircraft should be the main subject
-- Avoid heavily branded airline liveries if possible (generic/manufacturer livery preferred)
+1. **Query image coverage:**
+   ```bash
+   npx wrangler d1 execute airplane-directory-db --remote --command "SELECT manufacturer, COUNT(*) as total, SUM(CASE WHEN image_url IS NOT NULL AND image_url != '' THEN 1 ELSE 0 END) as with_images, COUNT(*) - SUM(CASE WHEN image_url IS NOT NULL AND image_url != '' THEN 1 ELSE 0 END) as missing FROM aircraft GROUP BY manufacturer ORDER BY missing DESC;"
+   ```
 
-## Naming Convention
+2. **Show results:**
+   ```
+   ## Image Coverage
+   | Manufacturer | Total | Has Image | Missing |
+   |--------------|-------|-----------|---------|
+   | Boeing       | 50    | 12        | 38      |
+   | Airbus       | 48    | 8         | 40      |
+   ...
 
-- `[slug].jpg` or `[slug].png` - main image
-- Examples:
-  - `boeing-737-800.jpg`
-  - `airbus-a320neo.png`
+   **Which manufacturer would you like to add images for?**
+   ```
 
-## Download Process
+3. **Wait for user to pick before proceeding.**
 
-1. Find high-quality image from approved sources
-2. Verify licensing allows use
-3. Download to temp folder
-4. Resize if needed (keep aspect ratio)
-5. Upload to R2
+---
 
-## Upload Command
+## Process
 
+**CRITICAL: Each image must be downloaded fresh, uploaded to R2, and database updated IMMEDIATELY — do not batch or defer.**
+
+### Step 1: Find aircraft needing images
 ```bash
-npx wrangler r2 object put airplane-directory-assets/aircraft/[slug].jpg --file=./temp/[slug].jpg
+npx wrangler d1 execute airplane-directory-db --remote --command "SELECT slug, name FROM aircraft WHERE manufacturer = '[manufacturer]' AND (image_url IS NULL OR image_url = '') LIMIT 20;"
 ```
 
-## Incremental Research
+### Step 2: For EACH aircraft (do all 3 steps before moving to next):
 
-When adding to existing data:
-1. Check R2 for existing images before downloading
-2. Only download images for new aircraft
-3. List existing: query the aircraft table and check R2
+**A. Find the actual image URL (try in order, stop when found):**
 
-## Notes
+1. **Wikipedia API** — Check if the aircraft has a Wikipedia article with a lead image:
+   ```bash
+   curl -s "https://en.wikipedia.org/w/api.php?action=query&titles=Boeing_737&prop=pageimages&piprop=original&format=json"
+   ```
 
-- Prioritize manufacturer images for consistency
-- Aircraft in neutral/manufacturer livery look best for directory
-- Avoid images with heavy watermarks
+2. **Wikimedia Commons search** — Search for aircraft photos:
+   ```bash
+   curl -s "https://commons.wikimedia.org/w/api.php?action=query&list=search&srsearch=Boeing+737&srnamespace=6&format=json"
+   ```
+   Then get the URL: `action=query&titles=File:[filename]&prop=imageinfo&iiprop=url&format=json`
+
+3. **Planespotters.net** — High quality aircraft photos (check licensing)
+
+4. **Manufacturer press images** — boeing.com/company/media, airbus.com/en/newsroom
+
+- Get the direct image URL (ending in .jpg, .png, .webp, etc.)
+- VERIFY it shows the real aircraft before proceeding
+
+**B. Download, upload to R2, update DB — ALL IN ONE GO:**
+```bash
+# Download fresh (use unique timestamp to avoid cached files)
+curl -L "[IMAGE_URL]" -o temp/[slug]-new.jpg
+
+# Upload to R2 IMMEDIATELY
+npx wrangler r2 object put airplane-directory-assets/aircraft/[slug].jpg --file=./temp/[slug]-new.jpg --remote
+
+# Update database IMMEDIATELY
+npx wrangler d1 execute airplane-directory-db --remote --command "UPDATE aircraft SET image_url = 'aircraft/[slug].jpg' WHERE slug = '[slug]';"
+```
+
+**C. Verify the upload worked:**
+```bash
+curl -sI "https://airplane-directory.pages.dev/images/aircraft/[slug].jpg" | head -3
+```
+
+### Step 3: Update CHANGELOG.md — Document images added
+
+### Step 4: Deploy
+
+```bash
+wrangler pages deploy ./public --project-name=airplane-directory
+```
+
+### Step 5: Report results with verification URLs
+
+Include URLs for verification:
+- **Production:** `https://airplane-directory.pages.dev/images/aircraft/[slug].jpg`
+
+---
+
+## Image Sources (Priority Order)
+
+**IMPORTANT: We want photos of the ACTUAL aircraft, not generic stock photos or illustrations.**
+
+1. **Wikimedia Commons** — Creative Commons licensed, safest
+2. **Planespotters.net** — High quality aircraft photos
+3. **Manufacturer press images** — Official photos
+4. **Flickr Creative Commons** — Search with license filter
+
+**If you cannot find a photo of the actual aircraft, skip it and note it in the handoff.** A missing image is better than a wrong image.
+
+---
+
+## Remember
+
+- Always use `--remote` flag for R2 and D1 commands
+- Store only filename in image_url (e.g., `aircraft/[slug].jpg`)
+- Update CHANGELOG.md when done
+- Deploy after adding images
