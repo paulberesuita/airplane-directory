@@ -6,6 +6,19 @@ What we shipped. Builder appends here after each feature.
 
 ## 2026-01-26
 
+### Airline Logos Uploaded
+- **15 airline logos** uploaded to R2 storage:
+  - US: American, Delta, United, Southwest, JetBlue, Alaska, Spirit, Frontier
+  - International: British Airways, Lufthansa, Air France, KLM, Emirates, Finnair, Swiss
+- Airlines without logos display IATA code fallback
+
+### UI Polish - Transparent Design
+- **Airlines page:** Removed solid backgrounds from nav and hero, removed card borders
+- **Airline detail page:** Removed stats section, made description card semi-transparent (`bg-white/60 backdrop-blur-sm`)
+- **Aircraft page:** New dedicated page at `/aircraft` with manufacturer filters (moved from homepage)
+- **Aircraft detail page:** Removed hero gradient, white text with drop shadows
+- **Footer:** Removed solid background across all pages
+
 ### International Airlines Expansion
 - **Added 32 international airlines** flying to/from the USA:
   - **Europe (13):** British Airways, Lufthansa, Air France, KLM, Virgin Atlantic, Iberia, Swiss, Aer Lingus, Icelandair, TAP Portugal, Norwegian, SAS, Finnair

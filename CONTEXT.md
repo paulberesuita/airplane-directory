@@ -4,6 +4,36 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ---
 
+## 2026-01-26
+
+### International Airlines Image Strategy
+
+Attempted to download airline-specific aircraft images for 199 international airline/aircraft combinations.
+
+**What didn't work:**
+- Wikimedia API search with queries like "British Airways Boeing 777" rarely finds matching images
+- Many airline-specific livery photos aren't on Wikimedia Commons with predictable naming
+
+**What we did instead:**
+- Use existing generic aircraft images (already in R2) for international airline fleet pages
+- The fleet cards have a built-in fallback chain:
+  1. First tries `/images/airlines/{airline}/{aircraft}.jpg` (airline-specific)
+  2. Falls back to `/images/aircraft/{aircraft}.jpg` (generic)
+  3. Final fallback: plane emoji placeholder
+
+**Key learning:**
+- Airline-specific aircraft photos are hard to source automatically at scale
+- Generic aircraft images are acceptable for MVP — they show the actual aircraft type
+- Better to ship with fallbacks than block on perfect images
+
+### R2 Bucket Naming
+
+Watch out for bucket name mismatches:
+- `wrangler.toml` has `bucket_name = "airplane-directory-assets"`
+- Double-check you're uploading to the right bucket name with `--remote` flag
+
+---
+
 ## 2026-01-25
 
 ### Wikimedia Commons Image Sourcing
