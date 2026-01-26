@@ -201,39 +201,30 @@ async function renderListPage(context, baseUrl) {
 
     return `
       <a href="/aircraft/${escapeHtml(a.slug)}"
-         class="aircraft-card group block bg-card rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300"
+         class="aircraft-card group block bg-white/20 backdrop-blur-xl rounded-2xl overflow-hidden hover:bg-white/30 transition-all duration-300 border border-white/30"
          data-manufacturer="${escapeHtml(a.manufacturer)}">
         ${imageHtml}
         <div class="p-4">
           <div class="flex items-start justify-between gap-2 mb-2">
-            <h3 class="font-semibold font-display text-slate-800 group-hover:text-primary transition-colors">${escapeHtml(a.name)}</h3>
-            <span class="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full ${statusClass}">${escapeHtml(a.status)}</span>
+            <h3 class="font-semibold font-display text-white group-hover:text-white transition-colors">${escapeHtml(a.name)}</h3>
+            <span class="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full bg-white/20 text-white">${escapeHtml(a.status)}</span>
           </div>
-          <p class="text-sm text-primary font-medium mb-2">${escapeHtml(a.manufacturer)}</p>
-          <p class="text-sm text-muted line-clamp-2 mb-4">${escapeHtml(a.description)}</p>
-          <div class="flex items-center gap-1 pt-3 border-t border-slate-100">
-            <div class="flex-1 text-center py-1.5 rounded bg-background">
-              <p class="text-xs text-muted mb-0.5">Pax</p>
-              <p class="text-sm font-semibold text-slate-700">${a.passengers}</p>
+          <p class="text-sm text-white font-medium mb-2">${escapeHtml(a.manufacturer)}</p>
+          <p class="text-sm text-white/90 line-clamp-2 mb-4">${escapeHtml(a.description)}</p>
+          <div class="flex items-center gap-1 pt-3 border-t border-white/20">
+            <div class="flex-1 text-center py-1.5 rounded bg-white/10">
+              <p class="text-xs text-white/90 mb-0.5">Pax</p>
+              <p class="text-sm font-semibold text-white">${a.passengers}</p>
             </div>
-            <div class="flex-1 text-center py-1.5 rounded bg-background">
-              <p class="text-xs text-muted mb-0.5">Range</p>
-              <p class="text-sm font-semibold text-slate-700">${formatNumber(rangeInMiles)} mi</p>
+            <div class="flex-1 text-center py-1.5 rounded bg-white/10">
+              <p class="text-xs text-white/90 mb-0.5">Range</p>
+              <p class="text-sm font-semibold text-white">${formatNumber(rangeInMiles)} mi</p>
             </div>
-            <div class="flex-1 text-center py-1.5 rounded bg-background">
-              <p class="text-xs text-muted mb-0.5">Speed</p>
-              <p class="text-sm font-semibold text-slate-700">${formatNumber(speedInMph)} mph</p>
+            <div class="flex-1 text-center py-1.5 rounded bg-white/10">
+              <p class="text-xs text-white/90 mb-0.5">Speed</p>
+              <p class="text-sm font-semibold text-white">${formatNumber(speedInMph)} mph</p>
             </div>
           </div>
-        </div>
-        <div class="px-4 py-3 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between">
-          <span class="text-xs text-muted">First flight: ${year}</span>
-          <span class="text-sm font-medium text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
-            View Details
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-            </svg>
-          </span>
         </div>
       </a>`;
   }).join('');
@@ -276,8 +267,8 @@ async function renderListPage(context, baseUrl) {
   <!-- Hero -->
   <div class="text-white">
     <div class="max-w-7xl mx-auto px-4 py-12 md:py-16">
-      <h1 class="font-display text-3xl md:text-4xl font-semibold mb-3 drop-shadow-lg">Aircraft Directory</h1>
-      <p class="text-white/80 text-lg max-w-2xl drop-shadow">
+      <h1 class="font-display text-3xl md:text-4xl font-semibold mb-3 text-white">Aircraft Directory</h1>
+      <p class="text-white text-lg max-w-2xl">
         Every plane type flown by major airlines. Browse specs, history, and details.
       </p>
     </div>
@@ -286,7 +277,7 @@ async function renderListPage(context, baseUrl) {
   <main class="max-w-7xl mx-auto px-4 py-8">
     <!-- Manufacturer Filters -->
     <div class="mb-8">
-      <p class="text-white/70 text-sm font-medium mb-3 uppercase tracking-wide">Filter by manufacturer</p>
+      <p class="text-white/90 text-sm font-medium mb-3 uppercase tracking-wide">Filter by manufacturer</p>
       <div id="manufacturer-filters" class="flex flex-wrap gap-2">
         <button onclick="filterByManufacturer('')"
                 class="filter-btn active px-4 py-2 rounded-lg text-sm font-medium bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:border-white/50 transition-all backdrop-blur-sm"
@@ -315,8 +306,8 @@ async function renderListPage(context, baseUrl) {
       <div class="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-6">
         <span class="text-4xl text-white/50">&#9992;</span>
       </div>
-      <h3 class="font-display text-2xl font-semibold text-white mb-2 drop-shadow">No aircraft found</h3>
-      <p class="text-white/70 mb-6 max-w-md mx-auto">No aircraft match your current filter.</p>
+      <h3 class="font-display text-2xl font-semibold text-white mb-2">No aircraft found</h3>
+      <p class="text-white/90 mb-6 max-w-md mx-auto">No aircraft match your current filter.</p>
       <button onclick="clearFilters()" class="inline-flex items-center gap-2 bg-white text-primary font-medium px-6 py-3 rounded-xl hover:bg-white/90 transition-all">
         Clear filter
       </button>
