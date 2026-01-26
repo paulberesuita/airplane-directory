@@ -128,44 +128,44 @@ function renderHead({ title, description, url, image }) {
 function renderAirlineCard(airline, baseUrl) {
   return `
     <a href="/airlines/${escapeHtml(airline.slug)}"
-       class="group block bg-card rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+       class="group block bg-white/20 backdrop-blur-xl rounded-2xl overflow-hidden hover:bg-white/30 hover:-translate-y-1 transition-all duration-300 border border-white/30">
       <div class="p-6">
         <div class="flex items-center gap-4 mb-4">
-          <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center shrink-0 overflow-hidden">
+          <div class="w-14 h-14 bg-white/80 rounded-xl flex items-center justify-center shrink-0 overflow-hidden">
             <img src="${baseUrl}/images/logos/${escapeHtml(airline.slug)}.png"
                  alt="${escapeHtml(airline.name)} logo"
                  class="w-10 h-10 object-contain"
                  onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\\'font-display font-bold text-primary text-xl\\'>${escapeHtml(airline.iata_code)}</span>';">
           </div>
           <div class="min-w-0">
-            <h3 class="font-display font-medium text-slate-800 group-hover:text-primary transition-colors truncate">
+            <h3 class="font-display font-medium text-white group-hover:text-white transition-colors truncate drop-shadow">
               ${escapeHtml(airline.name)}
             </h3>
-            <p class="text-sm text-muted">${escapeHtml(airline.headquarters)}</p>
+            <p class="text-sm text-white/70">${escapeHtml(airline.headquarters)}</p>
           </div>
         </div>
 
         <div class="grid grid-cols-3 gap-2 mb-4">
-          <div class="text-center py-2 rounded-lg bg-background">
-            <p class="text-lg font-bold text-slate-700">${formatNumber(airline.fleet_size)}</p>
-            <p class="text-xs text-muted">Aircraft</p>
+          <div class="text-center py-2 rounded-lg bg-white/10">
+            <p class="text-lg font-bold text-white drop-shadow">${formatNumber(airline.fleet_size)}</p>
+            <p class="text-xs text-white/70">Aircraft</p>
           </div>
-          <div class="text-center py-2 rounded-lg bg-background">
-            <p class="text-lg font-bold text-slate-700">${airline.aircraft_types || 0}</p>
-            <p class="text-xs text-muted">Types</p>
+          <div class="text-center py-2 rounded-lg bg-white/10">
+            <p class="text-lg font-bold text-white drop-shadow">${airline.aircraft_types || 0}</p>
+            <p class="text-xs text-white/70">Types</p>
           </div>
-          <div class="text-center py-2 rounded-lg bg-background">
-            <p class="text-lg font-bold text-slate-700">${formatNumber(airline.destinations)}</p>
-            <p class="text-xs text-muted">Routes</p>
+          <div class="text-center py-2 rounded-lg bg-white/10">
+            <p class="text-lg font-bold text-white drop-shadow">${formatNumber(airline.destinations)}</p>
+            <p class="text-xs text-white/70">Routes</p>
           </div>
         </div>
 
-        <p class="text-sm text-muted line-clamp-2">${escapeHtml(airline.description)}</p>
+        <p class="text-sm text-white/80 line-clamp-2">${escapeHtml(airline.description)}</p>
       </div>
 
-      <div class="px-6 py-3 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between">
-        <span class="text-xs text-muted">Founded ${airline.founded}</span>
-        <span class="text-sm font-medium text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
+      <div class="px-6 py-3 bg-white/10 border-t border-white/20 flex items-center justify-between">
+        <span class="text-xs text-white/60">Founded ${airline.founded}</span>
+        <span class="text-sm font-medium text-white flex items-center gap-1 group-hover:gap-2 transition-all">
           View Fleet
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -200,41 +200,41 @@ function renderAircraftCard(aircraft, baseUrl) {
 
   return `
     <a href="/aircraft/${escapeHtml(aircraft.slug)}"
-       class="aircraft-card group block bg-card rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300"
+       class="aircraft-card group block bg-white/20 backdrop-blur-xl rounded-2xl overflow-hidden hover:bg-white/30 transition-all duration-300 border border-white/30"
        data-manufacturer="${escapeHtml(aircraft.manufacturer)}"
        data-name="${escapeHtml(aircraft.name.toLowerCase())}"
        data-description="${escapeHtml((aircraft.description || '').toLowerCase())}">
       ${imageHtml}
       <div class="p-4">
         <div class="flex items-start justify-between gap-2 mb-2">
-          <h3 class="font-semibold font-display text-slate-800 group-hover:text-primary transition-colors">
+          <h3 class="font-semibold font-display text-white group-hover:text-white transition-colors drop-shadow">
             ${escapeHtml(aircraft.name)}
           </h3>
-          <span class="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full ${statusClass}">
+          <span class="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full bg-white/20 text-white">
             ${escapeHtml(aircraft.status)}
           </span>
         </div>
-        <p class="text-sm text-primary font-medium mb-2">${escapeHtml(aircraft.manufacturer)}</p>
-        <p class="text-sm text-muted line-clamp-2 mb-4">${escapeHtml(aircraft.description)}</p>
+        <p class="text-sm text-white/90 font-medium mb-2">${escapeHtml(aircraft.manufacturer)}</p>
+        <p class="text-sm text-white/70 line-clamp-2 mb-4">${escapeHtml(aircraft.description)}</p>
 
-        <div class="flex items-center gap-1 pt-3 border-t border-slate-100">
-          <div class="flex-1 text-center py-1.5 rounded bg-background">
-            <p class="text-xs text-muted mb-0.5">Pax</p>
-            <p class="text-sm font-semibold text-slate-700">${aircraft.passengers}</p>
+        <div class="flex items-center gap-1 pt-3 border-t border-white/20">
+          <div class="flex-1 text-center py-1.5 rounded bg-white/10">
+            <p class="text-xs text-white/60 mb-0.5">Pax</p>
+            <p class="text-sm font-semibold text-white drop-shadow">${aircraft.passengers}</p>
           </div>
-          <div class="flex-1 text-center py-1.5 rounded bg-background">
-            <p class="text-xs text-muted mb-0.5">Range</p>
-            <p class="text-sm font-semibold text-slate-700">${formatNumber(rangeInMiles)} mi</p>
+          <div class="flex-1 text-center py-1.5 rounded bg-white/10">
+            <p class="text-xs text-white/60 mb-0.5">Range</p>
+            <p class="text-sm font-semibold text-white drop-shadow">${formatNumber(rangeInMiles)} mi</p>
           </div>
-          <div class="flex-1 text-center py-1.5 rounded bg-background">
-            <p class="text-xs text-muted mb-0.5">Speed</p>
-            <p class="text-sm font-semibold text-slate-700">${formatNumber(speedInMph)} mph</p>
+          <div class="flex-1 text-center py-1.5 rounded bg-white/10">
+            <p class="text-xs text-white/60 mb-0.5">Speed</p>
+            <p class="text-sm font-semibold text-white drop-shadow">${formatNumber(speedInMph)} mph</p>
           </div>
         </div>
       </div>
-      <div class="px-4 py-3 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between">
-        <span class="text-xs text-muted">First flight: ${year}</span>
-        <span class="text-sm font-medium text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
+      <div class="px-4 py-3 bg-white/10 border-t border-white/20 flex items-center justify-between">
+        <span class="text-xs text-white/60">First flight: ${year}</span>
+        <span class="text-sm font-medium text-white flex items-center gap-1 group-hover:gap-2 transition-all">
           View Details
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
