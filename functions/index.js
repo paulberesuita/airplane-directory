@@ -269,19 +269,13 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
 <body class="bg-background text-slate-800 min-h-screen font-sans">
   <!-- Hero Section -->
   <header class="relative">
-    <div class="absolute top-10 right-10 opacity-30">
-      <svg class="w-32 h-32 text-white float-animation" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
-      </svg>
-    </div>
-
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative text-center">
       <div class="max-w-3xl mx-auto">
         <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-4 leading-tight">
-          Know what planes airlines fly
+          Every aircraft. Every airline.
         </h1>
         <p class="text-white text-lg md:text-xl mb-8 leading-relaxed">
-          Explore the fleets of major airlines worldwide. See specs, history, and details about every aircraft from carriers like Emirates, British Airways, Lufthansa, and more.
+          Discover what planes fly your favorite routes. Explore fleet details, specs, and history for 41 airlines worldwide.
         </p>
 
         <div class="flex flex-wrap gap-4 justify-center">
