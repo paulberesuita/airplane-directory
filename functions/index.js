@@ -138,29 +138,29 @@ function renderAirlineCard(airline, baseUrl) {
                  onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\\'font-display font-bold text-primary text-xl\\'>${escapeHtml(airline.iata_code)}</span>';">
           </div>
           <div class="min-w-0">
-            <h3 class="font-display font-medium text-white group-hover:text-white transition-colors truncate drop-shadow">
+            <h3 class="font-display font-medium text-white group-hover:text-white transition-colors truncate">
               ${escapeHtml(airline.name)}
             </h3>
-            <p class="text-sm text-white/70">${escapeHtml(airline.headquarters)}</p>
+            <p class="text-sm text-white/90">${escapeHtml(airline.headquarters)}</p>
           </div>
         </div>
 
         <div class="grid grid-cols-3 gap-2 mb-4">
           <div class="text-center py-2 rounded-lg bg-white/10">
-            <p class="text-lg font-bold text-white drop-shadow">${formatNumber(airline.fleet_size)}</p>
-            <p class="text-xs text-white/70">Aircraft</p>
+            <p class="text-lg font-bold text-white">${formatNumber(airline.fleet_size)}</p>
+            <p class="text-xs text-white/90">Aircraft</p>
           </div>
           <div class="text-center py-2 rounded-lg bg-white/10">
-            <p class="text-lg font-bold text-white drop-shadow">${airline.aircraft_types || 0}</p>
-            <p class="text-xs text-white/70">Types</p>
+            <p class="text-lg font-bold text-white">${airline.aircraft_types || 0}</p>
+            <p class="text-xs text-white/90">Types</p>
           </div>
           <div class="text-center py-2 rounded-lg bg-white/10">
-            <p class="text-lg font-bold text-white drop-shadow">${formatNumber(airline.destinations)}</p>
-            <p class="text-xs text-white/70">Routes</p>
+            <p class="text-lg font-bold text-white">${formatNumber(airline.destinations)}</p>
+            <p class="text-xs text-white/90">Routes</p>
           </div>
         </div>
 
-        <p class="text-sm text-white/80 line-clamp-2">${escapeHtml(airline.description)}</p>
+        <p class="text-sm text-white line-clamp-2">${escapeHtml(airline.description)}</p>
       </div>
     </a>`;
 }
@@ -197,33 +197,33 @@ function renderAircraftCard(aircraft, baseUrl) {
       ${imageHtml}
       <div class="p-4">
         <div class="flex items-start justify-between gap-2 mb-2">
-          <h3 class="font-semibold font-display text-white group-hover:text-white transition-colors drop-shadow">
+          <h3 class="font-semibold font-display text-white group-hover:text-white transition-colors">
             ${escapeHtml(aircraft.name)}
           </h3>
           <span class="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full bg-white/20 text-white">
             ${escapeHtml(aircraft.status)}
           </span>
         </div>
-        <p class="text-sm text-white/90 font-medium mb-2">${escapeHtml(aircraft.manufacturer)}</p>
-        <p class="text-sm text-white/70 line-clamp-2 mb-4">${escapeHtml(aircraft.description)}</p>
+        <p class="text-sm text-white font-medium mb-2">${escapeHtml(aircraft.manufacturer)}</p>
+        <p class="text-sm text-white/90 line-clamp-2 mb-4">${escapeHtml(aircraft.description)}</p>
 
         <div class="flex items-center gap-1 pt-3 border-t border-white/20">
           <div class="flex-1 text-center py-1.5 rounded bg-white/10">
-            <p class="text-xs text-white/60 mb-0.5">Pax</p>
-            <p class="text-sm font-semibold text-white drop-shadow">${aircraft.passengers}</p>
+            <p class="text-xs text-white/90 mb-0.5">Pax</p>
+            <p class="text-sm font-semibold text-white">${aircraft.passengers}</p>
           </div>
           <div class="flex-1 text-center py-1.5 rounded bg-white/10">
-            <p class="text-xs text-white/60 mb-0.5">Range</p>
-            <p class="text-sm font-semibold text-white drop-shadow">${formatNumber(rangeInMiles)} mi</p>
+            <p class="text-xs text-white/90 mb-0.5">Range</p>
+            <p class="text-sm font-semibold text-white">${formatNumber(rangeInMiles)} mi</p>
           </div>
           <div class="flex-1 text-center py-1.5 rounded bg-white/10">
-            <p class="text-xs text-white/60 mb-0.5">Speed</p>
-            <p class="text-sm font-semibold text-white drop-shadow">${formatNumber(speedInMph)} mph</p>
+            <p class="text-xs text-white/90 mb-0.5">Speed</p>
+            <p class="text-sm font-semibold text-white">${formatNumber(speedInMph)} mph</p>
           </div>
         </div>
       </div>
       <div class="px-4 py-3 bg-white/10 border-t border-white/20 flex items-center justify-between">
-        <span class="text-xs text-white/60">First flight: ${year}</span>
+        <span class="text-xs text-white/90">First flight: ${year}</span>
         <span class="text-sm font-medium text-white flex items-center gap-1 group-hover:gap-2 transition-all">
           View Details
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -277,25 +277,25 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative">
       <div class="max-w-3xl">
-        <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-4 leading-tight drop-shadow-lg">
+        <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-4 leading-tight">
           Know what planes airlines fly
         </h1>
-        <p class="text-white/90 text-lg md:text-xl mb-8 leading-relaxed drop-shadow">
+        <p class="text-white text-lg md:text-xl mb-8 leading-relaxed">
           Explore the fleets of major airlines worldwide. See specs, history, and details about every aircraft from carriers like Emirates, British Airways, Lufthansa, and more.
         </p>
 
         <div class="flex flex-wrap gap-4">
-          <div class="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 text-white shadow-lg">
-            <span class="text-2xl font-bold drop-shadow">${airlines.length}</span>
-            <span class="text-white/90 ml-1">Airlines</span>
+          <div class="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 text-white">
+            <span class="text-2xl font-bold">${airlines.length}</span>
+            <span class="text-white ml-1">Airlines</span>
           </div>
-          <div class="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 text-white shadow-lg">
-            <span class="text-2xl font-bold drop-shadow">${formatNumber(totalAircraft)}</span>
-            <span class="text-white/90 ml-1">Aircraft</span>
+          <div class="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 text-white">
+            <span class="text-2xl font-bold">${formatNumber(totalAircraft)}</span>
+            <span class="text-white ml-1">Aircraft</span>
           </div>
-          <div class="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 text-white shadow-lg">
-            <span class="text-2xl font-bold drop-shadow">${aircraft.length}</span>
-            <span class="text-white/90 ml-1">Aircraft Types</span>
+          <div class="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 text-white">
+            <span class="text-2xl font-bold">${aircraft.length}</span>
+            <span class="text-white ml-1">Aircraft Types</span>
           </div>
         </div>
       </div>
@@ -308,8 +308,8 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
     <section class="mb-16">
       <div class="flex items-center justify-between mb-6">
         <div>
-          <h2 class="font-display text-2xl md:text-3xl font-semibold text-white drop-shadow">Airlines</h2>
-          <p class="text-white/70 mt-1">Explore fleets of major carriers worldwide</p>
+          <h2 class="font-display text-2xl md:text-3xl font-semibold text-white">Airlines</h2>
+          <p class="text-white/90 mt-1">Explore fleets of major carriers worldwide</p>
         </div>
         <a href="/airlines" class="text-white hover:text-white/80 font-medium flex items-center gap-1 transition-colors">
           View all
@@ -327,8 +327,8 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
     <section>
       <div class="flex items-center justify-between mb-6">
         <div>
-          <h2 class="font-display text-2xl md:text-3xl font-semibold text-white drop-shadow">Aircraft Types</h2>
-          <p class="text-white/70 mt-1">${aircraft.length} plane types in airline fleets</p>
+          <h2 class="font-display text-2xl md:text-3xl font-semibold text-white">Aircraft Types</h2>
+          <p class="text-white/90 mt-1">${aircraft.length} plane types in airline fleets</p>
         </div>
         <a href="/aircraft" class="text-white hover:text-white/80 font-medium flex items-center gap-1 transition-colors">
           View all
@@ -365,15 +365,15 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
               <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
             </svg>
           </div>
-          <span class="font-display font-bold text-white text-lg drop-shadow">Airplane Directory</span>
+          <span class="font-display font-bold text-white text-lg">Airplane Directory</span>
         </div>
         <nav class="flex items-center gap-6">
-          <a href="/airlines" class="text-white/70 hover:text-white text-sm transition-colors">Airlines</a>
-          <a href="/aircraft" class="text-white/70 hover:text-white text-sm transition-colors">Aircraft</a>
+          <a href="/airlines" class="text-white/90 hover:text-white text-sm transition-colors">Airlines</a>
+          <a href="/aircraft" class="text-white/90 hover:text-white text-sm transition-colors">Aircraft</a>
         </nav>
       </div>
       <div class="border-t border-white/20 mt-8 pt-8 text-center">
-        <p class="text-white/60 text-sm drop-shadow">
+        <p class="text-white/80 text-sm">
           Fleet data sourced from airline newsrooms, Airfleets.net, and manufacturer specifications.
         </p>
       </div>
