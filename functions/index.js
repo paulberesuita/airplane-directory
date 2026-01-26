@@ -1,19 +1,31 @@
-// GET / - Homepage with aircraft grid (SSR)
+// GET / - Homepage with airlines and aircraft grid (SSR)
 export async function onRequestGet(context) {
   const { env, request } = context;
   const url = new URL(request.url);
   const baseUrl = `${url.protocol}//${url.host}`;
 
   try {
-    // Fetch all aircraft
-    const { results: aircraft } = await env.DB.prepare(
-      'SELECT * FROM aircraft ORDER BY CASE WHEN image_url IS NOT NULL AND image_url != \'\' THEN 0 ELSE 1 END, manufacturer, name'
-    ).all();
+    // Fetch all airlines with fleet counts
+    const { results: airlines } = await env.DB.prepare(`
+      SELECT a.*, COUNT(DISTINCT af.aircraft_slug) as aircraft_types,
+             SUM(af.count) as total_aircraft
+      FROM airlines a
+      LEFT JOIN airline_fleet af ON a.slug = af.airline_slug
+      GROUP BY a.id
+      ORDER BY a.fleet_size DESC
+    `).all();
+
+    // Fetch all aircraft that are in active airline fleets
+    const { results: aircraft } = await env.DB.prepare(`
+      SELECT DISTINCT ac.* FROM aircraft ac
+      INNER JOIN airline_fleet af ON ac.slug = af.aircraft_slug
+      ORDER BY CASE WHEN ac.image_url IS NOT NULL AND ac.image_url != '' THEN 0 ELSE 1 END, ac.manufacturer, ac.name
+    `).all();
 
     // Get unique manufacturers
     const manufacturers = [...new Set(aircraft.map(a => a.manufacturer))].sort();
 
-    const html = renderHomepage({ aircraft, manufacturers, baseUrl });
+    const html = renderHomepage({ airlines, aircraft, manufacturers, baseUrl });
 
     return new Response(html, {
       headers: {
@@ -104,6 +116,53 @@ function renderHead({ title, description, url, image }) {
   </script>`;
 }
 
+function renderAirlineCard(airline) {
+  return `
+    <a href="/airlines/${escapeHtml(airline.slug)}"
+       class="group block bg-card rounded-xl overflow-hidden border border-border hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+      <div class="p-6">
+        <div class="flex items-center gap-4 mb-4">
+          <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center shrink-0">
+            <span class="font-display font-bold text-primary text-xl">${escapeHtml(airline.iata_code)}</span>
+          </div>
+          <div class="min-w-0">
+            <h3 class="font-display font-semibold text-slate-800 group-hover:text-primary transition-colors truncate">
+              ${escapeHtml(airline.name)}
+            </h3>
+            <p class="text-sm text-muted">${escapeHtml(airline.headquarters)}</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 mb-4">
+          <div class="text-center py-2 rounded-lg bg-background">
+            <p class="text-lg font-bold text-slate-700">${formatNumber(airline.fleet_size)}</p>
+            <p class="text-xs text-muted">Aircraft</p>
+          </div>
+          <div class="text-center py-2 rounded-lg bg-background">
+            <p class="text-lg font-bold text-slate-700">${airline.aircraft_types || 0}</p>
+            <p class="text-xs text-muted">Types</p>
+          </div>
+          <div class="text-center py-2 rounded-lg bg-background">
+            <p class="text-lg font-bold text-slate-700">${formatNumber(airline.destinations)}</p>
+            <p class="text-xs text-muted">Routes</p>
+          </div>
+        </div>
+
+        <p class="text-sm text-muted line-clamp-2">${escapeHtml(airline.description)}</p>
+      </div>
+
+      <div class="px-6 py-3 bg-background border-t border-border flex items-center justify-between">
+        <span class="text-xs text-muted">Founded ${airline.founded}</span>
+        <span class="text-sm font-medium text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
+          View Fleet
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </span>
+      </div>
+    </a>`;
+}
+
 function renderAircraftCard(aircraft, baseUrl) {
   const rangeInMiles = kmToMiles(aircraft.range_km);
   const speedInMph = kmhToMph(aircraft.cruise_speed_kmh);
@@ -173,7 +232,8 @@ function renderAircraftCard(aircraft, baseUrl) {
     </a>`;
 }
 
-function renderHomepage({ aircraft, manufacturers, baseUrl }) {
+function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
+  const airlineCards = airlines.map(a => renderAirlineCard(a)).join('');
   const aircraftCards = aircraft.map(a => renderAircraftCard(a, baseUrl)).join('');
   const filterButtons = manufacturers.map(m => `
     <button onclick="filterByManufacturer('${escapeHtml(m)}')"
@@ -183,12 +243,14 @@ function renderHomepage({ aircraft, manufacturers, baseUrl }) {
     </button>
   `).join('');
 
+  const totalAircraft = airlines.reduce((sum, a) => sum + (a.fleet_size || 0), 0);
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   ${renderHead({
-    title: 'Airplane Directory — Know Your Aircraft',
-    description: `Explore ${aircraft.length} commercial aircraft from ${manufacturers.join(', ')}. Specs, history, and fun facts about the planes you fly on.`,
+    title: 'Airplane Directory — Know What US Airlines Fly',
+    description: `Explore the fleets of ${airlines.length} major US airlines with ${formatNumber(totalAircraft)}+ aircraft. See which planes Delta, United, American, Southwest and more operate.`,
     url: baseUrl,
     image: aircraft[0]?.image_url ? `${baseUrl}/images/aircraft/${aircraft[0].slug}.jpg` : null
   })}
@@ -228,19 +290,34 @@ function renderHomepage({ aircraft, manufacturers, baseUrl }) {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative">
       <div class="max-w-3xl">
         <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
-          Know the plane you are flying on
+          Know what planes US airlines fly
         </h1>
         <p class="text-sky-100 text-lg md:text-xl mb-8 leading-relaxed">
-          Curious about that aircraft outside your window? Explore specs, history, and fun facts about commercial planes.
+          Explore the fleets of America's major airlines. See specs, history, and details about every aircraft that Delta, United, American, Southwest and more operate.
         </p>
 
         <div class="relative max-w-2xl">
           <input type="text" id="search-input"
             class="w-full px-5 py-4 pl-14 bg-card border-0 rounded-2xl shadow-xl focus:outline-none focus:ring-4 focus:ring-white/30 text-slate-800 placeholder-muted text-lg"
-            placeholder="Search aircraft...">
+            placeholder="Search airlines or aircraft...">
           <svg class="absolute left-5 top-1/2 transform -translate-y-1/2 w-6 h-6 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
           </svg>
+        </div>
+
+        <div class="flex flex-wrap gap-4 mt-6">
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2 text-white">
+            <span class="text-2xl font-bold">${airlines.length}</span>
+            <span class="text-sky-100 ml-1">Airlines</span>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2 text-white">
+            <span class="text-2xl font-bold">${formatNumber(totalAircraft)}</span>
+            <span class="text-sky-100 ml-1">Aircraft</span>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2 text-white">
+            <span class="text-2xl font-bold">${aircraft.length}</span>
+            <span class="text-sky-100 ml-1">Aircraft Types</span>
+          </div>
         </div>
       </div>
     </div>
@@ -254,26 +331,52 @@ function renderHomepage({ aircraft, manufacturers, baseUrl }) {
 
   <!-- Main Content -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 min-h-[60vh]">
-    <!-- Manufacturer Filters -->
-    <div class="mb-8">
-      <p class="text-muted text-sm font-medium mb-3 uppercase tracking-wide">Filter by manufacturer</p>
-      <div id="manufacturer-filters" class="flex flex-wrap gap-2">
-        <button onclick="filterByManufacturer('')"
-                class="filter-btn active px-4 py-2 rounded-lg text-sm font-medium transition-all"
-                data-manufacturer="">
-          All Aircraft
-        </button>
-        ${filterButtons}
+    <!-- US Airlines Section -->
+    <section class="mb-16">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="font-display text-2xl md:text-3xl font-bold text-slate-800">US Airlines</h2>
+          <p class="text-muted mt-1">Explore fleets of major American carriers</p>
+        </div>
+        <a href="/airlines" class="text-primary hover:text-primary-hover font-medium flex items-center gap-1 transition-colors">
+          View all
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </a>
       </div>
-    </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        ${airlineCards}
+      </div>
+    </section>
 
-    <!-- Results Count -->
-    <div class="flex items-center justify-between mb-6">
-      <p id="results-count" class="text-muted font-medium">${aircraft.length} aircraft</p>
-      <button id="clear-filters-btn" onclick="clearFilters()" class="hidden text-primary hover:text-primary-hover text-sm font-medium transition-colors">
-        Clear filters
-      </button>
-    </div>
+    <!-- Aircraft Section -->
+    <section>
+      <div class="mb-6">
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-slate-800">Aircraft in US Fleets</h2>
+        <p class="text-muted mt-1">Every plane type flown by US carriers</p>
+      </div>
+
+      <!-- Manufacturer Filters -->
+      <div class="mb-8">
+        <p class="text-muted text-sm font-medium mb-3 uppercase tracking-wide">Filter by manufacturer</p>
+        <div id="manufacturer-filters" class="flex flex-wrap gap-2">
+          <button onclick="filterByManufacturer('')"
+                  class="filter-btn active px-4 py-2 rounded-lg text-sm font-medium transition-all"
+                  data-manufacturer="">
+            All Aircraft
+          </button>
+          ${filterButtons}
+        </div>
+      </div>
+
+      <!-- Results Count -->
+      <div class="flex items-center justify-between mb-6">
+        <p id="results-count" class="text-muted font-medium">${aircraft.length} aircraft</p>
+        <button id="clear-filters-btn" onclick="clearFilters()" class="hidden text-primary hover:text-primary-hover text-sm font-medium transition-colors">
+          Clear filters
+        </button>
+      </div>
 
     <!-- Empty State -->
     <div id="empty-state" class="hidden text-center py-20">
@@ -291,6 +394,7 @@ function renderHomepage({ aircraft, manufacturers, baseUrl }) {
     <div id="aircraft-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       ${aircraftCards}
     </div>
+    </section>
   </main>
 
   <!-- Footer -->
@@ -305,13 +409,14 @@ function renderHomepage({ aircraft, manufacturers, baseUrl }) {
           </div>
           <span class="font-display font-bold text-white text-lg">Airplane Directory</span>
         </div>
-        <p class="text-slate-400 text-sm text-center md:text-left">
-          For curious travelers who want to know what they are flying on.
-        </p>
+        <nav class="flex items-center gap-6">
+          <a href="/airlines" class="text-slate-400 hover:text-white text-sm transition-colors">Airlines</a>
+          <a href="/aircraft" class="text-slate-400 hover:text-white text-sm transition-colors">Aircraft</a>
+        </nav>
       </div>
       <div class="border-t border-gray-700 mt-8 pt-8 text-center">
         <p class="text-gray-500 text-sm">
-          Data sourced from manufacturer specifications and aviation databases.
+          Fleet data sourced from airline newsrooms, Airfleets.net, and manufacturer specifications.
         </p>
       </div>
     </div>

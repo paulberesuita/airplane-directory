@@ -5,6 +5,38 @@ What we shipped. Builder appends here after each feature.
 ---
 
 ## 2026-01-25
+
+### US Airlines Pivot
+- **New Focus:** Airplane Directory now centers on US airline fleets
+- **New Database Schema:**
+  - `airlines` table — US carriers with IATA/ICAO codes, HQ, fleet size, description
+  - `airline_fleet` junction table — Maps airlines to aircraft with counts
+- **Seeded 8 major US airlines:** American, Delta, United, Southwest, JetBlue, Alaska, Spirit, Frontier
+- **72 fleet mappings** linking airlines to aircraft types with counts and notes
+
+### Airlines Pages
+- Created `functions/airlines/[[slug]].js` — SSR pages for airline list and details
+- **Airlines list page** (`/airlines`):
+  - Grid of airline cards with fleet stats
+  - JSON-LD ItemList schema for SEO
+- **Airline detail pages** (`/airlines/[slug]`):
+  - Airline info header with IATA code, HQ, founded date
+  - Fleet grid showing all aircraft operated
+  - JSON-LD Airline schema
+
+### Homepage Redesign
+- **Updated hero messaging:** "Know what planes US airlines fly"
+- **Added stats banner:** Airlines count, total aircraft, aircraft types
+- **New US Airlines section:** Grid of airline cards above aircraft section
+- **Aircraft section:** Shows only aircraft in US airline fleets
+- **Updated footer:** Added Airlines/Aircraft nav links
+
+### Aircraft Page Updates
+- Added "US Airlines Operating This Aircraft" section on detail pages
+- Shows airline cards with aircraft count for each carrier
+
+---
+
 ### Architecture Refactor: SSR Migration
 - **Converted to Server-Side Rendering** — All pages now rendered server-side via Cloudflare Functions
   - `functions/index.js` — Homepage with aircraft grid

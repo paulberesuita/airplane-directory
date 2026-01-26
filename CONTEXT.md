@@ -6,6 +6,35 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ## 2026-01-25
 
+### US Airlines Pivot Decision
+
+Pivoted the product from a general aircraft encyclopedia to a focused US airlines fleet guide.
+
+**Why we pivoted:**
+- Users care about planes they'll actually fly on
+- "What planes does Delta fly?" is a more compelling entry point than browsing all aircraft
+- Airlines provide natural organization and filtering
+- Better SEO opportunity with airline-specific content
+
+**New architecture:**
+- Airlines as primary navigation (homepage features airlines prominently)
+- Aircraft linked to airlines via junction table (`airline_fleet`)
+- Aircraft pages show which US airlines operate them
+- Only shows aircraft that are actually in US airline fleets
+
+**Data model additions:**
+```sql
+airlines (slug, name, iata_code, icao_code, headquarters, founded, fleet_size, destinations, description, website)
+airline_fleet (airline_slug, aircraft_slug, count, notes)
+```
+
+**Key learnings:**
+- Junction tables need foreign keys to enforce referential integrity
+- Seeding order matters: airlines first, then aircraft, then fleet mappings
+- SUM + COUNT aggregates help show fleet stats without additional queries
+
+---
+
 ### SSR Migration Decision
 
 Migrated from static HTML + client-side fetching to full server-side rendering. The original architecture had `public/index.html` and `public/aircraft.html` as static files that fetched data via API on page load.

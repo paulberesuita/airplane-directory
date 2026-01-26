@@ -5,16 +5,25 @@ export async function onRequestGet(context) {
   const baseUrl = `${url.protocol}//${url.host}`;
 
   try {
-    // Fetch all aircraft slugs
-    const { results: aircraft } = await env.DB.prepare(
-      'SELECT slug FROM aircraft ORDER BY slug'
-    ).all();
+    // Fetch all aircraft and airline slugs
+    const [{ results: aircraft }, { results: airlines }] = await Promise.all([
+      env.DB.prepare('SELECT slug FROM aircraft ORDER BY slug').all(),
+      env.DB.prepare('SELECT slug FROM airlines ORDER BY slug').all()
+    ]);
 
     // Build URL entries
     const urls = [
       // Static pages
       { loc: baseUrl, priority: '1.0', changefreq: 'daily' },
+      { loc: `${baseUrl}/airlines`, priority: '0.9', changefreq: 'daily' },
       { loc: `${baseUrl}/aircraft`, priority: '0.9', changefreq: 'daily' },
+
+      // Airline detail pages
+      ...airlines.map(a => ({
+        loc: `${baseUrl}/airlines/${a.slug}`,
+        priority: '0.8',
+        changefreq: 'weekly'
+      })),
 
       // Aircraft detail pages
       ...aircraft.map(a => ({

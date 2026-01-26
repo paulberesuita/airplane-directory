@@ -9,8 +9,10 @@ High-level overview of pages and how they connect to data.
 | Pattern | Example | Status | Function |
 |---------|---------|--------|----------|
 | `/` | Homepage | Built | `functions/index.js` |
-| `/aircraft` | List | Built | `functions/aircraft/[[slug]].js` |
-| `/aircraft/[slug]` | Detail | Built | `functions/aircraft/[[slug]].js` |
+| `/airlines` | Airline list | Built | `functions/airlines/[[slug]].js` |
+| `/airlines/[slug]` | Airline detail | Built | `functions/airlines/[[slug]].js` |
+| `/aircraft` | Aircraft list | Built | `functions/aircraft/[[slug]].js` |
+| `/aircraft/[slug]` | Aircraft detail | Built | `functions/aircraft/[[slug]].js` |
 | `/sitemap.xml` | Sitemap | Built | `functions/sitemap.xml.js` |
 | `/images/*` | Images | Built | `functions/images/[[path]].js` |
 | `/manufacturer/[slug]` | Manufacturer | Planned | — |
@@ -54,14 +56,42 @@ Timeline entries linked to aircraft.
 | year | int | Timeline sorting |
 | title, content | text | Timeline display |
 
+### airlines
+US airline carriers.
+
+| Field | Type | Used By |
+|-------|------|---------|
+| slug | text | URL routing, FK reference |
+| name | text | Display |
+| iata_code | text | Display (e.g., "AA", "DL") |
+| icao_code | text | Display |
+| headquarters | text | Airline detail |
+| founded | int | Airline detail |
+| fleet_size | int | Stats display |
+| destinations | int | Stats display |
+| description | text | Airline detail |
+| website | text | Link to official site |
+
+### airline_fleet
+Junction table linking airlines to aircraft.
+
+| Field | Type | Used By |
+|-------|------|---------|
+| airline_slug | text | FK to airlines |
+| aircraft_slug | text | FK to aircraft |
+| count | int | Fleet stats |
+| notes | text | Context (e.g., "Domestic routes") |
+
 ---
 
 ## Page → Data Mapping
 
 | Page | Query |
 |------|-------|
-| Homepage | `SELECT * FROM aircraft ORDER BY name` |
-| Aircraft Detail | `SELECT * FROM aircraft WHERE slug = ?` + `SELECT * FROM aircraft_history WHERE aircraft_slug = ?` |
+| Homepage | Airlines + fleet stats via JOIN, Aircraft in US fleets via `INNER JOIN airline_fleet` |
+| Airlines List | `SELECT * FROM airlines ORDER BY fleet_size DESC` |
+| Airline Detail | Airline info + fleet with JOIN to aircraft table |
+| Aircraft Detail | Aircraft + `SELECT * FROM aircraft_history WHERE aircraft_slug = ?` + Airlines operating via JOIN |
 | Manufacturer | `SELECT * FROM aircraft WHERE manufacturer = ?` |
 | Comparison | `SELECT * FROM aircraft WHERE slug IN (?, ?)` |
 
