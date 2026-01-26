@@ -125,17 +125,20 @@ function renderHead({ title, description, url, image }) {
   </style>`;
 }
 
-function renderAirlineCard(airline) {
+function renderAirlineCard(airline, baseUrl) {
   return `
     <a href="/airlines/${escapeHtml(airline.slug)}"
        class="group block bg-card rounded-xl overflow-hidden border border-border hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
       <div class="p-6">
         <div class="flex items-center gap-4 mb-4">
-          <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center shrink-0">
-            <span class="font-display font-bold text-primary text-xl">${escapeHtml(airline.iata_code)}</span>
+          <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center shrink-0 border border-border overflow-hidden">
+            <img src="${baseUrl}/images/logos/${escapeHtml(airline.slug)}.png"
+                 alt="${escapeHtml(airline.name)} logo"
+                 class="w-10 h-10 object-contain"
+                 onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\\'font-display font-bold text-primary text-xl\\'>${escapeHtml(airline.iata_code)}</span>';">
           </div>
           <div class="min-w-0">
-            <h3 class="font-display font-semibold text-slate-800 group-hover:text-primary transition-colors truncate">
+            <h3 class="font-display font-medium text-slate-800 group-hover:text-primary transition-colors truncate">
               ${escapeHtml(airline.name)}
             </h3>
             <p class="text-sm text-muted">${escapeHtml(airline.headquarters)}</p>
@@ -242,7 +245,7 @@ function renderAircraftCard(aircraft, baseUrl) {
 }
 
 function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
-  const airlineCards = airlines.map(a => renderAirlineCard(a)).join('');
+  const airlineCards = airlines.map(a => renderAirlineCard(a, baseUrl)).join('');
   const aircraftCards = aircraft.map(a => renderAircraftCard(a, baseUrl)).join('');
   const filterButtons = manufacturers.map(m => `
     <button onclick="filterByManufacturer('${escapeHtml(m)}')"
@@ -291,23 +294,14 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative">
       <div class="max-w-3xl">
-        <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight drop-shadow-lg">
+        <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-4 leading-tight drop-shadow-lg">
           Know what planes US airlines fly
         </h1>
         <p class="text-white/90 text-lg md:text-xl mb-8 leading-relaxed drop-shadow">
           Explore the fleets of America's major airlines. See specs, history, and details about every aircraft that Delta, United, American, Southwest and more operate.
         </p>
 
-        <div class="relative max-w-2xl">
-          <input type="text" id="search-input"
-            class="w-full px-5 py-4 pl-14 bg-white/95 border-0 rounded-2xl shadow-xl focus:outline-none focus:ring-4 focus:ring-white/30 text-slate-800 placeholder-muted text-lg"
-            placeholder="Search airlines or aircraft...">
-          <svg class="absolute left-5 top-1/2 transform -translate-y-1/2 w-6 h-6 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-          </svg>
-        </div>
-
-        <div class="flex flex-wrap gap-4 mt-6">
+        <div class="flex flex-wrap gap-4">
           <div class="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 text-white shadow-lg">
             <span class="text-2xl font-bold drop-shadow">${airlines.length}</span>
             <span class="text-white/90 ml-1">Airlines</span>
@@ -331,7 +325,7 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
     <section class="mb-16">
       <div class="flex items-center justify-between mb-6">
         <div>
-          <h2 class="font-display text-2xl md:text-3xl font-bold text-slate-800">US Airlines</h2>
+          <h2 class="font-display text-2xl md:text-3xl font-semibold text-slate-800">US Airlines</h2>
           <p class="text-muted mt-1">Explore fleets of major American carriers</p>
         </div>
         <a href="/airlines" class="text-primary hover:text-primary-hover font-medium flex items-center gap-1 transition-colors">
@@ -349,7 +343,7 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
     <!-- Aircraft Section -->
     <section>
       <div class="mb-6">
-        <h2 class="font-display text-2xl md:text-3xl font-bold text-slate-800">Aircraft in US Fleets</h2>
+        <h2 class="font-display text-2xl md:text-3xl font-semibold text-slate-800">Aircraft in US Fleets</h2>
         <p class="text-muted mt-1">Every plane type flown by US carriers</p>
       </div>
 
