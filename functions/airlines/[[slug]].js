@@ -367,7 +367,7 @@ async function renderDetailPage(context, slug, baseUrl) {
           </div>
           <h1 class="font-display text-3xl md:text-4xl font-semibold drop-shadow-lg">${escapeHtml(airline.name)}</h1>
           <p class="text-white/80 mt-2 drop-shadow">${escapeHtml(airline.headquarters)} · Founded ${airline.founded}</p>
-          <p class="text-white/90 mt-4 max-w-2xl drop-shadow">${escapeHtml(airline.description)}</p>
+          <p class="text-white/90 mt-4 drop-shadow">${escapeHtml(airline.description)}</p>
           ${airline.website ? `
             <a href="${escapeHtml(airline.website)}" target="_blank" rel="noopener"
                class="inline-flex items-center gap-1 text-white/80 hover:text-white mt-3 text-sm font-medium drop-shadow">
