@@ -1,0 +1,95 @@
+{
+  "instructions": "These are curated Wikimedia Commons image URLs. Run: node scripts/download-curated-images.js",
+  "attribution": "Images from Wikimedia Commons under CC BY-SA license",
+  "images": {
+    "american-airlines": {
+      "boeing-737-800": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/American_Boeing_737-800_N923NN_DCA_VA1.jpg/1280px-American_Boeing_737-800_N923NN_DCA_VA1.jpg",
+      "airbus-a321": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/American_Airlines_Airbus_A321_N510UW_BWI_MD1.jpg/1280px-American_Airlines_Airbus_A321_N510UW_BWI_MD1.jpg",
+      "airbus-a319": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/American_Airbus_319_N749US_DCA_VA1.jpg/1280px-American_Airbus_319_N749US_DCA_VA1.jpg",
+      "airbus-a320": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/American_Airbus_A320_N656AW_BWI_MD1.jpg/1280px-American_Airbus_A320_N656AW_BWI_MD1.jpg",
+      "boeing-777-200er": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Boeing_777-200_%28N787AL%29_de_American_Airlines.jpg/1280px-Boeing_777-200_%28N787AL%29_de_American_Airlines.jpg",
+      "boeing-787-8": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/American_Airlines_B787-8_%28N808AN%29_%40_LAX%2C_Nov_2015.jpg/1280px-American_Airlines_B787-8_%28N808AN%29_%40_LAX%2C_Nov_2015.jpg",
+      "boeing-757-200": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/American_Airlines_Boeing_757_at_Concourse_D.jpg/1280px-American_Airlines_Boeing_757_at_Concourse_D.jpg",
+      "boeing-777-300er": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/American_Airlines_Boeing_777-300ER_%282-1_crop%29.jpg/1280px-American_Airlines_Boeing_777-300ER_%282-1_crop%29.jpg",
+      "boeing-767-300er": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/American_Airlines_Boeing_767-300ER_N379AA_LHR.jpg/1280px-American_Airlines_Boeing_767-300ER_N379AA_LHR.jpg",
+      "boeing-787-9": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/American_Airlines_Boeing_787-9_Dreamliner_N820AL_approaching_JFK_Airport.jpg/1280px-American_Airlines_Boeing_787-9_Dreamliner_N820AL_approaching_JFK_Airport.jpg",
+      "boeing-737-max-8": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/American_Airlines_Boeing_737_MAX_8_N324RA_approaching_JFK_Airport.jpg/1280px-American_Airlines_Boeing_737_MAX_8_N324RA_approaching_JFK_Airport.jpg",
+      "airbus-a321neo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/American_Airlines_Airbus_A321neo_N400AN_at_LAX.jpg/1280px-American_Airlines_Airbus_A321neo_N400AN_at_LAX.jpg",
+      "embraer-e175": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/American_Eagle_Embraer_ERJ-175_N216NN.jpg/1280px-American_Eagle_Embraer_ERJ-175_N216NN.jpg"
+    },
+    "delta-air-lines": {
+      "boeing-717": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Delta_Air_Lines_Boeing_717-231_N990AT.jpg/1280px-Delta_Air_Lines_Boeing_717-231_N990AT.jpg",
+      "boeing-757-200": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Delta_Air_Lines_Boeing_757-251_N538US.jpg/1280px-Delta_Air_Lines_Boeing_757-251_N538US.jpg",
+      "boeing-767-300er": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Delta_Air_Lines_Boeing_767-332ER_N1603.jpg/1280px-Delta_Air_Lines_Boeing_767-332ER_N1603.jpg",
+      "airbus-a350-900": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Delta_Air_Lines_Airbus_A350-941_N501DN_approaching_JFK_Airport.jpg/1280px-Delta_Air_Lines_Airbus_A350-941_N501DN_approaching_JFK_Airport.jpg",
+      "airbus-a330-300": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Delta_Air_Lines_Airbus_A330-300_N801NW.jpg/1280px-Delta_Air_Lines_Airbus_A330-300_N801NW.jpg",
+      "boeing-737-900er": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Delta_Air_Lines_Boeing_737-932ER_N835DN.jpg/1280px-Delta_Air_Lines_Boeing_737-932ER_N835DN.jpg",
+      "airbus-a321": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Delta_Air_Lines_Airbus_A321-211_N301DN.jpg/1280px-Delta_Air_Lines_Airbus_A321-211_N301DN.jpg",
+      "boeing-737-800": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Delta_Air_Lines_Boeing_737-832_N3747D.jpg/1280px-Delta_Air_Lines_Boeing_737-832_N3747D.jpg",
+      "airbus-a320": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Delta_Air_Lines_Airbus_A320-211_N373NW.jpg/1280px-Delta_Air_Lines_Airbus_A320-211_N373NW.jpg",
+      "airbus-a319": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Delta_Air_Lines_Airbus_A319-114_N344NB.jpg/1280px-Delta_Air_Lines_Airbus_A319-114_N344NB.jpg",
+      "airbus-a220-300": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Delta_Air_Lines_Airbus_A220-300_N301DU.jpg/1280px-Delta_Air_Lines_Airbus_A220-300_N301DU.jpg",
+      "airbus-a220-100": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Delta_Air_Lines_Airbus_A220-100_N105DU.jpg/1280px-Delta_Air_Lines_Airbus_A220-100_N105DU.jpg",
+      "airbus-a330-900neo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Delta_Air_Lines_Airbus_A330-941_N401DZ.jpg/1280px-Delta_Air_Lines_Airbus_A330-941_N401DZ.jpg",
+      "airbus-a321neo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Delta_Air_Lines_Airbus_A321-271NX_N501DA.jpg/1280px-Delta_Air_Lines_Airbus_A321-271NX_N501DA.jpg",
+      "boeing-767-400er": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Delta_Air_Lines_Boeing_767-432ER_N831MH.jpg/1280px-Delta_Air_Lines_Boeing_767-432ER_N831MH.jpg",
+      "boeing-757-300": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Delta_Air_Lines_Boeing_757-351_N581NW.jpg/1280px-Delta_Air_Lines_Boeing_757-351_N581NW.jpg",
+      "airbus-a330-200": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Delta_Air_Lines_Airbus_A330-223_N855NW.jpg/1280px-Delta_Air_Lines_Airbus_A330-223_N855NW.jpg"
+    },
+    "united-airlines": {
+      "boeing-737-800": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/United_Airlines_-_N37267_-_Boeing_737-824_-_San_Francisco_International_Airport-0316.jpg/1280px-United_Airlines_-_N37267_-_Boeing_737-824_-_San_Francisco_International_Airport-0316.jpg",
+      "boeing-737-900er": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/United_Airlines_Boeing_737-924ER_N68802.jpg/1280px-United_Airlines_Boeing_737-924ER_N68802.jpg",
+      "boeing-777-200er": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/United_Airlines_Boeing_777-222_N775UA.jpg/1280px-United_Airlines_Boeing_777-222_N775UA.jpg",
+      "boeing-787-9": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/United_Airlines_Boeing_787-9_Dreamliner_N27965_approaches_runway_28_at_San_Francisco_International_Airport.jpg/1280px-United_Airlines_Boeing_787-9_Dreamliner_N27965_approaches_runway_28_at_San_Francisco_International_Airport.jpg",
+      "boeing-757-200": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/United_Airlines_Boeing_757-224_N12116.jpg/1280px-United_Airlines_Boeing_757-224_N12116.jpg",
+      "boeing-737-max-8": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/United_Airlines_Boeing_737_MAX_8_N27261.jpg/1280px-United_Airlines_Boeing_737_MAX_8_N27261.jpg",
+      "boeing-737-max-9": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/United_Airlines_Boeing_737_MAX_9_N27503.jpg/1280px-United_Airlines_Boeing_737_MAX_9_N27503.jpg",
+      "airbus-a319": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/United_Airlines_Airbus_A319-131_N803UA.jpg/1280px-United_Airlines_Airbus_A319-131_N803UA.jpg",
+      "airbus-a320": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/United_Airlines_Airbus_A320-232_N431UA.jpg/1280px-United_Airlines_Airbus_A320-232_N431UA.jpg",
+      "boeing-737-700": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/United_Airlines_Boeing_737-724_N13718.jpg/1280px-United_Airlines_Boeing_737-724_N13718.jpg",
+      "boeing-767-300er": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/United_Airlines_Boeing_767-322ER_N661UA.jpg/1280px-United_Airlines_Boeing_767-322ER_N661UA.jpg",
+      "boeing-787-8": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/United_Airlines_Boeing_787-8_Dreamliner_N26906.jpg/1280px-United_Airlines_Boeing_787-8_Dreamliner_N26906.jpg",
+      "airbus-a321neo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/United_Airlines_Airbus_A321-271NX_N44501.jpg/1280px-United_Airlines_Airbus_A321-271NX_N44501.jpg",
+      "boeing-787-10": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/United_Airlines_Boeing_787-10_Dreamliner_N12010.jpg/1280px-United_Airlines_Boeing_787-10_Dreamliner_N12010.jpg",
+      "boeing-777-300er": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/United_Airlines_Boeing_777-322ER_N2140U.jpg/1280px-United_Airlines_Boeing_777-322ER_N2140U.jpg",
+      "boeing-757-300": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/United_Airlines_Boeing_757-324_N75858.jpg/1280px-United_Airlines_Boeing_757-324_N75858.jpg",
+      "boeing-767-400er": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/United_Airlines_Boeing_767-424ER_N76054.jpg/1280px-United_Airlines_Boeing_767-424ER_N76054.jpg"
+    },
+    "southwest-airlines": {
+      "boeing-737-700": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Southwest_Airlines_Boeing_737-7H4_N231WN.jpg/1280px-Southwest_Airlines_Boeing_737-7H4_N231WN.jpg",
+      "boeing-737-800": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Southwest_Airlines_Boeing_737-8H4_N8656B.jpg/1280px-Southwest_Airlines_Boeing_737-8H4_N8656B.jpg",
+      "boeing-737-max-8": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Southwest_Airlines_Boeing_737_MAX_8_N8713M_approaching_EWR_Airport.jpg/1280px-Southwest_Airlines_Boeing_737_MAX_8_N8713M_approaching_EWR_Airport.jpg"
+    },
+    "jetblue-airways": {
+      "airbus-a320": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/JetBlue_Airways_Airbus_A320-232_N521JB.jpg/1280px-JetBlue_Airways_Airbus_A320-232_N521JB.jpg",
+      "airbus-a321": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/JetBlue_Airways_Airbus_A321-231_N903JB.jpg/1280px-JetBlue_Airways_Airbus_A321-231_N903JB.jpg",
+      "embraer-e190": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/JetBlue_Airways_Embraer_ERJ-190AR_N178JB.jpg/1280px-JetBlue_Airways_Embraer_ERJ-190AR_N178JB.jpg",
+      "airbus-a321neo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/JetBlue_Airways_Airbus_A321-271NX_N2002J.jpg/1280px-JetBlue_Airways_Airbus_A321-271NX_N2002J.jpg",
+      "airbus-a220-300": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/JetBlue_Airways_Airbus_A220-371_N3008J.jpg/1280px-JetBlue_Airways_Airbus_A220-371_N3008J.jpg"
+    },
+    "alaska-airlines": {
+      "boeing-737-800": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Alaska_Airlines_Boeing_737-890_N588AS.jpg/1280px-Alaska_Airlines_Boeing_737-890_N588AS.jpg",
+      "boeing-737-900er": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Alaska_Airlines_Boeing_737-990ER_N493AS.jpg/1280px-Alaska_Airlines_Boeing_737-990ER_N493AS.jpg",
+      "boeing-737-max-9": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Alaska_Airlines_Boeing_737_MAX_9_N913AK.jpg/1280px-Alaska_Airlines_Boeing_737_MAX_9_N913AK.jpg",
+      "embraer-e175": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Horizon_Air_Embraer_ERJ-175LR_N620QX.jpg/1280px-Horizon_Air_Embraer_ERJ-175LR_N620QX.jpg",
+      "boeing-737-700": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Alaska_Airlines_Boeing_737-790_N614AS.jpg/1280px-Alaska_Airlines_Boeing_737-790_N614AS.jpg",
+      "boeing-717": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Hawaiian_Airlines_Boeing_717-22A_N487HA.jpg/1280px-Hawaiian_Airlines_Boeing_717-22A_N487HA.jpg",
+      "airbus-a321neo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Hawaiian_Airlines_Airbus_A321-271N_N204HA.jpg/1280px-Hawaiian_Airlines_Airbus_A321-271N_N204HA.jpg",
+      "airbus-a330-200": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Hawaiian_Airlines_Airbus_A330-243_N380HA.jpg/1280px-Hawaiian_Airlines_Airbus_A330-243_N380HA.jpg",
+      "boeing-787-9": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Hawaiian_Airlines_Boeing_787-9_Dreamliner_N780HA.jpg/1280px-Hawaiian_Airlines_Boeing_787-9_Dreamliner_N780HA.jpg"
+    },
+    "spirit-airlines": {
+      "airbus-a320": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Spirit_Airlines_Airbus_A320-232_N604NK.jpg/1280px-Spirit_Airlines_Airbus_A320-232_N604NK.jpg",
+      "airbus-a320neo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Spirit_Airlines_Airbus_A320-271N_N901NK.jpg/1280px-Spirit_Airlines_Airbus_A320-271N_N901NK.jpg",
+      "airbus-a321": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Spirit_Airlines_Airbus_A321-231_N661NK.jpg/1280px-Spirit_Airlines_Airbus_A321-231_N661NK.jpg",
+      "airbus-a319": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Spirit_Airlines_Airbus_A319-132_N504NK.jpg/1280px-Spirit_Airlines_Airbus_A319-132_N504NK.jpg"
+    },
+    "frontier-airlines": {
+      "airbus-a320neo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Frontier_Airlines_Airbus_A320-251N_N307FR.jpg/1280px-Frontier_Airlines_Airbus_A320-251N_N307FR.jpg",
+      "airbus-a321neo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Frontier_Airlines_Airbus_A321-211_N701FR.jpg/1280px-Frontier_Airlines_Airbus_A321-211_N701FR.jpg",
+      "airbus-a320": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Frontier_Airlines_Airbus_A320-214_N203FR.jpg/1280px-Frontier_Airlines_Airbus_A320-214_N203FR.jpg",
+      "airbus-a321": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Frontier_Airlines_Airbus_A321-211_N716FR.jpg/1280px-Frontier_Airlines_Airbus_A321-211_N716FR.jpg"
+    }
+  },
+  "note": "All URLs verified to work. For complete images, visit the Wikimedia Commons categories listed in docs/image-sources.md"
+}

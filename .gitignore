@@ -2,3 +2,8 @@ node_modules/
 .wrangler/
 temp/
 .DS_Store
+
+# Local image downloads (images are in R2)
+/images/airlines/
+# Temp working directories
+/airlines/

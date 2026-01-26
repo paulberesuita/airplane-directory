@@ -6,6 +6,15 @@ What we shipped. Builder appends here after each feature.
 
 ## 2026-01-25
 
+### Airline-Specific Aircraft Images
+- **71 airline-livery images** downloaded and uploaded to R2
+- Each airline's fleet page shows aircraft in that airline's livery
+- Images sourced from Wikimedia Commons via API search
+- Created scripts for automated image management:
+  - `scripts/download-verified-images.js` — Searches Wikimedia API for verified URLs
+  - `scripts/download-curated-images.js` — Downloads from curated URL list
+  - `scripts/upload-airline-images.js` — Status check and R2 upload
+
 ### US Airlines Pivot
 - **New Focus:** Airplane Directory now centers on US airline fleets
 - **New Database Schema:**

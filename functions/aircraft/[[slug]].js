@@ -353,8 +353,29 @@ async function renderDetailPage(context, slug, baseUrl) {
   </header>
 
   <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 -mt-4">
-    <!-- Aircraft Image -->
-    ${imageUrl ? `
+    <!-- Aircraft Liveries Gallery -->
+    ${airlines.length > 0 ? `
+    <div class="mb-10">
+      <h2 class="font-display text-lg font-semibold text-slate-700 mb-4">Airline Liveries</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        ${airlines.map(a => `
+          <a href="/airlines/${escapeHtml(a.slug)}" class="group block relative rounded-xl overflow-hidden shadow-lg border border-border hover:shadow-xl transition-all">
+            <img src="${baseUrl}/images/airlines/${escapeHtml(a.slug)}/${escapeHtml(slug)}.jpg"
+                 alt="${escapeHtml(a.name)} ${escapeHtml(aircraft.name)}"
+                 class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                 loading="lazy"
+                 onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'w-full h-48 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center\\'><span class=\\'text-4xl opacity-30\\'>&#9992;</span></div><div class=\\'absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3\\'><span class=\\'text-white font-semibold text-sm\\'>${escapeHtml(a.name)}</span></div>';">
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+              <div class="flex items-center justify-between">
+                <span class="text-white font-semibold text-sm">${escapeHtml(a.name)}</span>
+                <span class="bg-white/20 text-white text-xs font-bold px-2 py-1 rounded">${a.count}</span>
+              </div>
+            </div>
+          </a>
+        `).join('')}
+      </div>
+    </div>
+    ` : imageUrl ? `
     <div class="mb-10">
       <div class="relative rounded-2xl overflow-hidden shadow-lg border border-border">
         <img src="${imageUrl}" alt="${escapeHtml(aircraft.name)}" class="w-full h-64 sm:h-80 md:h-96 object-cover">

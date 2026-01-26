@@ -6,6 +6,35 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ## 2026-01-25
 
+### Wikimedia Commons Image Sourcing
+
+Downloaded 71 airline-specific aircraft images from Wikimedia Commons.
+
+**What worked:**
+- Using the Wikimedia API to search and get verified thumburls
+- API returns actual working URLs (thumburl field) that can be downloaded directly
+- Rate limiting with retries (2-4 sec between requests, 15 sec retry on 429)
+- Node.js https for downloads (avoids shell escaping issues with special characters)
+
+**What didn't work:**
+- Guessing URLs based on filename patterns — Wikimedia URLs aren't predictable
+- Fast downloads — triggered 429 rate limiting
+- Direct URL encoding from curated lists with special characters (;, @) — they 404
+- Shell commands (curl via execSync) with URLs containing encoded special chars
+
+**Key learnings:**
+- Always use the Wikimedia API to get actual URLs, don't construct them manually
+- thumburl from the API gives properly formatted, working URLs
+- Rate limiting is aggressive — need 2+ seconds between requests
+- Files under 5KB are likely HTML error pages, not images
+- R2 uploads use `wrangler r2 object put bucket/key --file=path --remote`
+
+**Scripts created:**
+- `download-verified-images.js` — Searches API, downloads with retries
+- `upload-airline-images.js` — Checks status and uploads to R2
+
+---
+
 ### US Airlines Pivot Decision
 
 Pivoted the product from a general aircraft encyclopedia to a focused US airlines fleet guide.

@@ -289,17 +289,13 @@ async function renderDetailPage(context, slug, baseUrl) {
   const fleetCards = fleet.map(f => `
     <a href="/aircraft/${escapeHtml(f.aircraft_slug)}"
        class="group block bg-card rounded-xl overflow-hidden border border-border hover:shadow-lg hover:border-primary/30 transition-all">
-      ${f.image_url
-        ? `<div class="aspect-[16/10] overflow-hidden bg-slate-100">
-             <img src="${baseUrl}/images/aircraft/${escapeHtml(f.aircraft_slug)}.jpg"
-                  alt="${escapeHtml(f.name)}"
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy">
-           </div>`
-        : `<div class="aspect-[16/10] bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
-             <span class="text-4xl opacity-30">&#9992;</span>
-           </div>`
-      }
+      <div class="aspect-[16/10] overflow-hidden bg-slate-100">
+        <img src="${baseUrl}/images/airlines/${escapeHtml(slug)}/${escapeHtml(f.aircraft_slug)}.jpg"
+             alt="${escapeHtml(airline.name)} ${escapeHtml(f.name)}"
+             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+             loading="lazy"
+             onerror="this.onerror=null; this.src='${baseUrl}/images/aircraft/${escapeHtml(f.aircraft_slug)}.jpg'; this.onerror=function(){this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center bg-slate-100\\'><span class=\\'text-4xl opacity-30\\'>&#9992;</span></div>';}">
+      </div>
       <div class="p-4">
         <div class="flex items-start justify-between gap-2 mb-2">
           <h3 class="font-display font-semibold text-slate-800 group-hover:text-primary transition-colors">
