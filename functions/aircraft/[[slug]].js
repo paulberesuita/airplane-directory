@@ -110,7 +110,7 @@ function renderHead({ title, description, url, image, jsonLd }) {
   <style>
     body {
       background-image: url('/images/sky-bg.jpg');
-      background-size: cover;
+      background-size: 100% 100vh;
       background-position: top center;
       background-attachment: fixed;
       background-repeat: no-repeat;

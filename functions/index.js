@@ -117,7 +117,7 @@ function renderHead({ title, description, url, image }) {
   <style>
     body {
       background-image: url('/images/sky-bg.jpg');
-      background-size: cover;
+      background-size: 100% 100vh;
       background-position: top center;
       background-attachment: fixed;
       background-repeat: no-repeat;
@@ -264,13 +264,6 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
     image: aircraft[0]?.image_url ? `${baseUrl}/images/aircraft/${aircraft[0].slug}.jpg` : null
   })}
   <style>
-    .hero-pattern {
-      background-color: #0EA5E9;
-      background-image:
-        radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 40%),
-        radial-gradient(circle at 40% 80%, rgba(255,255,255,0.06) 0%, transparent 30%);
-    }
     .aircraft-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     .aircraft-card:hover { transform: translateY(-4px); }
     .filter-btn.active { background: #0EA5E9; color: white; border-color: #0EA5E9; }
@@ -289,8 +282,8 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
 </head>
 <body class="bg-background text-slate-800 min-h-screen font-sans">
   <!-- Hero Section -->
-  <header class="hero-pattern relative overflow-hidden">
-    <div class="absolute top-10 right-10 opacity-20">
+  <header class="relative">
+    <div class="absolute top-10 right-10 opacity-30">
       <svg class="w-32 h-32 text-white float-animation" fill="currentColor" viewBox="0 0 24 24">
         <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
       </svg>
@@ -298,16 +291,16 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative">
       <div class="max-w-3xl">
-        <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
+        <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight drop-shadow-lg">
           Know what planes US airlines fly
         </h1>
-        <p class="text-sky-100 text-lg md:text-xl mb-8 leading-relaxed">
+        <p class="text-white/90 text-lg md:text-xl mb-8 leading-relaxed drop-shadow">
           Explore the fleets of America's major airlines. See specs, history, and details about every aircraft that Delta, United, American, Southwest and more operate.
         </p>
 
         <div class="relative max-w-2xl">
           <input type="text" id="search-input"
-            class="w-full px-5 py-4 pl-14 bg-card border-0 rounded-2xl shadow-xl focus:outline-none focus:ring-4 focus:ring-white/30 text-slate-800 placeholder-muted text-lg"
+            class="w-full px-5 py-4 pl-14 bg-white/95 border-0 rounded-2xl shadow-xl focus:outline-none focus:ring-4 focus:ring-white/30 text-slate-800 placeholder-muted text-lg"
             placeholder="Search airlines or aircraft...">
           <svg class="absolute left-5 top-1/2 transform -translate-y-1/2 w-6 h-6 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -315,26 +308,20 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
         </div>
 
         <div class="flex flex-wrap gap-4 mt-6">
-          <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2 text-white">
-            <span class="text-2xl font-bold">${airlines.length}</span>
-            <span class="text-sky-100 ml-1">Airlines</span>
+          <div class="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 text-white shadow-lg">
+            <span class="text-2xl font-bold drop-shadow">${airlines.length}</span>
+            <span class="text-white/90 ml-1">Airlines</span>
           </div>
-          <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2 text-white">
-            <span class="text-2xl font-bold">${formatNumber(totalAircraft)}</span>
-            <span class="text-sky-100 ml-1">Aircraft</span>
+          <div class="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 text-white shadow-lg">
+            <span class="text-2xl font-bold drop-shadow">${formatNumber(totalAircraft)}</span>
+            <span class="text-white/90 ml-1">Aircraft</span>
           </div>
-          <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2 text-white">
-            <span class="text-2xl font-bold">${aircraft.length}</span>
-            <span class="text-sky-100 ml-1">Aircraft Types</span>
+          <div class="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 text-white shadow-lg">
+            <span class="text-2xl font-bold drop-shadow">${aircraft.length}</span>
+            <span class="text-white/90 ml-1">Aircraft Types</span>
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="absolute bottom-0 left-0 right-0">
-      <svg class="w-full h-12 md:h-16" viewBox="0 0 1440 64" preserveAspectRatio="none" fill="#F8FAFC">
-        <path d="M0,32 C480,64 960,0 1440,32 L1440,64 L0,64 Z"></path>
-      </svg>
     </div>
   </header>
 
