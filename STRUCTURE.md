@@ -6,14 +6,24 @@ High-level overview of pages and how they connect to data.
 
 ## URL Patterns
 
-| Pattern | Example | Description |
-|---------|---------|-------------|
-| `/` | Homepage | Hero + search + aircraft grid |
-| `/aircraft` | List | All aircraft with filters |
-| `/aircraft/[slug]` | Detail | Single aircraft specs + history |
-| `/manufacturer/[slug]` | Manufacturer | Aircraft from one manufacturer |
-| `/compare/[a]-vs-[b]` | Comparison | Side-by-side specs |
-| `/best/[topic]` | Top list | Curated rankings |
+| Pattern | Example | Status | Function |
+|---------|---------|--------|----------|
+| `/` | Homepage | Built | `functions/index.js` |
+| `/aircraft` | List | Built | `functions/aircraft/[[slug]].js` |
+| `/aircraft/[slug]` | Detail | Built | `functions/aircraft/[[slug]].js` |
+| `/sitemap.xml` | Sitemap | Built | `functions/sitemap.xml.js` |
+| `/images/*` | Images | Built | `functions/images/[[path]].js` |
+| `/manufacturer/[slug]` | Manufacturer | Planned | — |
+| `/compare/[a]-vs-[b]` | Comparison | Planned | — |
+| `/best/[topic]` | Top list | Planned | — |
+
+### API Endpoints (JSON)
+
+| Pattern | Status | Function |
+|---------|--------|----------|
+| `/api/aircraft` | Built | `functions/api/aircraft/index.js` |
+| `/api/aircraft/[slug]` | Built | `functions/api/aircraft/[slug].js` |
+| `/api/aircraft/[slug]/history` | Built | `functions/api/aircraft/[slug]/history.js` |
 
 ---
 

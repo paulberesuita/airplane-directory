@@ -4,6 +4,62 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ---
 
+## 2026-01-25
+
+### SSR Migration Decision
+
+Migrated from static HTML + client-side fetching to full server-side rendering. The original architecture had `public/index.html` and `public/aircraft.html` as static files that fetched data via API on page load.
+
+**Why we changed:**
+- SEO crawlers saw empty pages (no content until JavaScript ran)
+- Page titles and meta descriptions were generic until JS updated them
+- No structured data (JSON-LD) on initial page load
+- Slower perceived performance (blank → loading → content)
+
+**New architecture:**
+- `functions/index.js` — Returns complete homepage HTML with all aircraft data
+- `functions/aircraft/[[slug]].js` — Returns complete HTML for list and detail pages
+- All meta tags, OG tags, and JSON-LD baked into initial response
+- Client-side JS only for interactive filtering (not data fetching)
+
+**Key learnings:**
+- Cloudflare Pages Functions with `[[slug]].js` pattern handles both bare path and parameterized paths
+- Check `params.slug?.[0]` — undefined for bare path, string for detail path
+- `escapeHtml()` is critical when rendering database content in HTML
+- JSON-LD should match Schema.org types (Product for aircraft, ItemList for collections)
+
+---
+
+### Image Serving Path Change
+
+Changed image serving from `/api/images/aircraft/[filename]` to `/images/aircraft/[slug].jpg`.
+
+**Why:**
+- Cleaner URLs that match the design system standard
+- Consistent with the `/images/` pattern documented in coding-standards
+- Aligns with the R2 binding rename from `BUCKET` to `IMAGES`
+
+**Key learnings:**
+- The `[[path]].js` pattern lets you capture multiple path segments
+- `params.path.join('/')` reconstructs the full key for R2 lookup
+
+---
+
+### Design System Token Alignment
+
+Reviewed codebase against design-system skill and found inconsistencies:
+- Was using `text-gray-*` instead of `text-slate-*`
+- Was using `font-heading` instead of `font-display`
+- Mixed raw Tailwind colors with custom tokens
+
+**Standardized to:**
+- `text-slate-800` for body text
+- `text-muted` (slate-500) for secondary text
+- `font-display` for headings
+- Custom color tokens: `primary`, `background`, `card`, `border`, `muted`, `accent`
+
+---
+
 ## 2026-01-20
 
 ### Aircraft Image Research

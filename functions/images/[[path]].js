@@ -1,25 +1,26 @@
-// GET /api/images/aircraft/[filename] - Serve aircraft image from R2
+// GET /images/* - Serve images from R2
 export async function onRequestGet(context) {
   const { env, params } = context;
-  const { filename } = params;
+  const key = params.path.join('/'); // e.g., "aircraft/boeing-737.jpg"
 
   try {
-    const object = await env.BUCKET.get(`aircraft/${filename}`);
+    const object = await env.IMAGES.get(key);
 
     if (!object) {
-      return new Response('Image not found', { status: 404 });
+      return new Response('Not found', { status: 404 });
     }
 
     // Determine content type from extension
-    const ext = filename.split('.').pop().toLowerCase();
+    const ext = key.split('.').pop().toLowerCase();
     const contentTypes = {
       'jpg': 'image/jpeg',
       'jpeg': 'image/jpeg',
       'png': 'image/png',
       'webp': 'image/webp',
-      'gif': 'image/gif'
+      'gif': 'image/gif',
+      'svg': 'image/svg+xml'
     };
-    const contentType = contentTypes[ext] || 'application/octet-stream';
+    const contentType = object.httpMetadata?.contentType || contentTypes[ext] || 'application/octet-stream';
 
     return new Response(object.body, {
       headers: {

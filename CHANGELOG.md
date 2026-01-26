@@ -4,6 +4,36 @@ What we shipped. Builder appends here after each feature.
 
 ---
 
+## 2026-01-25
+### Architecture Refactor: SSR Migration
+- **Converted to Server-Side Rendering** — All pages now rendered server-side via Cloudflare Functions
+  - `functions/index.js` — Homepage with aircraft grid
+  - `functions/aircraft/[[slug]].js` — List page and detail pages
+- **Removed static HTML** — Deleted `public/index.html` and `public/aircraft.html`
+- **Benefits:** SEO crawlers now see full content, faster perceived performance, proper meta tags on first load
+
+### Technical SEO
+- Added `functions/sitemap.xml.js` — Dynamic XML sitemap with all aircraft URLs
+- Added `public/robots.txt` — Points to sitemap, disallows /api/
+- Added Open Graph tags for social sharing (og:title, og:description, og:image)
+- Added Twitter Card meta tags
+- Added JSON-LD structured data:
+  - Homepage: WebSite schema
+  - Aircraft list: ItemList schema
+  - Aircraft detail: Product schema with specs
+
+### Design System Alignment
+- Updated Tailwind config to use custom color tokens (primary, muted, card, border, etc.)
+- Changed font class from `font-heading` to `font-display` per design system
+- Standardized on slate color palette (was mixing gray/slate)
+
+### Infrastructure
+- Fixed R2 binding: `BUCKET` → `IMAGES` in wrangler.toml
+- Moved image serving from `/api/images/aircraft/[filename]` to `/images/aircraft/[slug].jpg`
+- Updated `functions/images/[[path]].js` to use `IMAGES` binding
+
+---
+
 ## 2026-01-20
 ### Aircraft Images in UI
 - Added aircraft images to homepage cards with 16:9 aspect ratio
