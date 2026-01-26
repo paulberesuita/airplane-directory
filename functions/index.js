@@ -275,8 +275,8 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
       </svg>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative">
-      <div class="max-w-3xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative text-center">
+      <div class="max-w-3xl mx-auto">
         <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-4 leading-tight">
           Know what planes airlines fly
         </h1>
@@ -284,7 +284,7 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
           Explore the fleets of major airlines worldwide. See specs, history, and details about every aircraft from carriers like Emirates, British Airways, Lufthansa, and more.
         </p>
 
-        <div class="flex flex-wrap gap-4">
+        <div class="flex flex-wrap gap-4 justify-center">
           <div class="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 text-white">
             <span class="text-2xl font-bold">${airlines.length}</span>
             <span class="text-white ml-1">Airlines</span>
