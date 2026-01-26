@@ -120,11 +120,19 @@ function renderHead({ title, description, url, image, jsonLd }) {
 
 function renderHeader(baseUrl) {
   return `
-  <header class="border-b border-border bg-card">
+  <header class="sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-      <a href="/" class="text-xl font-bold font-display text-primary">Airplane Directory</a>
-      <nav class="flex gap-6 text-sm text-muted">
-        <a href="/aircraft" class="hover:text-slate-800 transition-colors">Aircraft</a>
+      <a href="/" class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+          </svg>
+        </div>
+        <span class="text-xl font-bold font-display text-white drop-shadow">Airplane Directory</span>
+      </a>
+      <nav class="flex gap-6 text-sm">
+        <a href="/airlines" class="text-white/70 hover:text-white transition-colors">Airlines</a>
+        <a href="/aircraft" class="text-white font-medium">Aircraft</a>
       </nav>
     </div>
   </header>`;
@@ -132,19 +140,19 @@ function renderHeader(baseUrl) {
 
 function renderFooter() {
   return `
-  <footer class="bg-gray-800 mt-16">
+  <footer class="mt-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+          <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
             <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
               <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
             </svg>
           </div>
-          <span class="font-display font-bold text-white text-lg">Airplane Directory</span>
+          <span class="font-display font-bold text-white text-lg drop-shadow">Airplane Directory</span>
         </div>
-        <p class="text-gray-400 text-sm text-center md:text-left">
-          For curious travelers who want to know what they are flying on.
+        <p class="text-white/60 text-sm text-center md:text-left drop-shadow">
+          Know what you're flying on. US airline fleets and aircraft information.
         </p>
       </div>
     </div>
@@ -162,8 +170,17 @@ async function renderListPage(context, baseUrl) {
 
   const manufacturers = [...new Set(aircraft.map(a => a.manufacturer))].sort();
 
+  const filterButtons = manufacturers.map(m => `
+    <button onclick="filterByManufacturer('${escapeHtml(m)}')"
+            class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:border-white/50 transition-all backdrop-blur-sm"
+            data-manufacturer="${escapeHtml(m)}">
+      ${escapeHtml(m)}
+    </button>
+  `).join('');
+
   const cards = aircraft.map(a => {
     const rangeInMiles = kmToMiles(a.range_km);
+    const speedInMph = kmhToMph(a.cruise_speed_kmh);
     const statusClass = a.status === 'In Production'
       ? 'bg-success-bg text-success'
       : a.status === 'In Service'
@@ -171,23 +188,52 @@ async function renderListPage(context, baseUrl) {
         : 'bg-slate-100 text-muted';
 
     const imageHtml = a.image_url
-      ? `<div class="aspect-[4/3] overflow-hidden">
+      ? `<div class="aspect-[16/9] overflow-hidden bg-slate-100">
            <img src="${baseUrl}/images/aircraft/${escapeHtml(a.slug)}.jpg" alt="${escapeHtml(a.name)}"
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy"
+                onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center bg-slate-100\\'><span class=\\'text-4xl opacity-30\\'>&#9992;</span></div>'">
          </div>`
-      : `<div class="aspect-[4/3] bg-slate-100 flex items-center justify-center">
+      : `<div class="aspect-[16/9] bg-slate-100 flex items-center justify-center">
            <span class="text-4xl opacity-30">&#9992;</span>
          </div>`;
 
+    const year = a.first_flight ? a.first_flight.split('-')[0] : '';
+
     return `
-      <a href="/aircraft/${escapeHtml(a.slug)}" class="group block bg-card rounded-xl overflow-hidden border border-border hover:shadow-lg transition-all duration-300">
+      <a href="/aircraft/${escapeHtml(a.slug)}"
+         class="aircraft-card group block bg-card rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300"
+         data-manufacturer="${escapeHtml(a.manufacturer)}">
         ${imageHtml}
         <div class="p-4">
-          <div class="flex items-start justify-between gap-2 mb-1">
-            <h3 class="font-semibold font-display group-hover:text-primary transition-colors">${escapeHtml(a.name)}</h3>
-            <span class="text-xs font-medium px-2 py-0.5 rounded-full ${statusClass}">${escapeHtml(a.status)}</span>
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <h3 class="font-semibold font-display text-slate-800 group-hover:text-primary transition-colors">${escapeHtml(a.name)}</h3>
+            <span class="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full ${statusClass}">${escapeHtml(a.status)}</span>
           </div>
-          <p class="text-sm text-muted">${escapeHtml(a.manufacturer)} · ${a.passengers} passengers</p>
+          <p class="text-sm text-primary font-medium mb-2">${escapeHtml(a.manufacturer)}</p>
+          <p class="text-sm text-muted line-clamp-2 mb-4">${escapeHtml(a.description)}</p>
+          <div class="flex items-center gap-1 pt-3 border-t border-slate-100">
+            <div class="flex-1 text-center py-1.5 rounded bg-background">
+              <p class="text-xs text-muted mb-0.5">Pax</p>
+              <p class="text-sm font-semibold text-slate-700">${a.passengers}</p>
+            </div>
+            <div class="flex-1 text-center py-1.5 rounded bg-background">
+              <p class="text-xs text-muted mb-0.5">Range</p>
+              <p class="text-sm font-semibold text-slate-700">${formatNumber(rangeInMiles)} mi</p>
+            </div>
+            <div class="flex-1 text-center py-1.5 rounded bg-background">
+              <p class="text-xs text-muted mb-0.5">Speed</p>
+              <p class="text-sm font-semibold text-slate-700">${formatNumber(speedInMph)} mph</p>
+            </div>
+          </div>
+        </div>
+        <div class="px-4 py-3 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between">
+          <span class="text-xs text-muted">First flight: ${year}</span>
+          <span class="text-sm font-medium text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
+            View Details
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </span>
         </div>
       </a>`;
   }).join('');
@@ -196,8 +242,8 @@ async function renderListPage(context, baseUrl) {
 <html lang="en">
 <head>
   ${renderHead({
-    title: 'All Aircraft | Airplane Directory',
-    description: `Browse ${aircraft.length} commercial aircraft from ${manufacturers.join(', ')}. Find specs, history, and details.`,
+    title: 'Aircraft in US Fleets | Airplane Directory',
+    description: `Browse ${aircraft.length} commercial aircraft from ${manufacturers.join(', ')}. Every plane type flown by US carriers.`,
     url: `${baseUrl}/aircraft`,
     jsonLd: {
       "@context": "https://schema.org",
@@ -212,22 +258,120 @@ async function renderListPage(context, baseUrl) {
       }))
     }
   })}
+  <style>
+    .aircraft-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .aircraft-card:hover { transform: translateY(-4px); }
+    .filter-btn.active { background: rgba(255,255,255,0.95); color: #0EA5E9; border-color: white; }
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
 </head>
 <body class="bg-background text-slate-800 min-h-screen font-sans">
   ${renderHeader(baseUrl)}
 
+  <!-- Hero -->
+  <div class="text-white">
+    <div class="max-w-7xl mx-auto px-4 py-12 md:py-16">
+      <h1 class="font-display text-3xl md:text-4xl font-semibold mb-3 drop-shadow-lg">Aircraft in US Fleets</h1>
+      <p class="text-white/80 text-lg max-w-2xl drop-shadow">
+        Every plane type flown by US carriers. Browse specs, history, and details.
+      </p>
+    </div>
+  </div>
+
   <main class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Manufacturer Filters -->
     <div class="mb-8">
-      <h1 class="text-3xl font-bold font-display mb-2">All Aircraft</h1>
-      <p class="text-muted">${aircraft.length} commercial aircraft from leading manufacturers</p>
+      <p class="text-white/70 text-sm font-medium mb-3 uppercase tracking-wide">Filter by manufacturer</p>
+      <div id="manufacturer-filters" class="flex flex-wrap gap-2">
+        <button onclick="filterByManufacturer('')"
+                class="filter-btn active px-4 py-2 rounded-lg text-sm font-medium bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:border-white/50 transition-all backdrop-blur-sm"
+                data-manufacturer="">
+          All Aircraft
+        </button>
+        ${filterButtons}
+      </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <!-- Results Count -->
+    <div class="flex items-center justify-between mb-6">
+      <p id="results-count" class="text-white/80 font-medium">${aircraft.length} aircraft</p>
+      <button id="clear-filters-btn" onclick="clearFilters()" class="hidden text-white hover:text-white/80 text-sm font-medium transition-colors">
+        Clear filters
+      </button>
+    </div>
+
+    <!-- Aircraft Grid -->
+    <div id="aircraft-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       ${cards}
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="hidden text-center py-20">
+      <div class="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-6">
+        <span class="text-4xl text-white/50">&#9992;</span>
+      </div>
+      <h3 class="font-display text-2xl font-semibold text-white mb-2 drop-shadow">No aircraft found</h3>
+      <p class="text-white/70 mb-6 max-w-md mx-auto">No aircraft match your current filter.</p>
+      <button onclick="clearFilters()" class="inline-flex items-center gap-2 bg-white text-primary font-medium px-6 py-3 rounded-xl hover:bg-white/90 transition-all">
+        Clear filter
+      </button>
     </div>
   </main>
 
   ${renderFooter()}
+
+  <script>
+    const aircraftGrid = document.getElementById('aircraft-grid');
+    const emptyState = document.getElementById('empty-state');
+    const resultsCount = document.getElementById('results-count');
+    const clearFiltersBtn = document.getElementById('clear-filters-btn');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+
+    let selectedManufacturer = '';
+
+    function filterAircraft() {
+      const cards = aircraftGrid.querySelectorAll('.aircraft-card');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const manufacturer = card.dataset.manufacturer;
+        const matchesManufacturer = !selectedManufacturer || manufacturer === selectedManufacturer;
+
+        if (matchesManufacturer) {
+          card.style.display = '';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      resultsCount.textContent = visibleCount === 1 ? '1 aircraft' : visibleCount + ' aircraft';
+      emptyState.classList.toggle('hidden', visibleCount > 0);
+      aircraftGrid.classList.toggle('hidden', visibleCount === 0);
+      clearFiltersBtn.classList.toggle('hidden', !selectedManufacturer);
+    }
+
+    function filterByManufacturer(manufacturer) {
+      selectedManufacturer = manufacturer;
+      filterBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.manufacturer === manufacturer);
+      });
+      filterAircraft();
+    }
+
+    function clearFilters() {
+      selectedManufacturer = '';
+      filterBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.manufacturer === '');
+      });
+      filterAircraft();
+    }
+  </script>
 </body>
 </html>`;
 
@@ -279,11 +423,8 @@ async function renderDetailPage(context, slug, baseUrl) {
   const speedInMph = kmhToMph(aircraft.cruise_speed_kmh);
   const year = aircraft.first_flight ? aircraft.first_flight.split('-')[0] : '';
 
-  const statusClass = aircraft.status === 'In Production'
-    ? 'bg-green-400/20 text-green-100'
-    : aircraft.status === 'In Service'
-      ? 'bg-white/20 text-white'
-      : 'bg-white/10 text-white/80';
+  // Status badge - now unified since we use transparent background
+  const statusLabel = aircraft.status;
 
   // Group history by type
   const grouped = { milestone: [], development: [], story: [], fact: [], record: [], incident: [], legacy: [] };
@@ -316,9 +457,6 @@ async function renderDetailPage(context, slug, baseUrl) {
     }
   })}
   <style>
-    .hero-gradient {
-      background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 50%, #0369A1 100%);
-    }
     .stat-card:hover { transform: translateY(-2px); }
     .fun-fact-card {
       background: linear-gradient(135deg, #FEF2F2 0%, #FFF7ED 100%);
@@ -328,15 +466,15 @@ async function renderDetailPage(context, slug, baseUrl) {
 </head>
 <body class="bg-background text-slate-800 min-h-screen font-sans">
   <!-- Hero Header -->
-  <header class="hero-gradient relative overflow-hidden">
-    <div class="absolute top-1/2 right-8 -translate-y-1/2 opacity-10 hidden lg:block">
+  <header class="relative">
+    <div class="absolute top-1/2 right-8 -translate-y-1/2 opacity-20 hidden lg:block">
       <svg class="w-64 h-64 text-white" fill="currentColor" viewBox="0 0 24 24">
         <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
       </svg>
     </div>
 
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 relative">
-      <a href="/" class="inline-flex items-center text-white/80 hover:text-white font-medium mb-8 text-sm transition-colors">
+      <a href="/aircraft" class="inline-flex items-center text-white/70 hover:text-white font-medium mb-8 text-sm transition-colors drop-shadow">
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
         </svg>
@@ -345,27 +483,21 @@ async function renderDetailPage(context, slug, baseUrl) {
 
       <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 pb-8">
         <div>
-          <p class="text-sky-200 text-sm font-semibold uppercase tracking-wider mb-2">${escapeHtml(aircraft.manufacturer)}</p>
-          <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">${escapeHtml(aircraft.name)}</h1>
+          <p class="text-white/70 text-sm font-semibold uppercase tracking-wider mb-2 drop-shadow">${escapeHtml(aircraft.manufacturer)}</p>
+          <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold text-white leading-tight drop-shadow-lg">${escapeHtml(aircraft.name)}</h1>
         </div>
-        <span class="shrink-0 inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold ${statusClass} self-start sm:self-auto">
-          ${escapeHtml(aircraft.status)}
+        <span class="shrink-0 inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-white/20 backdrop-blur-sm text-white self-start sm:self-auto drop-shadow">
+          ${escapeHtml(statusLabel)}
         </span>
       </div>
     </div>
-
-    <div class="absolute bottom-0 left-0 right-0">
-      <svg class="w-full h-8 md:h-12" viewBox="0 0 1440 48" preserveAspectRatio="none" fill="#F8FAFC">
-        <path d="M0,24 C360,48 720,0 1080,24 C1260,36 1380,36 1440,24 L1440,48 L0,48 Z"></path>
-      </svg>
-    </div>
   </header>
 
-  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 -mt-4">
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Aircraft Liveries Gallery -->
     ${airlines.length > 0 ? `
     <div class="mb-10">
-      <h2 class="font-display text-lg font-semibold text-slate-700 mb-4">Airline Liveries</h2>
+      <h2 class="font-display text-lg font-semibold text-white mb-4 drop-shadow">Airline Liveries</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         ${airlines.map(a => `
           <a href="/airlines/${escapeHtml(a.slug)}" class="group block relative rounded-xl overflow-hidden shadow-lg border border-border hover:shadow-xl transition-all">
@@ -401,7 +533,7 @@ async function renderDetailPage(context, slug, baseUrl) {
 
     <!-- Description -->
     <div class="mb-10">
-      <p class="text-muted text-lg leading-relaxed max-w-3xl">${escapeHtml(aircraft.description)}</p>
+      <p class="text-white/80 text-lg leading-relaxed max-w-3xl drop-shadow">${escapeHtml(aircraft.description)}</p>
     </div>
 
     <!-- Quick Stats Grid -->

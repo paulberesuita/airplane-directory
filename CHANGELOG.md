@@ -4,6 +4,21 @@ What we shipped. Builder appends here after each feature.
 
 ---
 
+## 2026-01-26
+
+### Homepage UI Improvements
+- **Sky background** — Added blue sky gradient background image (fixed to viewport height)
+- **Removed hero solid background** — Sky now visible through hero section
+- **Lightened headline weights** — Changed from `font-bold` to `font-semibold`
+- **Removed search input** — Simplified hero by removing search box
+- **Airline logos** — Airline cards now display actual logos with IATA fallback
+- **White text colors** — Updated all homepage text from black/gray to white for contrast against sky:
+  - Section headers use `text-white drop-shadow`
+  - Subtitles use `text-white/70`
+  - Filter buttons use semi-transparent white with backdrop blur
+
+---
+
 ## 2026-01-25
 
 ### Airline-Specific Aircraft Images

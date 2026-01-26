@@ -99,19 +99,19 @@ function renderHead({ title, description, url, image, jsonLd }) {
 
 function renderHeader(baseUrl) {
   return `
-  <header class="border-b border-border bg-card sticky top-0 z-50">
+  <header class="sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2">
-        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+        <div class="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
           <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
             <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
           </svg>
         </div>
-        <span class="text-xl font-bold font-display text-slate-800">Airplane Directory</span>
+        <span class="text-xl font-bold font-display text-white drop-shadow">Airplane Directory</span>
       </a>
       <nav class="flex gap-6 text-sm">
-        <a href="/airlines" class="text-primary font-medium">Airlines</a>
-        <a href="/aircraft" class="text-muted hover:text-slate-800 transition-colors">Aircraft</a>
+        <a href="/airlines" class="text-white font-medium">Airlines</a>
+        <a href="/aircraft" class="text-white/70 hover:text-white transition-colors">Aircraft</a>
       </nav>
     </div>
   </header>`;
@@ -119,18 +119,18 @@ function renderHeader(baseUrl) {
 
 function renderFooter() {
   return `
-  <footer class="bg-slate-800 mt-16">
+  <footer class="mt-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="flex flex-col md:flex-row items-center justify-between gap-6">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+          <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
             <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
               <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
             </svg>
           </div>
-          <span class="font-display font-bold text-white text-lg">Airplane Directory</span>
+          <span class="font-display font-bold text-white text-lg drop-shadow">Airplane Directory</span>
         </div>
-        <p class="text-slate-400 text-sm text-center md:text-left">
+        <p class="text-white/60 text-sm text-center md:text-left drop-shadow">
           Know what you're flying on. US airline fleets and aircraft information.
         </p>
       </div>
@@ -156,7 +156,7 @@ async function renderListPage(context, baseUrl) {
 
   const airlineCards = airlines.map(airline => `
     <a href="/airlines/${escapeHtml(airline.slug)}"
-       class="group block bg-card rounded-xl overflow-hidden border border-border hover:shadow-lg hover:border-primary/30 transition-all duration-300">
+       class="group block bg-card rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300">
       <div class="p-6">
         <div class="flex items-start justify-between gap-4 mb-4">
           <div>
@@ -172,7 +172,7 @@ async function renderListPage(context, baseUrl) {
 
         <p class="text-muted text-sm line-clamp-2 mb-4">${escapeHtml(airline.description?.substring(0, 150))}...</p>
 
-        <div class="grid grid-cols-3 gap-4 pt-4 border-t border-border">
+        <div class="grid grid-cols-3 gap-4 pt-4 border-t border-slate-100">
           <div class="text-center">
             <p class="text-2xl font-bold text-slate-800">${formatNumber(airline.fleet_size)}</p>
             <p class="text-xs text-muted">Aircraft</p>
@@ -188,7 +188,7 @@ async function renderListPage(context, baseUrl) {
         </div>
       </div>
 
-      <div class="px-6 py-3 bg-slate-50 border-t border-border flex items-center justify-between">
+      <div class="px-6 py-3 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between">
         <span class="text-xs text-muted">Founded ${airline.founded}</span>
         <span class="text-sm font-medium text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
           View Fleet
@@ -238,10 +238,10 @@ async function renderListPage(context, baseUrl) {
   ${renderHeader(baseUrl)}
 
   <!-- Hero -->
-  <div class="bg-gradient-to-br from-primary to-sky-600 text-white">
+  <div class="text-white">
     <div class="max-w-7xl mx-auto px-4 py-12 md:py-16">
-      <h1 class="font-display text-3xl md:text-4xl font-bold mb-3">US Airlines</h1>
-      <p class="text-sky-100 text-lg max-w-2xl">
+      <h1 class="font-display text-3xl md:text-4xl font-semibold mb-3 drop-shadow-lg">US Airlines</h1>
+      <p class="text-white/80 text-lg max-w-2xl drop-shadow">
         Explore the aircraft fleets of major US carriers. Find out what planes fly your favorite routes.
       </p>
     </div>
@@ -297,7 +297,7 @@ async function renderDetailPage(context, slug, baseUrl) {
 
   const fleetCards = fleet.map(f => `
     <a href="/aircraft/${escapeHtml(f.aircraft_slug)}"
-       class="group block bg-card rounded-xl overflow-hidden border border-border hover:shadow-lg hover:border-primary/30 transition-all">
+       class="group block bg-card rounded-xl overflow-hidden hover:shadow-lg transition-all">
       <div class="aspect-[16/10] overflow-hidden bg-slate-100">
         <img src="${baseUrl}/images/airlines/${escapeHtml(slug)}/${escapeHtml(f.aircraft_slug)}.jpg"
              alt="${escapeHtml(airline.name)} ${escapeHtml(f.name)}"
@@ -317,7 +317,7 @@ async function renderDetailPage(context, slug, baseUrl) {
         <p class="text-sm text-muted mb-3">${escapeHtml(f.manufacturer)}</p>
         ${f.notes ? `<p class="text-xs text-muted">${escapeHtml(f.notes)}</p>` : ''}
 
-        <div class="flex items-center gap-4 mt-3 pt-3 border-t border-border text-xs text-muted">
+        <div class="flex items-center gap-4 mt-3 pt-3 border-t border-slate-100 text-xs text-muted">
           <span>${escapeHtml(f.passengers)} pax</span>
           <span>${formatNumber(Math.round(f.range_km * 0.621371))} mi range</span>
         </div>
@@ -351,9 +351,9 @@ async function renderDetailPage(context, slug, baseUrl) {
   ${renderHeader(baseUrl)}
 
   <!-- Hero -->
-  <div class="bg-gradient-to-br from-primary to-sky-600 text-white">
+  <div class="text-white">
     <div class="max-w-7xl mx-auto px-4 py-8 md:py-12">
-      <a href="/airlines" class="inline-flex items-center text-sky-200 hover:text-white text-sm mb-4 transition-colors">
+      <a href="/airlines" class="inline-flex items-center text-white/70 hover:text-white text-sm mb-4 transition-colors">
         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
         </svg>
@@ -365,23 +365,8 @@ async function renderDetailPage(context, slug, baseUrl) {
           <div class="flex items-center gap-3 mb-2">
             <span class="bg-white/20 text-white text-lg font-bold px-3 py-1 rounded-lg">${escapeHtml(airline.iata_code)}</span>
           </div>
-          <h1 class="font-display text-3xl md:text-4xl font-bold">${escapeHtml(airline.name)}</h1>
-          <p class="text-sky-100 mt-2">${escapeHtml(airline.headquarters)} · Founded ${airline.founded}</p>
-        </div>
-
-        <div class="flex gap-6 text-center">
-          <div>
-            <p class="text-3xl font-bold">${formatNumber(totalAircraft)}</p>
-            <p class="text-sky-200 text-sm">Aircraft</p>
-          </div>
-          <div>
-            <p class="text-3xl font-bold">${fleet.length}</p>
-            <p class="text-sky-200 text-sm">Types</p>
-          </div>
-          <div>
-            <p class="text-3xl font-bold">${airline.destinations || 0}</p>
-            <p class="text-sky-200 text-sm">Destinations</p>
-          </div>
+          <h1 class="font-display text-3xl md:text-4xl font-semibold drop-shadow-lg">${escapeHtml(airline.name)}</h1>
+          <p class="text-white/80 mt-2 drop-shadow">${escapeHtml(airline.headquarters)} · Founded ${airline.founded}</p>
         </div>
       </div>
     </div>
@@ -389,7 +374,7 @@ async function renderDetailPage(context, slug, baseUrl) {
 
   <main class="max-w-7xl mx-auto px-4 py-8">
     <!-- Description -->
-    <div class="bg-card rounded-xl border border-border p-6 mb-8">
+    <div class="bg-white/60 backdrop-blur-sm rounded-xl p-6 mb-8">
       <p class="text-muted leading-relaxed">${escapeHtml(airline.description)}</p>
       ${airline.website ? `
         <a href="${escapeHtml(airline.website)}" target="_blank" rel="noopener"
@@ -404,8 +389,8 @@ async function renderDetailPage(context, slug, baseUrl) {
 
     <!-- Fleet Header -->
     <div class="flex items-center justify-between mb-6">
-      <h2 class="font-display text-2xl font-bold text-slate-800">Fleet</h2>
-      <p class="text-muted">
+      <h2 class="font-display text-2xl font-semibold text-white drop-shadow">Fleet</h2>
+      <p class="text-white/70">
         ${manufacturers.join(', ')} aircraft
       </p>
     </div>
@@ -417,7 +402,7 @@ async function renderDetailPage(context, slug, baseUrl) {
 
     <!-- Back Link -->
     <div class="text-center mt-12">
-      <a href="/airlines" class="inline-flex items-center gap-2 text-primary hover:text-primary-hover font-medium">
+      <a href="/airlines" class="inline-flex items-center gap-2 text-white hover:text-white/80 font-medium drop-shadow">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
         </svg>
