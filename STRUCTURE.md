@@ -15,7 +15,8 @@ High-level overview of pages and how they connect to data.
 | `/aircraft/[slug]` | Aircraft detail | Built | `functions/aircraft/[[slug]].js` |
 | `/sitemap.xml` | Sitemap | Built | `functions/sitemap.xml.js` |
 | `/images/*` | Images | Built | `functions/images/[[path]].js` |
-| `/manufacturer/[slug]` | Manufacturer | Planned | — |
+| `/manufacturer` | Manufacturer list | Built | `functions/manufacturer/[[slug]].js` |
+| `/manufacturer/[slug]` | Manufacturer detail | Built | `functions/manufacturer/[[slug]].js` |
 | `/compare/[a]-vs-[b]` | Comparison | Planned | — |
 | `/best/[topic]` | Top list | Planned | — |
 

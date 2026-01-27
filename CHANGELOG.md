@@ -6,6 +6,17 @@ What we shipped. Builder appends here after each feature.
 
 ## 2026-01-26
 
+### Manufacturer Pages
+- **Created `/manufacturer` list page** showing all 4 manufacturers (Boeing, Airbus, Embraer, Bombardier)
+- **Created `/manufacturer/[slug]` detail pages** with:
+  - Company description, founding year, headquarters
+  - Stats: total aircraft types, in production count, max passengers, max range
+  - Grid of all aircraft from that manufacturer with glass morphism cards
+  - JSON-LD Organization structured data for SEO
+- **Updated sitemap.xml** to include manufacturer list and detail pages
+- **Added Manufacturers link** to homepage footer navigation
+- **Updated STRUCTURE.md** to mark manufacturer pages as built
+
 ### Airline Logos Uploaded
 - **15 airline logos** uploaded to R2 storage:
   - US: American, Delta, United, Southwest, JetBlue, Alaska, Spirit, Frontier

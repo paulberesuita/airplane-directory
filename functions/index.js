@@ -364,6 +364,7 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
         <nav class="flex items-center gap-6">
           <a href="/airlines" class="text-white/90 hover:text-white text-sm transition-colors">Airlines</a>
           <a href="/aircraft" class="text-white/90 hover:text-white text-sm transition-colors">Aircraft</a>
+          <a href="/manufacturer" class="text-white/90 hover:text-white text-sm transition-colors">Manufacturers</a>
         </nav>
       </div>
       <div class="border-t border-white/20 mt-8 pt-8 text-center">

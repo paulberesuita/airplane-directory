@@ -5,10 +5,11 @@ export async function onRequestGet(context) {
   const baseUrl = `${url.protocol}//${url.host}`;
 
   try {
-    // Fetch all aircraft and airline slugs
-    const [{ results: aircraft }, { results: airlines }] = await Promise.all([
+    // Fetch all aircraft, airline, and manufacturer slugs
+    const [{ results: aircraft }, { results: airlines }, { results: manufacturers }] = await Promise.all([
       env.DB.prepare('SELECT slug FROM aircraft ORDER BY slug').all(),
-      env.DB.prepare('SELECT slug FROM airlines ORDER BY slug').all()
+      env.DB.prepare('SELECT slug FROM airlines ORDER BY slug').all(),
+      env.DB.prepare('SELECT DISTINCT LOWER(manufacturer) as slug FROM aircraft ORDER BY manufacturer').all()
     ]);
 
     // Build URL entries
@@ -17,6 +18,7 @@ export async function onRequestGet(context) {
       { loc: baseUrl, priority: '1.0', changefreq: 'daily' },
       { loc: `${baseUrl}/airlines`, priority: '0.9', changefreq: 'daily' },
       { loc: `${baseUrl}/aircraft`, priority: '0.9', changefreq: 'daily' },
+      { loc: `${baseUrl}/manufacturer`, priority: '0.9', changefreq: 'daily' },
 
       // Airline detail pages
       ...airlines.map(a => ({
@@ -28,6 +30,13 @@ export async function onRequestGet(context) {
       // Aircraft detail pages
       ...aircraft.map(a => ({
         loc: `${baseUrl}/aircraft/${a.slug}`,
+        priority: '0.8',
+        changefreq: 'weekly'
+      })),
+
+      // Manufacturer detail pages
+      ...manufacturers.map(m => ({
+        loc: `${baseUrl}/manufacturer/${m.slug}`,
         priority: '0.8',
         changefreq: 'weekly'
       }))

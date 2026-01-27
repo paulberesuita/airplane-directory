@@ -6,6 +6,26 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ## 2026-01-26
 
+### Manufacturer Pages Architecture
+
+Created programmatic SEO pages for manufacturers without a dedicated database table.
+
+**Approach:**
+- Manufacturer metadata (description, founded, headquarters, website) stored as a constant in the function file
+- Aircraft counts and stats derived from `aircraft` table using `GROUP BY manufacturer`
+- Slug is lowercase version of manufacturer name (e.g., "Boeing" -> "boeing")
+
+**Why this works:**
+- Only 4 manufacturers, so hardcoded metadata is maintainable
+- Stats stay accurate because they're calculated from aircraft table at runtime
+- No migration needed, no data duplication
+
+**Key pattern:**
+- List page: Query `SELECT manufacturer, COUNT(*) ... GROUP BY manufacturer`
+- Detail page: Lookup metadata from constant, query `SELECT * FROM aircraft WHERE LOWER(manufacturer) = ?`
+
+---
+
 ### International Airlines Image Strategy
 
 Attempted to download airline-specific aircraft images for 199 international airline/aircraft combinations.
