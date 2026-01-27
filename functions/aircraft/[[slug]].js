@@ -148,7 +148,7 @@ function renderHead({ title, description, url, image, jsonLd }) {
 function renderHeader(baseUrl) {
   return `
   <header class="sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-4 pt-6 pb-4 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2">
         <div class="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
           <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
