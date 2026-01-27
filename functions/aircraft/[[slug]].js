@@ -128,11 +128,19 @@ function renderHead({ title, description, url, image, jsonLd }) {
   </script>
   <style>
     body {
+      background-color: white;
+      padding: 0.75rem;
+      min-height: 100vh;
+    }
+    .window-frame {
       background-image: url('/images/sky-bg.png');
       background-size: 100% 100vh;
       background-position: top center;
       background-attachment: fixed;
       background-repeat: no-repeat;
+      border-radius: 24px;
+      min-height: calc(100vh - 1.5rem);
+      overflow: hidden;
     }
   </style>`;
 }
@@ -208,8 +216,8 @@ async function renderListPage(context, baseUrl) {
 
     const imageHtml = a.image_url
       ? `<div class="aspect-[16/9] overflow-hidden bg-slate-100">
-           <img src="${baseUrl}/images/aircraft/${escapeHtml(a.slug)}.jpg" alt="${escapeHtml(a.name)}"
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy"
+           <img src="${baseUrl}/images/aircraft-styled/${escapeHtml(a.slug)}.jpg" alt="${escapeHtml(a.name)}"
+                class="w-full h-full object-cover transition-transform duration-300" loading="lazy"
                 onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center bg-slate-100\\'><span class=\\'text-4xl opacity-30\\'>&#9992;</span></div>'">
          </div>`
       : `<div class="aspect-[16/9] bg-slate-100 flex items-center justify-center">
@@ -220,7 +228,7 @@ async function renderListPage(context, baseUrl) {
 
     return `
       <a href="/aircraft/${escapeHtml(a.slug)}"
-         class="aircraft-card group block bg-white/20 backdrop-blur-xl rounded-2xl overflow-hidden hover:bg-white/30 transition-all duration-300 border border-white/30"
+         class="aircraft-card group block bg-white/20 backdrop-blur-xl rounded-2xl overflow-hidden hover:bg-white/30 transition-all duration-300"
          data-manufacturer="${escapeHtml(a.manufacturer)}">
         ${imageHtml}
         <div class="p-4">
@@ -280,7 +288,8 @@ async function renderListPage(context, baseUrl) {
     }
   </style>
 </head>
-<body class="bg-background text-slate-800 min-h-screen font-sans">
+<body class="font-sans">
+  <div class="window-frame">
   ${renderHeader(baseUrl)}
 
   <!-- Hero -->
@@ -382,6 +391,7 @@ async function renderListPage(context, baseUrl) {
       filterAircraft();
     }
   </script>
+  </div>
 </body>
 </html>`;
 
@@ -500,7 +510,8 @@ async function renderDetailPage(context, slug, baseUrl) {
     }
   </style>
 </head>
-<body class="bg-background text-slate-800 min-h-screen font-sans">
+<body class="font-sans">
+  <div class="window-frame">
   <!-- Hero Header -->
   <header class="relative">
     <div class="absolute top-1/2 right-8 -translate-y-1/2 opacity-20 hidden lg:block">
@@ -539,7 +550,7 @@ async function renderDetailPage(context, slug, baseUrl) {
           <a href="/airlines/${escapeHtml(a.slug)}" class="group block relative rounded-xl overflow-hidden shadow-lg border border-border hover:shadow-xl transition-all">
             <img src="${baseUrl}/images/airlines/${escapeHtml(a.slug)}/${escapeHtml(slug)}.jpg"
                  alt="${escapeHtml(a.name)} ${escapeHtml(aircraft.name)}"
-                 class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                 class="w-full h-48 object-cover transition-transform duration-300"
                  loading="lazy"
                  onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'w-full h-48 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center\\'><span class=\\'text-4xl opacity-30\\'>&#9992;</span></div><div class=\\'absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3\\'><span class=\\'text-white font-semibold text-sm\\'>${escapeHtml(a.name)}</span></div>';">
             <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
@@ -873,7 +884,7 @@ async function renderDetailPage(context, slug, baseUrl) {
             ${v.image_url
               ? `<div class="aspect-[4/3] overflow-hidden">
                    <img src="${baseUrl}/images/aircraft/${escapeHtml(v.slug)}.jpg" alt="${escapeHtml(v.name)}"
-                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                        class="w-full h-full object-cover transition-transform duration-300" loading="lazy">
                  </div>`
               : `<div class="aspect-[4/3] bg-white/10 flex items-center justify-center">
                    <span class="text-2xl opacity-30">&#9992;</span>
@@ -925,7 +936,7 @@ async function renderDetailPage(context, slug, baseUrl) {
             ${r.image_url
               ? `<div class="aspect-[4/3] overflow-hidden">
                    <img src="${baseUrl}/images/aircraft/${escapeHtml(r.slug)}.jpg" alt="${escapeHtml(r.name)}"
-                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                        class="w-full h-full object-cover transition-transform duration-300" loading="lazy">
                  </div>`
               : `<div class="aspect-[4/3] bg-slate-100 flex items-center justify-center">
                    <span class="text-2xl opacity-30">&#9992;</span>
@@ -1003,6 +1014,7 @@ async function renderDetailPage(context, slug, baseUrl) {
   </main>
 
   ${renderFooter()}
+  </div>
 </body>
 </html>`;
 
@@ -1131,7 +1143,8 @@ function renderErrorPage(baseUrl, message) {
     url: baseUrl
   })}
 </head>
-<body class="bg-background text-slate-800 min-h-screen font-sans">
+<body class="font-sans">
+  <div class="window-frame">
   ${renderHeader(baseUrl)}
 
   <div class="max-w-5xl mx-auto px-4 py-20 text-center">
@@ -1146,6 +1159,7 @@ function renderErrorPage(baseUrl, message) {
   </div>
 
   ${renderFooter()}
+  </div>
 </body>
 </html>`;
 }

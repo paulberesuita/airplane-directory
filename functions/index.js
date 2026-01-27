@@ -116,11 +116,19 @@ function renderHead({ title, description, url, image }) {
   </script>
   <style>
     body {
+      background-color: white;
+      padding: 0.75rem;
+      min-height: 100vh;
+    }
+    .window-frame {
       background-image: url('/images/sky-bg.png');
       background-size: 100% 100vh;
       background-position: top center;
       background-attachment: fixed;
       background-repeat: no-repeat;
+      border-radius: 24px;
+      min-height: calc(100vh - 1.5rem);
+      overflow: hidden;
     }
   </style>`;
 }
@@ -178,9 +186,9 @@ function renderAircraftCard(aircraft, baseUrl) {
 
   const imageHtml = aircraft.image_url
     ? `<div class="aspect-[16/9] bg-slate-100 overflow-hidden">
-         <img src="${baseUrl}/images/aircraft/${escapeHtml(aircraft.slug)}.jpg"
+         <img src="${baseUrl}/images/aircraft-styled/${escapeHtml(aircraft.slug)}.jpg"
               alt="${escapeHtml(aircraft.name)}"
-              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              class="w-full h-full object-cover transition-transform duration-300"
               loading="lazy"
               onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center bg-slate-100\\'><span class=\\'text-4xl opacity-30\\'>&#9992;</span></div>'">
        </div>`
@@ -266,38 +274,24 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
     .float-animation { animation: float 3s ease-in-out infinite; }
   </style>
 </head>
-<body class="bg-background text-slate-800 min-h-screen font-sans">
+<body class="font-sans">
+  <div class="window-frame">
   <!-- Hero Section -->
   <header class="relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative text-center">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 relative text-center">
       <div class="max-w-3xl mx-auto">
         <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-4 leading-tight">
           Every aircraft. Every airline.
         </h1>
-        <p class="text-white text-lg md:text-xl mb-8 leading-relaxed">
+        <p class="text-white text-lg md:text-xl leading-relaxed">
           Discover what planes fly your favorite routes. Explore fleet details, specs, and history for 41 airlines worldwide.
         </p>
-
-        <div class="flex flex-wrap gap-4 justify-center">
-          <div class="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 text-white">
-            <span class="text-2xl font-bold">${airlines.length}</span>
-            <span class="text-white ml-1">Airlines</span>
-          </div>
-          <div class="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 text-white">
-            <span class="text-2xl font-bold">${formatNumber(totalAircraft)}</span>
-            <span class="text-white ml-1">Aircraft</span>
-          </div>
-          <div class="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2 text-white">
-            <span class="text-2xl font-bold">${aircraft.length}</span>
-            <span class="text-white ml-1">Aircraft Types</span>
-          </div>
-        </div>
       </div>
     </div>
   </header>
 
   <!-- Main Content -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 min-h-[60vh]">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 min-h-[60vh]">
     <!-- US Airlines Section -->
     <section class="mb-16">
       <div class="flex items-center justify-between mb-6">
@@ -375,6 +369,7 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
     </div>
   </footer>
 
+  </div>
 </body>
 </html>`;
 }
@@ -389,7 +384,8 @@ function renderErrorPage(baseUrl) {
     url: baseUrl
   })}
 </head>
-<body class="bg-background text-slate-800 min-h-screen font-sans flex items-center justify-center">
+<body class="font-sans">
+  <div class="window-frame flex items-center justify-center">
   <div class="text-center px-4">
     <div class="inline-flex items-center justify-center w-24 h-24 bg-error-bg rounded-full mb-6">
       <span class="text-4xl">&#9992;</span>
@@ -399,6 +395,7 @@ function renderErrorPage(baseUrl) {
     <a href="/" class="inline-flex items-center gap-2 bg-primary text-white font-medium px-6 py-3 rounded-xl hover:bg-primary-hover transition-all">
       Try Again
     </a>
+  </div>
   </div>
 </body>
 </html>`;

@@ -88,11 +88,19 @@ function renderHead({ title, description, url, image, jsonLd }) {
   </script>
   <style>
     body {
+      background-color: white;
+      padding: 0.75rem;
+      min-height: 100vh;
+    }
+    .window-frame {
       background-image: url('/images/sky-bg.png');
       background-size: 100% 100vh;
       background-position: top center;
       background-attachment: fixed;
       background-repeat: no-repeat;
+      border-radius: 24px;
+      min-height: calc(100vh - 1.5rem);
+      overflow: hidden;
     }
   </style>`;
 }
@@ -224,7 +232,8 @@ async function renderListPage(context, baseUrl) {
     }
   </style>
 </head>
-<body class="bg-background text-slate-800 min-h-screen font-sans">
+<body class="font-sans">
+  <div class="window-frame">
   ${renderHeader(baseUrl)}
 
   <!-- Hero -->
@@ -244,6 +253,7 @@ async function renderListPage(context, baseUrl) {
   </main>
 
   ${renderFooter()}
+  </div>
 </body>
 </html>`;
 
@@ -337,7 +347,8 @@ async function renderDetailPage(context, slug, baseUrl) {
     }
   })}
 </head>
-<body class="bg-background text-slate-800 min-h-screen font-sans">
+<body class="font-sans">
+  <div class="window-frame">
   ${renderHeader(baseUrl)}
 
   <!-- Hero -->
@@ -399,6 +410,7 @@ async function renderDetailPage(context, slug, baseUrl) {
   </main>
 
   ${renderFooter()}
+  </div>
 </body>
 </html>`;
 
@@ -420,7 +432,8 @@ function renderErrorPage(baseUrl, message) {
     url: baseUrl
   })}
 </head>
-<body class="bg-background text-slate-800 min-h-screen font-sans">
+<body class="font-sans">
+  <div class="window-frame">
   ${renderHeader(baseUrl)}
 
   <div class="max-w-5xl mx-auto px-4 py-20 text-center">
@@ -435,6 +448,7 @@ function renderErrorPage(baseUrl, message) {
   </div>
 
   ${renderFooter()}
+  </div>
 </body>
 </html>`;
 }
