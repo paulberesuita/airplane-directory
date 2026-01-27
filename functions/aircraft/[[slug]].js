@@ -99,7 +99,7 @@ function renderHead({ title, description, url, image, jsonLd }) {
   ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : ''}
 
   <!-- Fonts & Tailwind -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -149,14 +149,7 @@ function renderHeader(baseUrl) {
   return `
   <header class="sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 pt-6 pb-4 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-2">
-        <div class="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
-          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
-          </svg>
-        </div>
-        <span class="text-xl font-bold font-display text-white drop-shadow">Airplane Directory</span>
-      </a>
+      <a href="/" class="text-2xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRPLANE DIRECTORY</a>
       <nav class="flex gap-6 text-sm">
         <a href="/airlines" class="text-white/70 hover:text-white transition-colors">Airlines</a>
         <a href="/aircraft" class="text-white font-medium">Aircraft</a>
@@ -170,14 +163,7 @@ function renderFooter() {
   <footer class="mt-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
-            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
-            </svg>
-          </div>
-          <span class="font-display font-bold text-white text-lg drop-shadow">Airplane Directory</span>
-        </div>
+        <a href="/" class="text-xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRPLANE DIRECTORY</a>
         <p class="text-white/60 text-sm text-center md:text-left drop-shadow">
           Know what you're flying on. US airline fleets and aircraft information.
         </p>
