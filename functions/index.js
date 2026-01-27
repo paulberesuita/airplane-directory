@@ -276,6 +276,24 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
 </head>
 <body class="font-sans">
   <div class="window-frame">
+  <!-- Nav -->
+  <nav class="sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+          </svg>
+        </div>
+        <span class="text-xl font-bold font-display text-white drop-shadow">Airplane Directory</span>
+      </a>
+      <div class="flex gap-6 text-sm">
+        <a href="/airlines" class="text-white/70 hover:text-white transition-colors">Airlines</a>
+        <a href="/aircraft" class="text-white/70 hover:text-white transition-colors">Aircraft</a>
+      </div>
+    </div>
+  </nav>
+
   <!-- Hero Section -->
   <header class="relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 relative text-center">
