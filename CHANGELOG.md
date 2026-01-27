@@ -6,6 +6,27 @@ What we shipped. Builder appends here after each feature.
 
 ## 2026-01-26
 
+### Expanded Aircraft Specifications Data
+- **Added 15 new spec columns** to aircraft table:
+  - Performance: max_takeoff_weight_kg, fuel_capacity_liters, service_ceiling_m, takeoff_distance_m, landing_distance_m, climb_rate_fpm
+  - Cargo: cargo_capacity_m3, max_payload_kg
+  - Engine: engine_thrust_kn, engine_manufacturer
+  - Commercial: total_orders, total_delivered, list_price_usd
+  - Family: family_slug, variant_order
+- **Populated all 45 aircraft** with expanded specifications:
+  - Tier 1 (8): Boeing 737-800, 737 MAX 8, 737-900ER, Airbus A320neo, A321neo, Boeing 787-8, 787-9, 777-300ER
+  - Tier 2 (33): All remaining Boeing and Airbus variants
+  - Tier 3 (4): Embraer E175, E190, E190-E2, Bombardier CRJ-900
+- **Created 21 aircraft families** with variant ordering:
+  - Boeing: 737 NG, 737 MAX, 757, 767, 777 Classic, 777X, 787, 747 Classic, 747-8, 717
+  - Airbus: A220, A320ceo, A320neo, A330ceo, A330neo, A340, A350, A380
+  - Regional: Embraer E-Jet E1, E-Jet E2, Bombardier CRJ
+- **Created aircraft_sources table** for per-field source tracking:
+  - 75 source citations across 19 key aircraft
+  - Source types: manufacturer (4), aviation_db (67), news (4)
+  - Tracked fields: MTOW, fuel capacity, service ceiling, engine specs, orders/deliveries
+- **Data sources:** Wikipedia, SKYbrary, Flugzeuginfo, Aero Corner, Aircraft Commerce, Airbus/Boeing official
+
 ### Manufacturer Pages
 - **Created `/manufacturer` list page** showing all 4 manufacturers (Boeing, Airbus, Embraer, Bombardier)
 - **Created `/manufacturer/[slug]` detail pages** with:

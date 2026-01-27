@@ -6,6 +6,39 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ## 2026-01-26
 
+### Aircraft Data Expansion Strategy
+
+Expanded aircraft table with detailed specifications and per-field source tracking.
+
+**Data Collection Approach:**
+- Used web search to find manufacturer specs from multiple sources
+- Cross-referenced Wikipedia, SKYbrary, Flugzeuginfo, and manufacturer sites
+- Prioritized data accuracy over completeness (left fields NULL if uncertain)
+
+**Family Grouping Logic:**
+- `family_slug` groups variants together (e.g., all 737 MAX variants share `boeing-737-max`)
+- `variant_order` provides sort order within family (smaller variant first)
+- Enables future "compare variants" and "family overview" pages
+
+**Source Tracking Decision:**
+- Created `aircraft_sources` table for per-field attribution
+- Each source record links to one aircraft + one field + one URL
+- Source types: `manufacturer` (official), `aviation_db` (Wikipedia, SKYbrary), `news` (Simple Flying, etc.)
+- Not every field has a source — focused on key specs (MTOW, fuel, engines, orders)
+
+**Key learnings:**
+- Boeing and Airbus stopped publishing list prices in 2018/2019; use historical prices with caveat
+- Service ceiling is consistently ~41,000 ft for narrowbodies, ~43,000 ft for widebodies
+- MTOW varies significantly by configuration; used most common/max values
+- Orders/deliveries change frequently; stored as snapshot with accessed_at date
+
+**What's missing (future work):**
+- Some aircraft still need sources added to aircraft_sources
+- Could add more per-field sources for completeness
+- Max payload and climb rate fields not populated for many aircraft
+
+---
+
 ### Manufacturer Pages Architecture
 
 Created programmatic SEO pages for manufacturers without a dedicated database table.

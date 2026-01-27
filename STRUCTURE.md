@@ -46,6 +46,37 @@ Core table with specs and metadata.
 | status | text | Filtering (in production, etc.) |
 | image_url | text | Cards, detail page |
 | fun_fact | text | Detail page |
+| **Expanded Performance Specs** | | |
+| max_takeoff_weight_kg | int | MTOW for comparisons |
+| fuel_capacity_liters | int | Fuel capacity |
+| service_ceiling_m | int | Max altitude |
+| takeoff_distance_m | int | Takeoff performance |
+| landing_distance_m | int | Landing performance |
+| climb_rate_fpm | int | Climb performance |
+| cargo_capacity_m3 | real | Cargo volume |
+| max_payload_kg | int | Payload capacity |
+| engine_thrust_kn | real | Engine power |
+| engine_manufacturer | text | Engine maker |
+| **Commercial Data** | | |
+| total_orders | int | Order count |
+| total_delivered | int | Delivery count |
+| list_price_usd | int | Catalog price |
+| **Family Grouping** | | |
+| family_slug | text | Aircraft family (e.g., boeing-737-max) |
+| variant_order | int | Sort order within family |
+
+### aircraft_sources
+Per-field source tracking for data attribution.
+
+| Field | Type | Used By |
+|-------|------|---------|
+| aircraft_slug | text | FK to aircraft |
+| field_name | text | Which field this sources |
+| source_url | text | Link to source |
+| source_name | text | Source display name |
+| source_type | text | manufacturer, aviation_db, news, regulatory |
+| accessed_at | text | When data was retrieved |
+| notes | text | Additional context |
 
 ### aircraft_history
 Timeline entries linked to aircraft.
