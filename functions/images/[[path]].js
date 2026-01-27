@@ -1,7 +1,7 @@
 // GET /images/* - Serve images from R2
 export async function onRequestGet(context) {
   const { env, params } = context;
-  const key = params.path.join('/'); // e.g., "aircraft/boeing-737.jpg"
+  const key = 'images/' + params.path.join('/'); // e.g., "images/aircraft/boeing-737.jpg"
 
   try {
     const object = await env.IMAGES.get(key);

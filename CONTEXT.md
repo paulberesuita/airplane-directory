@@ -4,6 +4,58 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ---
 
+## 2026-01-27
+
+### Sitemap Function Deployment
+
+The sitemap.xml function existed and worked correctly locally, but production was serving stale content.
+
+**Root Cause:** Cloudflare Pages Functions need to be redeployed to update. The function code was correct, but a fresh `wrangler pages deploy` was needed to serve the updated version.
+
+**Key Learning:** When Functions aren't working in production but work locally, try redeploying before debugging code.
+
+### Airline Logo Sourcing
+
+Attempted multiple sources for airline logos.
+
+**What didn't work:**
+- Wikimedia Commons: Direct downloads return HTTP 403 (Forbidden), most logos are SVG
+- Wikipedia: Same issue with direct downloads blocked
+
+**What worked:**
+- [SeekLogo](https://seeklogo.com) has free PNG downloads with consistent URL pattern
+- URL format: `https://images.seeklogo.com/logo-png/{prefix}/{digit}/{name}-logo-png_seeklogo-{id}.png`
+- Downloaded all 26 missing logos successfully (5-16KB each)
+- Total: 41/41 airlines now have logos (100% coverage)
+
+**Key Learning:** SeekLogo is a reliable free source for brand logos. The URL pattern is predictable once you have the logo ID from their website. Always set proper User-Agent and Referer headers when downloading.
+
+### R2 Image Serving Path Bug
+
+The `/images/[[path]].js` function was stripping the `images/` prefix from the R2 key.
+
+**Bug:** Route `/images/logos/airline.png` → key `logos/airline.png` → 404 (file is at `images/logos/airline.png`)
+
+**Fix:** Prepend `images/` to the R2 key in the function:
+```js
+const key = 'images/' + params.path.join('/');
+```
+
+**Key Learning:** When using catch-all routes like `[[path]]`, the route prefix is NOT included in params. Must manually prepend it when constructing R2 keys.
+
+### JSON-LD Coverage
+
+All pages now have appropriate structured data:
+- Homepage: WebSite schema
+- Aircraft list: ItemList schema
+- Aircraft detail: Product schema with additionalProperty
+- Airlines list: ItemList with Airline items
+- Airlines detail: Airline schema
+- Manufacturer list: ItemList with Organization items
+- Manufacturer detail: Organization schema
+
+---
+
 ## 2026-01-26
 
 ### Aircraft Detail Page Specs UI Design

@@ -64,7 +64,7 @@ function kmhToMph(kmh) {
   return Math.round(kmh * 0.621371);
 }
 
-function renderHead({ title, description, url, image }) {
+function renderHead({ title, description, url, image, jsonLd }) {
   return `
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -85,6 +85,8 @@ function renderHead({ title, description, url, image }) {
   <meta name="twitter:title" content="${escapeHtml(title)}">
   <meta name="twitter:description" content="${escapeHtml(description)}">
   ${image ? `<meta name="twitter:image" content="${escapeHtml(image)}">` : ''}
+
+  ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : ''}
 
   <!-- Fonts & Tailwind -->
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -256,7 +258,18 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
     title: 'Airplane Directory — Know What Airlines Fly',
     description: `Explore the fleets of ${airlines.length} major airlines with ${formatNumber(totalAircraft)}+ aircraft. See which planes Emirates, British Airways, Lufthansa, Singapore Airlines and more operate.`,
     url: baseUrl,
-    image: aircraft[0]?.image_url ? `${baseUrl}/images/aircraft/${aircraft[0].slug}.jpg` : null
+    image: aircraft[0]?.image_url ? `${baseUrl}/images/aircraft/${aircraft[0].slug}.jpg` : null,
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Airplane Directory",
+      "url": baseUrl,
+      "description": "Explore airline fleets and aircraft specifications. Know what planes you're flying on.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Airplane Directory"
+      }
+    }
   })}
   <style>
     .aircraft-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }

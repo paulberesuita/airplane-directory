@@ -4,6 +4,21 @@ What we shipped. Builder appends here after each feature.
 
 ---
 
+## 2026-01-27
+
+### SEO Improvements
+- **Fixed sitemap.xml** — Now correctly generates 94 URLs (was returning stale content with 1 URL)
+- **Added JSON-LD WebSite schema** to homepage for rich snippets in search results
+- **Uploaded 41 airline logos** to R2 storage — 100% coverage for all airlines
+  - Researched and downloaded from [SeekLogo](https://seeklogo.com) (free vector logo database)
+  - US carriers: American, Delta, United, Southwest, JetBlue, Alaska, Spirit, Frontier
+  - European: British Airways, Lufthansa, Air France, KLM, Finnair, Swiss, SAS, Norwegian, Icelandair, Virgin Atlantic, Iberia, TAP Portugal, Aer Lingus, Turkish Airlines
+  - Asia-Pacific: Singapore Airlines, Cathay Pacific, Qantas, Air New Zealand, ANA, Japan Airlines, Korean Air, China Airlines, EVA Air
+  - Middle East: Emirates, Qatar Airways, Etihad Airways, El Al
+  - Americas: Air Canada, WestJet, Aeromexico, Avianca, Copa Airlines, LATAM
+
+---
+
 ## 2026-01-26
 
 ### Aircraft Detail Page Expanded Specs UI
