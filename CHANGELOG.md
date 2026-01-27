@@ -6,6 +6,25 @@ What we shipped. Builder appends here after each feature.
 
 ## 2026-01-26
 
+### Aircraft Detail Page Expanded Specs UI
+- **Redesigned Technical Specifications section** with glass morphism cards (bg-white/20, backdrop-blur-xl)
+- **Organized specs into 8 categories:**
+  - Performance: Range, cruise speed, service ceiling, climb rate
+  - Dimensions: Length, wingspan (with metric + imperial)
+  - Capacity: Passengers, cargo volume, max payload
+  - Engines: Count, manufacturer, thrust per engine
+  - Weights: MTOW, fuel capacity (with dual units)
+  - Takeoff/Landing: Distances with unit conversion
+  - Commercial: Total orders, delivered, list price
+  - History: First flight, production status
+- **Added Related Variants section** showing other aircraft in the same family (e.g., 737-700, 737-900ER on 737-800 page)
+- **Added Sources section** displaying per-field data citations with source type badges (M=Manufacturer, D=Aviation Database, N=News)
+- **Unit conversions throughout:**
+  - kg to lbs for weights
+  - liters to gallons for fuel
+  - meters to feet for dimensions and distances
+- **Updated SQL query** to fetch all 15 new specification columns
+
 ### Expanded Aircraft Specifications Data
 - **Added 15 new spec columns** to aircraft table:
   - Performance: max_takeoff_weight_kg, fuel_capacity_liters, service_ceiling_m, takeoff_distance_m, landing_distance_m, climb_rate_fpm

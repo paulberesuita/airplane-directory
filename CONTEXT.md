@@ -6,6 +6,38 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ## 2026-01-26
 
+### Aircraft Detail Page Specs UI Design
+
+Redesigned the technical specifications section to display all expanded data.
+
+**Design Decisions:**
+- Used glass morphism cards (`bg-white/20 backdrop-blur-xl`) to match site's existing style
+- 3-column grid on large screens, 2 on medium, 1 on mobile
+- Conditional rendering for optional fields (only show cards/rows when data exists)
+- Dual unit display (metric + imperial) for weights, distances, volumes
+
+**Category Organization:**
+- Grouped 15+ fields into 8 logical categories users would expect
+- Performance first (what users care about most: range, speed, ceiling)
+- Commercial last (orders/deliveries/price — more niche interest)
+
+**Related Variants Pattern:**
+- Query aircraft with same `family_slug` but different `slug`
+- Sort by `variant_order` to show smaller variants first
+- Shows passengers + range as quick comparison stats
+
+**Sources Display:**
+- De-duplicated by source_url (same source often cited for multiple fields)
+- Badge system: M=Manufacturer (blue), D=Database (green), N=News (amber)
+- Shows notes when available for context
+
+**Key learnings:**
+- Keep conditional checks simple: `${aircraft.field ? \`...\` : ''}` pattern works well
+- Entire category cards can be conditionally rendered for cleaner output
+- Glass morphism works well for spec cards but Airlines/Related sections kept solid cards for differentiation
+
+---
+
 ### Aircraft Data Expansion Strategy
 
 Expanded aircraft table with detailed specifications and per-field source tracking.

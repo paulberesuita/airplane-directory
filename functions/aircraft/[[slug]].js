@@ -47,6 +47,25 @@ function metersToFeet(m) {
   return Math.round(m * 3.28084);
 }
 
+function kgToLbs(kg) {
+  return Math.round(kg * 2.20462);
+}
+
+function litersToGallons(liters) {
+  return Math.round(liters * 0.264172);
+}
+
+function formatPrice(usd) {
+  if (!usd) return null;
+  if (usd >= 1000000000) {
+    return '$' + (usd / 1000000000).toFixed(1) + 'B';
+  }
+  if (usd >= 1000000) {
+    return '$' + (usd / 1000000).toFixed(1) + 'M';
+  }
+  return '$' + formatNumber(usd);
+}
+
 function formatDate(dateStr) {
   if (!dateStr) return '';
   const date = new Date(dateStr);
@@ -380,7 +399,13 @@ async function renderDetailPage(context, slug, baseUrl) {
   const { env } = context;
 
   const aircraft = await env.DB.prepare(
-    'SELECT * FROM aircraft WHERE slug = ?'
+    `SELECT slug, name, manufacturer, description, passengers, range_km, cruise_speed_kmh,
+            engines, length_m, wingspan_m, first_flight, status, image_url, fun_fact, source_url,
+            max_takeoff_weight_kg, fuel_capacity_liters, service_ceiling_m, takeoff_distance_m,
+            landing_distance_m, climb_rate_fpm, cargo_capacity_m3, max_payload_kg,
+            engine_thrust_kn, engine_manufacturer, total_orders, total_delivered, list_price_usd,
+            family_slug, variant_order
+     FROM aircraft WHERE slug = ?`
   ).bind(slug).first();
 
   if (!aircraft) {
@@ -399,6 +424,26 @@ async function renderDetailPage(context, slug, baseUrl) {
   const { results: related } = await env.DB.prepare(
     'SELECT slug, name, image_url FROM aircraft WHERE manufacturer = ? AND slug != ? LIMIT 4'
   ).bind(aircraft.manufacturer, slug).all();
+
+  // Fetch family variants (same family_slug, different aircraft)
+  let familyVariants = [];
+  if (aircraft.family_slug) {
+    const { results } = await env.DB.prepare(
+      `SELECT slug, name, passengers, range_km, image_url
+       FROM aircraft
+       WHERE family_slug = ? AND slug != ?
+       ORDER BY variant_order ASC, name ASC`
+    ).bind(aircraft.family_slug, slug).all();
+    familyVariants = results;
+  }
+
+  // Fetch sources for this aircraft
+  const { results: sources } = await env.DB.prepare(
+    `SELECT field_name, source_url, source_name, source_type, accessed_at, notes
+     FROM aircraft_sources
+     WHERE aircraft_slug = ?
+     ORDER BY source_type, field_name`
+  ).bind(slug).all();
 
   // Fetch airlines that operate this aircraft
   const { results: airlines } = await env.DB.prepare(`
@@ -597,64 +642,252 @@ async function renderDetailPage(context, slug, baseUrl) {
         Technical Specifications
       </h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="bg-card rounded-2xl shadow-sm border border-border p-6 border-t-4 border-t-primary">
-          <h3 class="font-display text-lg font-semibold text-slate-800 mb-4">Dimensions</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Performance -->
+        <div class="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30">
+          <h3 class="font-display text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+            </svg>
+            Performance
+          </h3>
           <dl class="space-y-3">
-            <div class="flex justify-between py-2 border-b border-border">
-              <dt class="text-muted">Length</dt>
-              <dd class="font-semibold">${aircraft.length_m}m (${metersToFeet(aircraft.length_m)} ft)</dd>
+            <div class="flex justify-between py-2 border-b border-white/20">
+              <dt class="text-white/70">Range</dt>
+              <dd class="font-semibold text-white">${formatNumber(aircraft.range_km)} km (${formatNumber(rangeInMiles)} mi)</dd>
+            </div>
+            <div class="flex justify-between py-2 border-b border-white/20">
+              <dt class="text-white/70">Cruise Speed</dt>
+              <dd class="font-semibold text-white">${formatNumber(aircraft.cruise_speed_kmh)} km/h (${formatNumber(speedInMph)} mph)</dd>
+            </div>
+            ${aircraft.service_ceiling_m ? `
+            <div class="flex justify-between py-2 border-b border-white/20">
+              <dt class="text-white/70">Service Ceiling</dt>
+              <dd class="font-semibold text-white">${formatNumber(aircraft.service_ceiling_m)} m (${formatNumber(metersToFeet(aircraft.service_ceiling_m))} ft)</dd>
+            </div>
+            ` : ''}
+            ${aircraft.climb_rate_fpm ? `
+            <div class="flex justify-between py-2">
+              <dt class="text-white/70">Climb Rate</dt>
+              <dd class="font-semibold text-white">${formatNumber(aircraft.climb_rate_fpm)} ft/min</dd>
+            </div>
+            ` : ''}
+          </dl>
+        </div>
+
+        <!-- Dimensions -->
+        <div class="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30">
+          <h3 class="font-display text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+            </svg>
+            Dimensions
+          </h3>
+          <dl class="space-y-3">
+            <div class="flex justify-between py-2 border-b border-white/20">
+              <dt class="text-white/70">Length</dt>
+              <dd class="font-semibold text-white">${aircraft.length_m} m (${metersToFeet(aircraft.length_m)} ft)</dd>
             </div>
             <div class="flex justify-between py-2">
-              <dt class="text-muted">Wingspan</dt>
-              <dd class="font-semibold">${aircraft.wingspan_m}m (${metersToFeet(aircraft.wingspan_m)} ft)</dd>
+              <dt class="text-white/70">Wingspan</dt>
+              <dd class="font-semibold text-white">${aircraft.wingspan_m} m (${metersToFeet(aircraft.wingspan_m)} ft)</dd>
             </div>
           </dl>
         </div>
 
-        <div class="bg-card rounded-2xl shadow-sm border border-border p-6 border-t-4 border-t-success">
-          <h3 class="font-display text-lg font-semibold text-slate-800 mb-4">Performance</h3>
+        <!-- Capacity -->
+        <div class="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30">
+          <h3 class="font-display text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            Capacity
+          </h3>
           <dl class="space-y-3">
-            <div class="flex justify-between py-2 border-b border-border">
-              <dt class="text-muted">Range</dt>
-              <dd class="font-semibold">${formatNumber(aircraft.range_km)} km (${formatNumber(rangeInMiles)} mi)</dd>
+            <div class="flex justify-between py-2 border-b border-white/20">
+              <dt class="text-white/70">Passengers</dt>
+              <dd class="font-semibold text-white">${aircraft.passengers}</dd>
             </div>
+            ${aircraft.cargo_capacity_m3 ? `
+            <div class="flex justify-between py-2 border-b border-white/20">
+              <dt class="text-white/70">Cargo Volume</dt>
+              <dd class="font-semibold text-white">${aircraft.cargo_capacity_m3} m&sup3;</dd>
+            </div>
+            ` : ''}
+            ${aircraft.max_payload_kg ? `
             <div class="flex justify-between py-2">
-              <dt class="text-muted">Cruise Speed</dt>
-              <dd class="font-semibold">${formatNumber(aircraft.cruise_speed_kmh)} km/h (${formatNumber(speedInMph)} mph)</dd>
+              <dt class="text-white/70">Max Payload</dt>
+              <dd class="font-semibold text-white">${formatNumber(aircraft.max_payload_kg)} kg (${formatNumber(kgToLbs(aircraft.max_payload_kg))} lbs)</dd>
             </div>
+            ` : ''}
           </dl>
         </div>
 
-        <div class="bg-card rounded-2xl shadow-sm border border-border p-6 border-t-4 border-t-violet-500">
-          <h3 class="font-display text-lg font-semibold text-slate-800 mb-4">Capacity</h3>
+        <!-- Engines -->
+        <div class="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30">
+          <h3 class="font-display text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            Engines
+          </h3>
           <dl class="space-y-3">
-            <div class="flex justify-between py-2 border-b border-border">
-              <dt class="text-muted">Passengers</dt>
-              <dd class="font-semibold">${aircraft.passengers}</dd>
+            <div class="flex justify-between py-2 border-b border-white/20">
+              <dt class="text-white/70">Engine Count</dt>
+              <dd class="font-semibold text-white">${aircraft.engines}</dd>
             </div>
+            ${aircraft.engine_manufacturer ? `
+            <div class="flex justify-between py-2 border-b border-white/20">
+              <dt class="text-white/70">Manufacturer</dt>
+              <dd class="font-semibold text-white">${escapeHtml(aircraft.engine_manufacturer)}</dd>
+            </div>
+            ` : ''}
+            ${aircraft.engine_thrust_kn ? `
             <div class="flex justify-between py-2">
-              <dt class="text-muted">Engines</dt>
-              <dd class="font-semibold">${aircraft.engines}</dd>
+              <dt class="text-white/70">Thrust (each)</dt>
+              <dd class="font-semibold text-white">${aircraft.engine_thrust_kn} kN</dd>
             </div>
+            ` : ''}
           </dl>
         </div>
 
-        <div class="bg-card rounded-2xl shadow-sm border border-border p-6 border-t-4 border-t-amber-500">
-          <h3 class="font-display text-lg font-semibold text-slate-800 mb-4">History</h3>
+        <!-- Weights -->
+        <div class="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30">
+          <h3 class="font-display text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path>
+            </svg>
+            Weights
+          </h3>
           <dl class="space-y-3">
-            <div class="flex justify-between py-2 border-b border-border">
-              <dt class="text-muted">First Flight</dt>
-              <dd class="font-semibold">${formatDate(aircraft.first_flight)}</dd>
+            ${aircraft.max_takeoff_weight_kg ? `
+            <div class="flex justify-between py-2 border-b border-white/20">
+              <dt class="text-white/70">Max Takeoff (MTOW)</dt>
+              <dd class="font-semibold text-white">${formatNumber(aircraft.max_takeoff_weight_kg)} kg (${formatNumber(kgToLbs(aircraft.max_takeoff_weight_kg))} lbs)</dd>
+            </div>
+            ` : ''}
+            ${aircraft.fuel_capacity_liters ? `
+            <div class="flex justify-between py-2">
+              <dt class="text-white/70">Fuel Capacity</dt>
+              <dd class="font-semibold text-white">${formatNumber(aircraft.fuel_capacity_liters)} L (${formatNumber(litersToGallons(aircraft.fuel_capacity_liters))} gal)</dd>
+            </div>
+            ` : ''}
+          </dl>
+        </div>
+
+        <!-- Takeoff/Landing -->
+        ${(aircraft.takeoff_distance_m || aircraft.landing_distance_m) ? `
+        <div class="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30">
+          <h3 class="font-display text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+            </svg>
+            Takeoff / Landing
+          </h3>
+          <dl class="space-y-3">
+            ${aircraft.takeoff_distance_m ? `
+            <div class="flex justify-between py-2 border-b border-white/20">
+              <dt class="text-white/70">Takeoff Distance</dt>
+              <dd class="font-semibold text-white">${formatNumber(aircraft.takeoff_distance_m)} m (${formatNumber(metersToFeet(aircraft.takeoff_distance_m))} ft)</dd>
+            </div>
+            ` : ''}
+            ${aircraft.landing_distance_m ? `
+            <div class="flex justify-between py-2">
+              <dt class="text-white/70">Landing Distance</dt>
+              <dd class="font-semibold text-white">${formatNumber(aircraft.landing_distance_m)} m (${formatNumber(metersToFeet(aircraft.landing_distance_m))} ft)</dd>
+            </div>
+            ` : ''}
+          </dl>
+        </div>
+        ` : ''}
+
+        <!-- Commercial -->
+        ${(aircraft.total_orders || aircraft.total_delivered || aircraft.list_price_usd) ? `
+        <div class="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30">
+          <h3 class="font-display text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+            Commercial
+          </h3>
+          <dl class="space-y-3">
+            ${aircraft.total_orders ? `
+            <div class="flex justify-between py-2 border-b border-white/20">
+              <dt class="text-white/70">Total Orders</dt>
+              <dd class="font-semibold text-white">${formatNumber(aircraft.total_orders)}</dd>
+            </div>
+            ` : ''}
+            ${aircraft.total_delivered ? `
+            <div class="flex justify-between py-2 border-b border-white/20">
+              <dt class="text-white/70">Delivered</dt>
+              <dd class="font-semibold text-white">${formatNumber(aircraft.total_delivered)}</dd>
+            </div>
+            ` : ''}
+            ${aircraft.list_price_usd ? `
+            <div class="flex justify-between py-2">
+              <dt class="text-white/70">List Price</dt>
+              <dd class="font-semibold text-white">${formatPrice(aircraft.list_price_usd)}</dd>
+            </div>
+            ` : ''}
+          </dl>
+        </div>
+        ` : ''}
+
+        <!-- History -->
+        <div class="bg-white/20 backdrop-blur-xl rounded-2xl p-6 border border-white/30">
+          <h3 class="font-display text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            History
+          </h3>
+          <dl class="space-y-3">
+            <div class="flex justify-between py-2 border-b border-white/20">
+              <dt class="text-white/70">First Flight</dt>
+              <dd class="font-semibold text-white">${formatDate(aircraft.first_flight)}</dd>
             </div>
             <div class="flex justify-between py-2">
-              <dt class="text-muted">Status</dt>
-              <dd class="font-semibold">${escapeHtml(aircraft.status)}</dd>
+              <dt class="text-white/70">Status</dt>
+              <dd class="font-semibold text-white">${escapeHtml(aircraft.status)}</dd>
             </div>
           </dl>
         </div>
       </div>
     </div>
+
+    ${familyVariants.length > 0 ? `
+    <!-- Related Variants -->
+    <div class="mb-10">
+      <h2 class="font-display text-2xl font-bold text-white mb-6 flex items-center gap-3 drop-shadow">
+        <span class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+          </svg>
+        </span>
+        Related Variants
+      </h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        ${familyVariants.map(v => `
+          <a href="/aircraft/${escapeHtml(v.slug)}" class="group block bg-white/20 backdrop-blur-xl rounded-xl overflow-hidden border border-white/30 hover:bg-white/30 transition-all">
+            ${v.image_url
+              ? `<div class="aspect-[4/3] overflow-hidden">
+                   <img src="${baseUrl}/images/aircraft/${escapeHtml(v.slug)}.jpg" alt="${escapeHtml(v.name)}"
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                 </div>`
+              : `<div class="aspect-[4/3] bg-white/10 flex items-center justify-center">
+                   <span class="text-2xl opacity-30">&#9992;</span>
+                 </div>`
+            }
+            <div class="p-3">
+              <p class="font-medium text-white text-sm group-hover:text-white transition-colors">${escapeHtml(v.name)}</p>
+              <p class="text-white/70 text-xs mt-1">${v.passengers} pax | ${formatNumber(kmToMiles(v.range_km))} mi range</p>
+            </div>
+          </a>
+        `).join('')}
+      </div>
+    </div>
+    ` : ''}
 
     ${airlines.length > 0 ? `
     <!-- Airlines Operating This Aircraft -->
@@ -665,7 +898,7 @@ async function renderDetailPage(context, slug, baseUrl) {
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
           </svg>
         </span>
-        US Airlines Operating This Aircraft
+        Airlines Operating This Aircraft
       </h2>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         ${airlines.map(a => `
@@ -707,8 +940,47 @@ async function renderDetailPage(context, slug, baseUrl) {
     </div>
     ` : ''}
 
+    ${sources.length > 0 ? `
+    <!-- Sources -->
+    <div class="mb-10">
+      <h2 class="font-display text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+        <span class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center">
+          <svg class="w-5 h-5 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+          </svg>
+        </span>
+        Sources
+      </h2>
+      <div class="bg-card rounded-2xl shadow-sm border border-border p-6">
+        <p class="text-muted text-sm mb-4">Data compiled from the following sources:</p>
+        <ul class="space-y-3">
+          ${[...new Map(sources.map(s => [s.source_url, s])).values()].map(s => `
+            <li class="flex items-start gap-3">
+              <span class="shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
+                s.source_type === 'manufacturer' ? 'bg-primary/10 text-primary' :
+                s.source_type === 'aviation_db' ? 'bg-success/10 text-success' :
+                'bg-amber-100 text-amber-700'
+              }">
+                ${s.source_type === 'manufacturer' ? 'M' : s.source_type === 'aviation_db' ? 'D' : 'N'}
+              </span>
+              <div>
+                <a href="${escapeHtml(s.source_url)}" target="_blank" rel="noopener" class="text-primary hover:text-primary-hover font-medium underline underline-offset-2 transition-colors">
+                  ${escapeHtml(s.source_name)}
+                </a>
+                ${s.notes ? `<p class="text-muted text-xs mt-0.5">${escapeHtml(s.notes)}</p>` : ''}
+              </div>
+            </li>
+          `).join('')}
+        </ul>
+        <p class="text-muted text-xs mt-4 pt-4 border-t border-border">
+          <span class="inline-flex items-center gap-1"><span class="w-4 h-4 rounded-full bg-primary/10 text-primary text-[10px] flex items-center justify-center">M</span> Manufacturer</span>
+          <span class="inline-flex items-center gap-1 ml-3"><span class="w-4 h-4 rounded-full bg-success/10 text-success text-[10px] flex items-center justify-center">D</span> Aviation Database</span>
+          <span class="inline-flex items-center gap-1 ml-3"><span class="w-4 h-4 rounded-full bg-amber-100 text-amber-700 text-[10px] flex items-center justify-center">N</span> News</span>
+        </p>
+      </div>
+    </div>
+    ` : aircraft.source_url ? `
     <!-- Source Attribution -->
-    ${aircraft.source_url ? `
     <div class="text-center py-6 border-t border-border">
       <p class="text-muted text-sm">
         Data sourced from
