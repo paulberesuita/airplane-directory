@@ -450,7 +450,7 @@ async function renderDetailPage(context, slug, baseUrl) {
     ORDER BY f.count DESC
   `).bind(slug).all();
 
-  const imageUrl = aircraft.image_url ? `${baseUrl}/images/aircraft/${aircraft.slug}.jpg` : null;
+  const imageUrl = aircraft.image_url ? `${baseUrl}/images/aircraft-styled/${aircraft.slug}.jpg` : null;
   const rangeInMiles = kmToMiles(aircraft.range_km);
   const speedInMph = kmhToMph(aircraft.cruise_speed_kmh);
   const year = aircraft.first_flight ? aircraft.first_flight.split('-')[0] : '';
@@ -869,7 +869,7 @@ async function renderDetailPage(context, slug, baseUrl) {
           <a href="/aircraft/${escapeHtml(v.slug)}" class="group block bg-white/20 backdrop-blur-xl rounded-xl overflow-hidden border border-white/30 hover:bg-white/30 transition-all">
             ${v.image_url
               ? `<div class="aspect-[4/3] overflow-hidden">
-                   <img src="${baseUrl}/images/aircraft/${escapeHtml(v.slug)}.jpg" alt="${escapeHtml(v.name)}"
+                   <img src="${baseUrl}/images/aircraft-styled/${escapeHtml(v.slug)}.jpg" alt="${escapeHtml(v.name)}"
                         class="w-full h-full object-cover transition-transform duration-300" loading="lazy">
                  </div>`
               : `<div class="aspect-[4/3] bg-white/10 flex items-center justify-center">
@@ -921,7 +921,7 @@ async function renderDetailPage(context, slug, baseUrl) {
           <a href="/aircraft/${escapeHtml(r.slug)}" class="group block bg-card rounded-xl overflow-hidden border border-border hover:shadow-lg transition-all">
             ${r.image_url
               ? `<div class="aspect-[4/3] overflow-hidden">
-                   <img src="${baseUrl}/images/aircraft/${escapeHtml(r.slug)}.jpg" alt="${escapeHtml(r.name)}"
+                   <img src="${baseUrl}/images/aircraft-styled/${escapeHtml(r.slug)}.jpg" alt="${escapeHtml(r.name)}"
                         class="w-full h-full object-cover transition-transform duration-300" loading="lazy">
                  </div>`
               : `<div class="aspect-[4/3] bg-slate-100 flex items-center justify-center">

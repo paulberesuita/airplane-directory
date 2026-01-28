@@ -386,7 +386,7 @@ async function renderDetailPage(context, slug, baseUrl) {
 
     const imageHtml = a.image_url
       ? `<div class="aspect-[16/9] overflow-hidden bg-slate-100">
-           <img src="${baseUrl}/images/aircraft/${escapeHtml(a.slug)}.jpg" alt="${escapeHtml(a.name)}"
+           <img src="${baseUrl}/images/aircraft-styled/${escapeHtml(a.slug)}.jpg" alt="${escapeHtml(a.name)}"
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy"
                 onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center bg-slate-100\\'><span class=\\'text-4xl opacity-30\\'>&#9992;</span></div>'">
          </div>`

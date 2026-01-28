@@ -289,7 +289,7 @@ async function renderDetailPage(context, slug, baseUrl) {
              alt="${escapeHtml(airline.name)} ${escapeHtml(f.name)}"
              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
              loading="lazy"
-             onerror="this.onerror=null; this.src='${baseUrl}/images/aircraft/${escapeHtml(f.aircraft_slug)}.jpg'; this.onerror=function(){this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center bg-slate-100\\'><span class=\\'text-4xl opacity-30\\'>&#9992;</span></div>';}">
+             onerror="this.onerror=null; this.src='${baseUrl}/images/aircraft-styled/${escapeHtml(f.aircraft_slug)}.jpg'; this.onerror=function(){this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center bg-slate-100\\'><span class=\\'text-4xl opacity-30\\'>&#9992;</span></div>';}">
       </div>
       <div class="p-4">
         <div class="flex items-start justify-between gap-2 mb-2">

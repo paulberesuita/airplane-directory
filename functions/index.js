@@ -258,7 +258,7 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
     title: 'Airplane Directory — Know What Airlines Fly',
     description: `Explore the fleets of ${airlines.length} major airlines with ${formatNumber(totalAircraft)}+ aircraft. See which planes Emirates, British Airways, Lufthansa, Singapore Airlines and more operate.`,
     url: baseUrl,
-    image: aircraft[0]?.image_url ? `${baseUrl}/images/aircraft/${aircraft[0].slug}.jpg` : null,
+    image: aircraft[0]?.image_url ? `${baseUrl}/images/aircraft-styled/${aircraft[0].slug}.jpg` : null,
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "WebSite",
