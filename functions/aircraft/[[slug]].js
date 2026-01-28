@@ -87,7 +87,7 @@ function renderHead({ title, description, url, image, jsonLd }) {
   <meta property="og:description" content="${escapeHtml(description)}">
   <meta property="og:url" content="${escapeHtml(url)}">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Airplane Directory">
+  <meta property="og:site_name" content="AirlinePlanes">
   ${image ? `<meta property="og:image" content="${escapeHtml(image)}">` : ''}
 
   <!-- Twitter Card -->
@@ -149,7 +149,7 @@ function renderHeader(baseUrl) {
   return `
   <header class="sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 pt-6 pb-4 flex items-center justify-between">
-      <a href="/" class="text-2xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRPLANE DIRECTORY</a>
+      <a href="/" class="text-2xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRLINEPLANES</a>
       <nav class="flex gap-6 text-sm">
         <a href="/airlines" class="text-white/70 hover:text-white transition-colors">Airlines</a>
         <a href="/aircraft" class="text-white font-medium">Aircraft</a>
@@ -163,7 +163,7 @@ function renderFooter() {
   <footer class="mt-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-        <a href="/" class="text-xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRPLANE DIRECTORY</a>
+        <a href="/" class="text-xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRLINEPLANES</a>
         <p class="text-white/60 text-sm text-center md:text-left drop-shadow">
           Know what you're flying on. US airline fleets and aircraft information.
         </p>
@@ -246,13 +246,13 @@ async function renderListPage(context, baseUrl) {
 <html lang="en">
 <head>
   ${renderHead({
-    title: 'Aircraft Directory | Airplane Directory',
+    title: 'Aircraft | AirlinePlanes',
     description: `Browse ${aircraft.length} commercial aircraft from ${manufacturers.join(', ')}. Every plane type flown by major airlines.`,
     url: `${baseUrl}/aircraft`,
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "ItemList",
-      "name": "Commercial Aircraft Directory",
+      "name": "Commercial Aircraft",
       "description": `Directory of ${aircraft.length} commercial aircraft`,
       "numberOfItems": aircraft.length,
       "itemListElement": aircraft.slice(0, 10).map((a, i) => ({
@@ -281,7 +281,7 @@ async function renderListPage(context, baseUrl) {
   <!-- Hero -->
   <div class="text-white">
     <div class="max-w-7xl mx-auto px-4 py-12 md:py-16">
-      <h1 class="font-display text-3xl md:text-4xl font-semibold mb-3 text-white">Aircraft Directory</h1>
+      <h1 class="font-display text-3xl md:text-4xl font-semibold mb-3 text-white">Aircraft</h1>
       <p class="text-white text-lg max-w-2xl">
         Every plane type flown by major airlines. Browse specs, history, and details.
       </p>
@@ -468,7 +468,7 @@ async function renderDetailPage(context, slug, baseUrl) {
 <html lang="en">
 <head>
   ${renderHead({
-    title: `${aircraft.name} — Specs & History | Airplane Directory`,
+    title: `${aircraft.name} — Specs & History | AirlinePlanes`,
     description: aircraft.description?.substring(0, 155) || `Learn about the ${aircraft.name} from ${aircraft.manufacturer}. Specs, history, and fun facts.`,
     url: `${baseUrl}/aircraft/${slug}`,
     image: imageUrl,
@@ -1124,7 +1124,7 @@ function renderErrorPage(baseUrl, message) {
 <html lang="en">
 <head>
   ${renderHead({
-    title: 'Not Found | Airplane Directory',
+    title: 'Not Found | AirlinePlanes',
     description: message,
     url: baseUrl
   })}

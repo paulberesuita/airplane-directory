@@ -1,9 +1,9 @@
-# Airplane Directory robots.txt
+# AirlinePlanes robots.txt
 User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://airplane-directory.pages.dev/sitemap.xml
+Sitemap: https://airlineplanes.com/sitemap.xml
 
 # Disallow API endpoints from indexing
 Disallow: /api/

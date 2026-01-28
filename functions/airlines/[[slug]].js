@@ -51,7 +51,7 @@ function renderHead({ title, description, url, image, jsonLd }) {
   <meta property="og:description" content="${escapeHtml(description)}">
   <meta property="og:url" content="${escapeHtml(url)}">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Airplane Directory">
+  <meta property="og:site_name" content="AirlinePlanes">
   ${image ? `<meta property="og:image" content="${escapeHtml(image)}">` : ''}
 
   <!-- Twitter Card -->
@@ -109,7 +109,7 @@ function renderHeader(baseUrl) {
   return `
   <header class="sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 pt-6 pb-4 flex items-center justify-between">
-      <a href="/" class="text-2xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRPLANE DIRECTORY</a>
+      <a href="/" class="text-2xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRLINEPLANES</a>
       <nav class="flex gap-6 text-sm">
         <a href="/airlines" class="text-white font-medium">Airlines</a>
         <a href="/aircraft" class="text-white/70 hover:text-white transition-colors">Aircraft</a>
@@ -123,7 +123,7 @@ function renderFooter() {
   <footer class="mt-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-        <a href="/" class="text-xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRPLANE DIRECTORY</a>
+        <a href="/" class="text-xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRLINEPLANES</a>
         <p class="text-white/60 text-sm text-center md:text-left drop-shadow">
           Know what you're flying on. US airline fleets and aircraft information.
         </p>
@@ -188,7 +188,7 @@ async function renderListPage(context, baseUrl) {
 <html lang="en">
 <head>
   ${renderHead({
-    title: 'Airlines Fleet Guide | Airplane Directory',
+    title: 'Airlines Fleet Guide | AirlinePlanes',
     description: 'Explore the aircraft fleets of major airlines worldwide. Learn what planes Emirates, British Airways, Lufthansa, Singapore Airlines, and more fly.',
     url: `${baseUrl}/airlines`,
     jsonLd: {
@@ -315,7 +315,7 @@ async function renderDetailPage(context, slug, baseUrl) {
 <html lang="en">
 <head>
   ${renderHead({
-    title: `${airline.name} Fleet | Airplane Directory`,
+    title: `${airline.name} Fleet | AirlinePlanes`,
     description: `Explore ${airline.name}'s fleet of ${totalAircraft} aircraft. See what planes ${airline.iata_code} flies and learn about each aircraft type.`,
     url: `${baseUrl}/airlines/${slug}`,
     jsonLd: {
@@ -413,7 +413,7 @@ function renderErrorPage(baseUrl, message) {
 <html lang="en">
 <head>
   ${renderHead({
-    title: 'Not Found | Airplane Directory',
+    title: 'Not Found | AirlinePlanes',
     description: message,
     url: baseUrl
   })}

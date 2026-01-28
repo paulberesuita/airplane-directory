@@ -77,7 +77,7 @@ function renderHead({ title, description, url, image, jsonLd }) {
   <meta property="og:description" content="${escapeHtml(description)}">
   <meta property="og:url" content="${escapeHtml(url)}">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Airplane Directory">
+  <meta property="og:site_name" content="AirlinePlanes">
   ${image ? `<meta property="og:image" content="${escapeHtml(image)}">` : ''}
 
   <!-- Twitter Card -->
@@ -255,19 +255,19 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
 <html lang="en">
 <head>
   ${renderHead({
-    title: 'Airplane Directory — Know What Airlines Fly',
+    title: 'AirlinePlanes — Know What Airlines Fly',
     description: `Explore the fleets of ${airlines.length} major airlines with ${formatNumber(totalAircraft)}+ aircraft. See which planes Emirates, British Airways, Lufthansa, Singapore Airlines and more operate.`,
     url: baseUrl,
     image: aircraft[0]?.image_url ? `${baseUrl}/images/aircraft-styled/${aircraft[0].slug}.jpg` : null,
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "Airplane Directory",
+      "name": "AirlinePlanes",
       "url": baseUrl,
       "description": "Explore airline fleets and aircraft specifications. Know what planes you're flying on.",
       "publisher": {
         "@type": "Organization",
-        "name": "Airplane Directory"
+        "name": "AirlinePlanes"
       }
     }
   })}
@@ -292,7 +292,7 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
   <!-- Nav -->
   <nav class="sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 pt-6 pb-4 flex items-center justify-between">
-      <a href="/" class="text-2xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRPLANE DIRECTORY</a>
+      <a href="/" class="text-2xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRLINEPLANES</a>
       <div class="flex gap-6 text-sm">
         <a href="/airlines" class="text-white/70 hover:text-white transition-colors">Airlines</a>
         <a href="/aircraft" class="text-white/70 hover:text-white transition-colors">Aircraft</a>
@@ -371,7 +371,7 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
   <footer class="mt-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-        <a href="/" class="text-xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRPLANE DIRECTORY</a>
+        <a href="/" class="text-xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRLINEPLANES</a>
         <nav class="flex items-center gap-6">
           <a href="/airlines" class="text-white/90 hover:text-white text-sm transition-colors">Airlines</a>
           <a href="/aircraft" class="text-white/90 hover:text-white text-sm transition-colors">Aircraft</a>
@@ -396,7 +396,7 @@ function renderErrorPage(baseUrl) {
 <html lang="en">
 <head>
   ${renderHead({
-    title: 'Error — Airplane Directory',
+    title: 'Error — AirlinePlanes',
     description: 'Something went wrong loading the page.',
     url: baseUrl
   })}

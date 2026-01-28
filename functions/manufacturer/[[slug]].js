@@ -100,7 +100,7 @@ function renderHead({ title, description, url, image, jsonLd }) {
   <meta property="og:description" content="${escapeHtml(description)}">
   <meta property="og:url" content="${escapeHtml(url)}">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Airplane Directory">
+  <meta property="og:site_name" content="AirlinePlanes">
   ${image ? `<meta property="og:image" content="${escapeHtml(image)}">` : ''}
 
   <!-- Twitter Card -->
@@ -158,7 +158,7 @@ function renderHeader(baseUrl, activeManufacturer = false) {
             <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
           </svg>
         </div>
-        <span class="text-xl font-bold font-display text-white drop-shadow">Airplane Directory</span>
+        <span class="text-xl font-bold font-display text-white drop-shadow">AirlinePlanes</span>
       </a>
       <nav class="flex gap-6 text-sm">
         <a href="/airlines" class="text-white/70 hover:text-white transition-colors">Airlines</a>
@@ -180,7 +180,7 @@ function renderFooter() {
               <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
             </svg>
           </div>
-          <span class="font-display font-bold text-white text-lg drop-shadow">Airplane Directory</span>
+          <span class="font-display font-bold text-white text-lg drop-shadow">AirlinePlanes</span>
         </div>
         <p class="text-white/60 text-sm text-center md:text-left drop-shadow">
           Know what you're flying on. Airline fleets and aircraft information.
@@ -264,7 +264,7 @@ async function renderListPage(context, baseUrl) {
 <html lang="en">
 <head>
   ${renderHead({
-    title: 'Aircraft Manufacturers | Airplane Directory',
+    title: 'Aircraft Manufacturers | AirlinePlanes',
     description: `Browse ${manufacturerStats.length} major aircraft manufacturers including Boeing, Airbus, Embraer, and Bombardier. See their complete aircraft lineups and specs.`,
     url: `${baseUrl}/manufacturer`,
     jsonLd: {
@@ -426,7 +426,7 @@ async function renderDetailPage(context, slug, baseUrl) {
 <html lang="en">
 <head>
   ${renderHead({
-    title: `${manufacturerData.name} Aircraft | Airplane Directory`,
+    title: `${manufacturerData.name} Aircraft | AirlinePlanes`,
     description: `Explore all ${aircraft.length} ${manufacturerData.name} aircraft. ${inProduction} in production, ${inService} in service. See specs, history, and details for each model.`,
     url: `${baseUrl}/manufacturer/${slug}`,
     jsonLd: {
@@ -554,7 +554,7 @@ function renderErrorPage(baseUrl, message) {
 <html lang="en">
 <head>
   ${renderHead({
-    title: 'Not Found | Airplane Directory',
+    title: 'Not Found | AirlinePlanes',
     description: message,
     url: baseUrl
   })}
