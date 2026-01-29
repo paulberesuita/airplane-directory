@@ -132,17 +132,121 @@ function renderHead({ title, description, url, image, jsonLd }) {
       padding: 0.75rem;
       min-height: 100vh;
     }
+    #sky-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
     .window-frame {
-      background-image: url('/images/sky-bg.png');
-      background-size: 100% 100vh;
-      background-position: top center;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
       border-radius: 24px;
       min-height: calc(100vh - 1.5rem);
       overflow: hidden;
     }
-  </style>`;
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const canvas = document.getElementById('sky-canvas');
+      if (!canvas) return;
+      const gl = canvas.getContext('webgl');
+      if (!gl) return;
+
+      const vertexShader = \`
+        attribute vec2 a_position;
+        void main() { gl_Position = vec4(a_position, 0.0, 1.0); }
+      \`;
+
+      const fragmentShader = \`
+        precision mediump float;
+        uniform float u_time;
+        uniform vec2 u_resolution;
+
+        float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+
+        float noise(vec2 p) {
+          vec2 i = floor(p);
+          vec2 f = fract(p);
+          f = f * f * (3.0 - 2.0 * f);
+          float a = hash(i);
+          float b = hash(i + vec2(1.0, 0.0));
+          float c = hash(i + vec2(0.0, 1.0));
+          float d = hash(i + vec2(1.0, 1.0));
+          return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+        }
+
+        float fbm(vec2 p) {
+          float value = 0.0;
+          float amplitude = 0.5;
+          for (int i = 0; i < 6; i++) {
+            value += amplitude * noise(p);
+            p *= 2.0;
+            amplitude *= 0.5;
+          }
+          return value;
+        }
+
+        void main() {
+          vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+          uv.x *= u_resolution.x / u_resolution.y;
+          vec2 movement = vec2(u_time * 0.02, u_time * 0.008);
+          float clouds = fbm(uv * 2.0 + movement);
+          clouds = smoothstep(0.4, 0.7, clouds);
+          clouds *= 0.5;
+          vec3 skyTop = vec3(0.0, 0.4, 0.85);
+          vec3 skyBottom = vec3(0.35, 0.6, 0.9);
+          vec3 sky = mix(skyBottom, skyTop, uv.y);
+          vec3 cloudColor = vec3(0.85, 0.9, 1.0);
+          vec3 color = mix(sky, cloudColor, clouds * 0.7);
+          gl_FragColor = vec4(color, 1.0);
+        }
+      \`;
+
+      function createShader(gl, type, source) {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        return shader;
+      }
+
+      const vs = createShader(gl, gl.VERTEX_SHADER, vertexShader);
+      const fs = createShader(gl, gl.FRAGMENT_SHADER, fragmentShader);
+      const program = gl.createProgram();
+      gl.attachShader(program, vs);
+      gl.attachShader(program, fs);
+      gl.linkProgram(program);
+      gl.useProgram(program);
+
+      const vertices = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
+      const buffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+      const aPosition = gl.getAttribLocation(program, 'a_position');
+      gl.enableVertexAttribArray(aPosition);
+      gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+
+      const uTime = gl.getUniformLocation(program, 'u_time');
+      const uResolution = gl.getUniformLocation(program, 'u_resolution');
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        gl.viewport(0, 0, canvas.width, canvas.height);
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      function render(time) {
+        gl.uniform1f(uTime, time * 0.001);
+        gl.uniform2f(uResolution, canvas.width, canvas.height);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        requestAnimationFrame(render);
+      }
+      render(0);
+    });
+  </script>`;
 }
 
 function renderHeader(baseUrl) {
@@ -275,6 +379,7 @@ async function renderListPage(context, baseUrl) {
   </style>
 </head>
 <body class="font-sans">
+  <canvas id="sky-canvas"></canvas>
   <div class="window-frame">
   ${renderHeader(baseUrl)}
 
@@ -497,6 +602,7 @@ async function renderDetailPage(context, slug, baseUrl) {
   </style>
 </head>
 <body class="font-sans">
+  <canvas id="sky-canvas"></canvas>
   <div class="window-frame">
   <!-- Hero Header -->
   <header class="relative">
@@ -1130,6 +1236,7 @@ function renderErrorPage(baseUrl, message) {
   })}
 </head>
 <body class="font-sans">
+  <canvas id="sky-canvas"></canvas>
   <div class="window-frame">
   ${renderHeader(baseUrl)}
 

@@ -122,55 +122,139 @@ function renderHead({ title, description, url, image, jsonLd }) {
       padding: 0.75rem;
       min-height: 100vh;
     }
+    #sky-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
     .window-frame {
-      background-image: url('/images/sky-bg.png');
-      background-size: 100% 100vh;
-      background-position: top center;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
       border-radius: 24px;
       min-height: calc(100vh - 1.5rem);
       overflow: hidden;
     }
-  </style>`;
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const canvas = document.getElementById('sky-canvas');
+      if (!canvas) return;
+      const gl = canvas.getContext('webgl');
+      if (!gl) return;
+
+      const vertexShader = \`
+        attribute vec2 a_position;
+        void main() { gl_Position = vec4(a_position, 0.0, 1.0); }
+      \`;
+
+      const fragmentShader = \`
+        precision mediump float;
+        uniform float u_time;
+        uniform vec2 u_resolution;
+
+        float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+
+        float noise(vec2 p) {
+          vec2 i = floor(p);
+          vec2 f = fract(p);
+          f = f * f * (3.0 - 2.0 * f);
+          float a = hash(i);
+          float b = hash(i + vec2(1.0, 0.0));
+          float c = hash(i + vec2(0.0, 1.0));
+          float d = hash(i + vec2(1.0, 1.0));
+          return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+        }
+
+        float fbm(vec2 p) {
+          float value = 0.0;
+          float amplitude = 0.5;
+          for (int i = 0; i < 6; i++) {
+            value += amplitude * noise(p);
+            p *= 2.0;
+            amplitude *= 0.5;
+          }
+          return value;
+        }
+
+        void main() {
+          vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+          uv.x *= u_resolution.x / u_resolution.y;
+          vec2 movement = vec2(u_time * 0.02, u_time * 0.008);
+          float clouds = fbm(uv * 2.0 + movement);
+          clouds = smoothstep(0.4, 0.7, clouds);
+          clouds *= 0.5;
+          vec3 skyTop = vec3(0.0, 0.4, 0.85);
+          vec3 skyBottom = vec3(0.35, 0.6, 0.9);
+          vec3 sky = mix(skyBottom, skyTop, uv.y);
+          vec3 cloudColor = vec3(0.85, 0.9, 1.0);
+          vec3 color = mix(sky, cloudColor, clouds * 0.7);
+          gl_FragColor = vec4(color, 1.0);
+        }
+      \`;
+
+      function createShader(gl, type, source) {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        return shader;
+      }
+
+      const vs = createShader(gl, gl.VERTEX_SHADER, vertexShader);
+      const fs = createShader(gl, gl.FRAGMENT_SHADER, fragmentShader);
+      const program = gl.createProgram();
+      gl.attachShader(program, vs);
+      gl.attachShader(program, fs);
+      gl.linkProgram(program);
+      gl.useProgram(program);
+
+      const vertices = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
+      const buffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+      const aPosition = gl.getAttribLocation(program, 'a_position');
+      gl.enableVertexAttribArray(aPosition);
+      gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+
+      const uTime = gl.getUniformLocation(program, 'u_time');
+      const uResolution = gl.getUniformLocation(program, 'u_resolution');
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        gl.viewport(0, 0, canvas.width, canvas.height);
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      function render(time) {
+        gl.uniform1f(uTime, time * 0.001);
+        gl.uniform2f(uResolution, canvas.width, canvas.height);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        requestAnimationFrame(render);
+      }
+      render(0);
+    });
+  </script>`;
 }
 
 function renderAirlineCard(airline, baseUrl) {
   return `
     <a href="/airlines/${escapeHtml(airline.slug)}"
-       class="group block bg-white/20 backdrop-blur-xl rounded-2xl overflow-hidden hover:bg-white/30 hover:-translate-y-1 transition-all duration-300 border border-white/30">
-      <div class="p-6">
-        <div class="flex items-center gap-4 mb-4">
-          <div class="w-14 h-14 bg-white rounded-xl flex items-center justify-center shrink-0 overflow-hidden">
-            <img src="${baseUrl}/images/logos/${escapeHtml(airline.slug)}.png"
-                 alt="${escapeHtml(airline.name)} logo"
-                 class="w-10 h-10 object-contain"
-                 onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\\'font-display font-bold text-primary text-xl\\'>${escapeHtml(airline.iata_code)}</span>';">
-          </div>
-          <div class="min-w-0">
-            <h3 class="font-display font-medium text-white group-hover:text-white transition-colors truncate">
-              ${escapeHtml(airline.name)}
-            </h3>
-            <p class="text-sm text-white/90">${escapeHtml(airline.headquarters)}</p>
-          </div>
+       class="group block bg-white rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
+      <div class="p-6 text-center">
+        <div class="h-16 mx-auto mb-4 flex items-center justify-center px-4">
+          <img src="${baseUrl}/images/logos/${escapeHtml(airline.slug)}.png"
+               alt="${escapeHtml(airline.name)} logo"
+               class="max-h-full w-auto max-w-[140px] object-contain"
+               onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\\'font-display font-bold text-slate-300 text-3xl\\'>${escapeHtml(airline.iata_code)}</span>';">
         </div>
-
-        <div class="grid grid-cols-3 gap-2 mb-4">
-          <div class="text-center py-2 rounded-lg bg-white/10">
-            <p class="text-lg font-bold text-white">${formatNumber(airline.fleet_size)}</p>
-            <p class="text-xs text-white/90">Aircraft</p>
-          </div>
-          <div class="text-center py-2 rounded-lg bg-white/10">
-            <p class="text-lg font-bold text-white">${airline.aircraft_types || 0}</p>
-            <p class="text-xs text-white/90">Types</p>
-          </div>
-          <div class="text-center py-2 rounded-lg bg-white/10">
-            <p class="text-lg font-bold text-white">${formatNumber(airline.destinations)}</p>
-            <p class="text-xs text-white/90">Routes</p>
-          </div>
-        </div>
-
-        <p class="text-sm text-white line-clamp-2">${escapeHtml(airline.description)}</p>
+        <h3 class="font-display font-semibold text-slate-800 group-hover:text-primary transition-colors mb-1">
+          ${escapeHtml(airline.name)}
+        </h3>
+        <p class="text-sm text-slate-400 mb-3">${escapeHtml(airline.headquarters)}</p>
+        <p class="text-xs text-slate-500">${formatNumber(airline.fleet_size)} aircraft · ${airline.aircraft_types || 0} types</p>
       </div>
     </a>`;
 }
@@ -288,6 +372,7 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
   </style>
 </head>
 <body class="font-sans">
+  <canvas id="sky-canvas"></canvas>
   <div class="window-frame">
   <!-- Nav -->
   <nav class="sticky top-0 z-50">
@@ -402,6 +487,7 @@ function renderErrorPage(baseUrl) {
   })}
 </head>
 <body class="font-sans">
+  <canvas id="sky-canvas"></canvas>
   <div class="window-frame flex items-center justify-center">
   <div class="text-center px-4">
     <div class="inline-flex items-center justify-center w-24 h-24 bg-error-bg rounded-full mb-6">
