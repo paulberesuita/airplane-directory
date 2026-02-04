@@ -46,6 +46,11 @@ function renderHead({ title, description, url, image, jsonLd }) {
   <meta name="description" content="${escapeHtml(description)}">
   <link rel="canonical" href="${escapeHtml(url)}">
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
   <!-- Open Graph -->
   <meta property="og:title" content="${escapeHtml(title)}">
   <meta property="og:description" content="${escapeHtml(description)}">
@@ -74,8 +79,8 @@ function renderHead({ title, description, url, image, jsonLd }) {
             display: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
           },
           colors: {
-            'primary': '#0EA5E9',
-            'primary-hover': '#0284C7',
+            'primary': '#3B82F6',
+            'primary-hover': '#2563EB',
             'background': 'rgba(248, 250, 252, 0.85)',
             'card': 'rgba(255, 255, 255, 0.95)',
             'border': '#E2E8F0',
@@ -154,8 +159,8 @@ function renderHead({ title, description, url, image, jsonLd }) {
           float clouds = fbm(uv * 2.0 + movement);
           clouds = smoothstep(0.4, 0.7, clouds);
           clouds *= 0.5;
-          vec3 skyTop = vec3(0.0, 0.4, 0.85);
-          vec3 skyBottom = vec3(0.35, 0.6, 0.9);
+          vec3 skyTop = vec3(0.051, 0.157, 1.0);
+          vec3 skyBottom = vec3(0.2, 0.35, 1.0);
           vec3 sky = mix(skyBottom, skyTop, uv.y);
           vec3 cloudColor = vec3(0.85, 0.9, 1.0);
           vec3 color = mix(sky, cloudColor, clouds * 0.7);

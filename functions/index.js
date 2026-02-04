@@ -72,6 +72,11 @@ function renderHead({ title, description, url, image, jsonLd }) {
   <meta name="description" content="${escapeHtml(description)}">
   <link rel="canonical" href="${escapeHtml(url)}">
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
   <!-- Open Graph -->
   <meta property="og:title" content="${escapeHtml(title)}">
   <meta property="og:description" content="${escapeHtml(description)}">
@@ -100,8 +105,8 @@ function renderHead({ title, description, url, image, jsonLd }) {
             display: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
           },
           colors: {
-            'primary': '#0EA5E9',
-            'primary-hover': '#0284C7',
+            'primary': '#3B82F6',
+            'primary-hover': '#2563EB',
             'background': 'rgba(248, 250, 252, 0.85)',
             'card': 'rgba(255, 255, 255, 0.95)',
             'border': '#E2E8F0',
@@ -153,42 +158,62 @@ function renderHead({ title, description, url, image, jsonLd }) {
         uniform float u_time;
         uniform vec2 u_resolution;
 
-        float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+        // Draw a single Mario-style cloud (3 bumps) - smaller
+        float cloud(vec2 uv, vec2 pos, float size) {
+          vec2 p = uv - pos;
+          p.x /= 1.5;
 
-        float noise(vec2 p) {
-          vec2 i = floor(p);
-          vec2 f = fract(p);
-          f = f * f * (3.0 - 2.0 * f);
-          float a = hash(i);
-          float b = hash(i + vec2(1.0, 0.0));
-          float c = hash(i + vec2(0.0, 1.0));
-          float d = hash(i + vec2(1.0, 1.0));
-          return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
-        }
+          float d1 = length(p - vec2(-0.04, 0.0) * size) - 0.025 * size;
+          float d2 = length(p - vec2(0.0, 0.012) * size) - 0.032 * size;
+          float d3 = length(p - vec2(0.04, 0.0) * size) - 0.025 * size;
+          float d4 = length(p - vec2(0.0, -0.008) * size) - 0.04 * size;
 
-        float fbm(vec2 p) {
-          float value = 0.0;
-          float amplitude = 0.5;
-          for (int i = 0; i < 6; i++) {
-            value += amplitude * noise(p);
-            p *= 2.0;
-            amplitude *= 0.5;
-          }
-          return value;
+          float d = min(min(d1, d2), min(d3, d4));
+          return 1.0 - step(0.0, d);
         }
 
         void main() {
           vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-          uv.x *= u_resolution.x / u_resolution.y;
-          vec2 movement = vec2(u_time * 0.02, u_time * 0.008);
-          float clouds = fbm(uv * 2.0 + movement);
-          clouds = smoothstep(0.4, 0.7, clouds);
-          clouds *= 0.5;
-          vec3 skyTop = vec3(0.0, 0.4, 0.85);
-          vec3 skyBottom = vec3(0.35, 0.6, 0.9);
+          float aspect = u_resolution.x / u_resolution.y;
+
+          // Pixelate
+          float pixelCount = 100.0;
+          vec2 pixelUV = floor(uv * pixelCount) / pixelCount;
+
+          vec2 p = pixelUV;
+          p.x *= aspect;
+
+          // Very slow movement
+          float t = u_time * 0.008;
+
+          // Clouds spread across the sky
+          float c = 0.0;
+          // Top clouds
+          c = max(c, cloud(p, vec2(mod(t * 0.6, 4.0) - 0.5, 0.93), 1.0));
+          c = max(c, cloud(p, vec2(mod(t * 0.4 + 2.0, 4.5) - 0.3, 0.86), 0.8));
+          c = max(c, cloud(p, vec2(mod(t * 0.5 + 1.2, 3.8) - 0.4, 0.90), 0.9));
+          // Middle clouds
+          c = max(c, cloud(p, vec2(mod(t * 0.45 + 3.0, 4.8) - 0.6, 0.70), 0.75));
+          c = max(c, cloud(p, vec2(mod(t * 0.38 + 0.8, 4.2) - 0.3, 0.55), 0.85));
+          c = max(c, cloud(p, vec2(mod(t * 0.52 + 2.2, 5.0) - 0.9, 0.45), 0.7));
+          c = max(c, cloud(p, vec2(mod(t * 0.42 + 1.5, 3.9) - 0.5, 0.62), 0.8));
+          c = max(c, cloud(p, vec2(mod(t * 0.48 + 3.8, 4.4) - 0.7, 0.38), 0.9));
+          // Bottom clouds
+          c = max(c, cloud(p, vec2(mod(t * 0.5 + 3.5, 5.0) - 1.0, 0.08), 0.9));
+          c = max(c, cloud(p, vec2(mod(t * 0.35 + 1.0, 4.2) - 0.2, 0.15), 0.7));
+          c = max(c, cloud(p, vec2(mod(t * 0.55 + 2.5, 4.0) - 0.8, 0.04), 0.85));
+          c = max(c, cloud(p, vec2(mod(t * 0.4 + 0.5, 3.6) - 0.1, 0.22), 0.65));
+
+          // Sky gradient
+          vec3 skyTop = vec3(0.051, 0.157, 1.0);
+          vec3 skyBottom = vec3(0.15, 0.3, 1.0);
           vec3 sky = mix(skyBottom, skyTop, uv.y);
-          vec3 cloudColor = vec3(0.85, 0.9, 1.0);
-          vec3 color = mix(sky, cloudColor, clouds * 0.7);
+
+          // Cloud color - very subtle, light blue-white tint
+          vec3 cloudColor = vec3(0.6, 0.7, 1.0);
+
+          // Subtle blend
+          vec3 color = mix(sky, cloudColor, c * 0.25);
           gl_FragColor = vec4(color, 1.0);
         }
       \`;
@@ -242,13 +267,13 @@ function renderHead({ title, description, url, image, jsonLd }) {
 function renderAirlineCard(airline, baseUrl) {
   return `
     <a href="/airlines/${escapeHtml(airline.slug)}"
-       class="group block bg-white rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
+       class="group block bg-white overflow-hidden hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
       <div class="p-6 text-center">
-        <div class="h-16 mx-auto mb-4 flex items-center justify-center px-4">
+        <div class="h-24 mx-auto mb-4 flex items-center justify-center px-4">
           <img src="${baseUrl}/images/logos/${escapeHtml(airline.slug)}.png"
                alt="${escapeHtml(airline.name)} logo"
-               class="max-h-full w-auto max-w-[140px] object-contain"
-               onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\\'font-display font-bold text-slate-300 text-3xl\\'>${escapeHtml(airline.iata_code)}</span>';">
+               class="max-h-full w-auto max-w-[200px] object-contain"
+               onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\\'font-display font-bold text-slate-300 text-4xl\\'>${escapeHtml(airline.iata_code)}</span>';">
         </div>
         <h3 class="font-display font-semibold text-slate-800 group-hover:text-primary transition-colors mb-1">
           ${escapeHtml(airline.name)}

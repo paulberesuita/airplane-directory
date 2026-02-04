@@ -50,6 +50,11 @@ function renderHead({ title, description, url, jsonLd }) {
   <meta name="description" content="${escapeHtml(description)}">
   <link rel="canonical" href="${escapeHtml(url)}">
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
   <!-- Open Graph -->
   <meta property="og:title" content="${escapeHtml(title)}">
   <meta property="og:description" content="${escapeHtml(description)}">
@@ -76,8 +81,8 @@ function renderHead({ title, description, url, jsonLd }) {
             display: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
           },
           colors: {
-            'primary': '#0EA5E9',
-            'primary-hover': '#0284C7',
+            'primary': '#3B82F6',
+            'primary-hover': '#2563EB',
             'background': 'rgba(248, 250, 252, 0.85)',
             'card': 'rgba(255, 255, 255, 0.95)',
             'border': '#E2E8F0',
@@ -155,8 +160,8 @@ function renderHead({ title, description, url, jsonLd }) {
           float clouds = fbm(uv * 2.0 + movement);
           clouds = smoothstep(0.4, 0.7, clouds);
           clouds *= 0.5;
-          vec3 skyTop = vec3(0.0, 0.4, 0.85);
-          vec3 skyBottom = vec3(0.35, 0.6, 0.9);
+          vec3 skyTop = vec3(0.051, 0.157, 1.0);
+          vec3 skyBottom = vec3(0.2, 0.35, 1.0);
           vec3 sky = mix(skyBottom, skyTop, uv.y);
           vec3 cloudColor = vec3(0.85, 0.9, 1.0);
           vec3 color = mix(sky, cloudColor, clouds * 0.7);
@@ -298,16 +303,16 @@ function renderAboutPage(baseUrl, stats) {
       <section class="mb-12">
         <h2 class="font-display text-2xl font-semibold text-slate-800 mb-6">By the Numbers</h2>
         <div class="grid grid-cols-3 gap-4">
-          <div class="bg-sky-50 rounded-xl p-6 text-center">
-            <p class="text-3xl font-bold text-sky-600 mb-1">${stats.aircraft}+</p>
+          <div class="bg-blue-50 rounded-xl p-6 text-center">
+            <p class="text-3xl font-bold text-blue-600 mb-1">${stats.aircraft}+</p>
             <p class="text-sm text-slate-600">Aircraft Models</p>
           </div>
-          <div class="bg-sky-50 rounded-xl p-6 text-center">
-            <p class="text-3xl font-bold text-sky-600 mb-1">${stats.airlines}+</p>
+          <div class="bg-blue-50 rounded-xl p-6 text-center">
+            <p class="text-3xl font-bold text-blue-600 mb-1">${stats.airlines}+</p>
             <p class="text-sm text-slate-600">Airlines</p>
           </div>
-          <div class="bg-sky-50 rounded-xl p-6 text-center">
-            <p class="text-3xl font-bold text-sky-600 mb-1">${stats.manufacturers}</p>
+          <div class="bg-blue-50 rounded-xl p-6 text-center">
+            <p class="text-3xl font-bold text-blue-600 mb-1">${stats.manufacturers}</p>
             <p class="text-sm text-slate-600">Manufacturers</p>
           </div>
         </div>
