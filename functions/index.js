@@ -335,6 +335,52 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
 
   const totalAircraft = airlines.reduce((sum, a) => sum + (a.fleet_size || 0), 0);
 
+  // Build enhanced JSON-LD schemas
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "AirlinePlanes",
+    "alternateName": "Airline Planes Directory",
+    "url": baseUrl,
+    "description": "Explore airline fleets and aircraft specifications. Know what planes you're flying on.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": `${baseUrl}/aircraft?q={search_term_string}`
+      },
+      "query-input": "required name=search_term_string"
+    }
+  };
+
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "AirlinePlanes",
+    "url": baseUrl,
+    "description": "A curated directory of commercial aircraft and the airlines that fly them.",
+    "sameAs": []
+  };
+
+  const airlineListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Major Airlines",
+    "description": "Airlines with detailed fleet information",
+    "numberOfItems": airlines.length,
+    "itemListElement": airlines.slice(0, 20).map((a, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": a.name,
+      "url": `${baseUrl}/airlines/${a.slug}`
+    }))
+  };
+
+  const multipleJsonLd = `
+  <script type="application/ld+json">${JSON.stringify(websiteSchema)}</script>
+  <script type="application/ld+json">${JSON.stringify(organizationSchema)}</script>
+  <script type="application/ld+json">${JSON.stringify(airlineListSchema)}</script>`;
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -343,18 +389,9 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
     description: `Explore the fleets of ${airlines.length} major airlines with ${formatNumber(totalAircraft)}+ aircraft. See which planes Emirates, British Airways, Lufthansa, Singapore Airlines and more operate.`,
     url: baseUrl,
     image: aircraft[0]?.image_url ? `${baseUrl}/images/aircraft-styled/${aircraft[0].slug}.jpg` : null,
-    jsonLd: {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "AirlinePlanes",
-      "url": baseUrl,
-      "description": "Explore airline fleets and aircraft specifications. Know what planes you're flying on.",
-      "publisher": {
-        "@type": "Organization",
-        "name": "AirlinePlanes"
-      }
-    }
+    jsonLd: null
   })}
+  ${multipleJsonLd}
   <style>
     .aircraft-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     .aircraft-card:hover { transform: translateY(-4px); }

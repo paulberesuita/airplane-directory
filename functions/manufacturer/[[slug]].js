@@ -525,6 +525,57 @@ async function renderDetailPage(context, slug, baseUrl) {
       </a>`;
   }).join('');
 
+  // Build multiple JSON-LD schemas
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": manufacturerData.name,
+    "description": manufacturerData.description,
+    "foundingDate": manufacturerData.founded?.toString(),
+    "url": manufacturerData.website,
+    "location": {
+      "@type": "Place",
+      "name": manufacturerData.headquarters
+    },
+    "makesOffer": aircraft.map(a => ({
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Product",
+        "name": a.name,
+        "url": `${baseUrl}/aircraft/${a.slug}`
+      }
+    }))
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": baseUrl
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Manufacturers",
+        "item": `${baseUrl}/manufacturer`
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": manufacturerData.name,
+        "item": `${baseUrl}/manufacturer/${slug}`
+      }
+    ]
+  };
+
+  const multipleJsonLd = `
+  <script type="application/ld+json">${JSON.stringify(organizationSchema)}</script>
+  <script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`;
+
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -532,27 +583,9 @@ async function renderDetailPage(context, slug, baseUrl) {
     title: `${manufacturerData.name} Aircraft | AirlinePlanes`,
     description: `Explore all ${aircraft.length} ${manufacturerData.name} aircraft. ${inProduction} in production, ${inService} in service. See specs, history, and details for each model.`,
     url: `${baseUrl}/manufacturer/${slug}`,
-    jsonLd: {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": manufacturerData.name,
-      "description": manufacturerData.description,
-      "foundingDate": manufacturerData.founded?.toString(),
-      "url": manufacturerData.website,
-      "location": {
-        "@type": "Place",
-        "name": manufacturerData.headquarters
-      },
-      "makesOffer": aircraft.map(a => ({
-        "@type": "Offer",
-        "itemOffered": {
-          "@type": "Product",
-          "name": a.name,
-          "url": `${baseUrl}/aircraft/${a.slug}`
-        }
-      }))
-    }
+    jsonLd: null
   })}
+  ${multipleJsonLd}
   <style>
     .line-clamp-2 {
       display: -webkit-box;

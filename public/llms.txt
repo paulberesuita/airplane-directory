@@ -1,0 +1,59 @@
+# AirlinePlanes
+
+> A directory of commercial aircraft and the airlines that fly them
+
+AirlinePlanes is a curated database of commercial aircraft with detailed specifications, history, and information about which airlines operate them.
+
+## Quick Facts
+
+- 45+ commercial aircraft models
+- 25+ major airlines
+- 4 manufacturers: Airbus, Boeing, Bombardier, Embraer
+
+## How to Navigate
+
+- Browse airlines: https://airlineplanes.com/airlines
+- Browse aircraft: https://airlineplanes.com/aircraft
+- Browse by manufacturer: https://airlineplanes.com/manufacturer
+- View an aircraft: https://airlineplanes.com/aircraft/{slug}
+- View an airline: https://airlineplanes.com/airlines/{slug}
+
+## Example URLs
+
+### Airlines
+- https://airlineplanes.com/airlines/united-airlines
+- https://airlineplanes.com/airlines/delta-air-lines
+- https://airlineplanes.com/airlines/american-airlines
+
+### Aircraft
+- https://airlineplanes.com/aircraft/boeing-737-max-8
+- https://airlineplanes.com/aircraft/airbus-a350-900
+- https://airlineplanes.com/aircraft/boeing-787-9
+
+### Manufacturers
+- https://airlineplanes.com/manufacturer/boeing
+- https://airlineplanes.com/manufacturer/airbus
+
+## API
+
+The JSON API returns aircraft and airline data including:
+- Aircraft: name, manufacturer, specs (range, speed, passengers), first flight, status
+- Airlines: name, IATA/ICAO codes, headquarters, fleet size, destinations
+
+```
+GET /api/aircraft - All aircraft (JSON)
+GET /api/aircraft/{slug} - Single aircraft with full details
+```
+
+## Full Content
+
+For complete aircraft and airline data including all descriptions and specifications, see:
+https://airlineplanes.com/llms-full.txt
+
+## About
+
+AirlinePlanes researches and documents commercial aircraft with verified specifications, operational history, and current airline operators. Each aircraft includes manufacturer data and industry sources.
+
+## Contact
+
+Website: https://airlineplanes.com

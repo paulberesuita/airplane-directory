@@ -416,6 +416,50 @@ async function renderDetailPage(context, slug, baseUrl) {
     </a>
   `).join('');
 
+  // Build multiple JSON-LD schemas
+  const airlineSchema = {
+    "@context": "https://schema.org",
+    "@type": "Airline",
+    "name": airline.name,
+    "iataCode": airline.iata_code,
+    "icaoCode": airline.icao_code,
+    "url": airline.website,
+    "foundingDate": airline.founded?.toString(),
+    "location": {
+      "@type": "Place",
+      "name": airline.headquarters
+    }
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": baseUrl
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Airlines",
+        "item": `${baseUrl}/airlines`
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": airline.name,
+        "item": `${baseUrl}/airlines/${slug}`
+      }
+    ]
+  };
+
+  const multipleJsonLd = `
+  <script type="application/ld+json">${JSON.stringify(airlineSchema)}</script>
+  <script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`;
+
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -423,20 +467,9 @@ async function renderDetailPage(context, slug, baseUrl) {
     title: `${airline.name} Fleet | AirlinePlanes`,
     description: `Explore ${airline.name}'s fleet of ${totalAircraft} aircraft. See what planes ${airline.iata_code} flies and learn about each aircraft type.`,
     url: `${baseUrl}/airlines/${slug}`,
-    jsonLd: {
-      "@context": "https://schema.org",
-      "@type": "Airline",
-      "name": airline.name,
-      "iataCode": airline.iata_code,
-      "icaoCode": airline.icao_code,
-      "url": airline.website,
-      "foundingDate": airline.founded?.toString(),
-      "location": {
-        "@type": "Place",
-        "name": airline.headquarters
-      }
-    }
+    jsonLd: null
   })}
+  ${multipleJsonLd}
 </head>
 <body class="font-sans">
   <canvas id="sky-canvas"></canvas>

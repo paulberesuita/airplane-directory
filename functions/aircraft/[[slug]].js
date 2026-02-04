@@ -569,6 +569,52 @@ async function renderDetailPage(context, slug, baseUrl) {
     if (grouped[h.content_type]) grouped[h.content_type].push(h);
   });
 
+  // Build multiple JSON-LD schemas
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": aircraft.name,
+    "description": aircraft.description,
+    "brand": { "@type": "Brand", "name": aircraft.manufacturer },
+    "image": imageUrl,
+    "category": "Commercial Aircraft",
+    "additionalProperty": [
+      { "@type": "PropertyValue", "name": "Passengers", "value": aircraft.passengers },
+      { "@type": "PropertyValue", "name": "Range", "value": `${formatNumber(aircraft.range_km)} km` },
+      { "@type": "PropertyValue", "name": "Cruise Speed", "value": `${formatNumber(aircraft.cruise_speed_kmh)} km/h` },
+      { "@type": "PropertyValue", "name": "First Flight", "value": aircraft.first_flight }
+    ]
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": baseUrl
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Aircraft",
+        "item": `${baseUrl}/aircraft`
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": aircraft.name,
+        "item": `${baseUrl}/aircraft/${slug}`
+      }
+    ]
+  };
+
+  const multipleJsonLd = `
+  <script type="application/ld+json">${JSON.stringify(productSchema)}</script>
+  <script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`;
+
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -577,22 +623,9 @@ async function renderDetailPage(context, slug, baseUrl) {
     description: aircraft.description?.substring(0, 155) || `Learn about the ${aircraft.name} from ${aircraft.manufacturer}. Specs, history, and fun facts.`,
     url: `${baseUrl}/aircraft/${slug}`,
     image: imageUrl,
-    jsonLd: {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": aircraft.name,
-      "description": aircraft.description,
-      "brand": { "@type": "Brand", "name": aircraft.manufacturer },
-      "image": imageUrl,
-      "category": "Commercial Aircraft",
-      "additionalProperty": [
-        { "@type": "PropertyValue", "name": "Passengers", "value": aircraft.passengers },
-        { "@type": "PropertyValue", "name": "Range", "value": `${formatNumber(aircraft.range_km)} km` },
-        { "@type": "PropertyValue", "name": "Cruise Speed", "value": `${formatNumber(aircraft.cruise_speed_kmh)} km/h` },
-        { "@type": "PropertyValue", "name": "First Flight", "value": aircraft.first_flight }
-      ]
-    }
+    jsonLd: null
   })}
+  ${multipleJsonLd}
   <style>
     .stat-card:hover { transform: translateY(-2px); }
     .fun-fact-card {
