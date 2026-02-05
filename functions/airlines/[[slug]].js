@@ -36,6 +36,146 @@ function formatNumber(num) {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
+// Airline brand colors
+const airlineBrandColors = {
+  'united-airlines': '#002244',
+  'american-airlines': '#0078D2',
+  'delta-air-lines': '#003366',
+  'southwest-airlines': '#304CB2',
+  'jetblue-airways': '#003876',
+  'alaska-airlines': '#01426A',
+  'spirit-airlines': '#FFE302',
+  'frontier-airlines': '#00A651',
+  'british-airways': '#075AAA',
+  'lufthansa': '#05164D',
+  'air-france': '#002157',
+  'klm': '#00A1E4',
+  'emirates': '#D71921',
+  'qatar-airways': '#5C0632',
+  'singapore-airlines': '#F59E0B',
+  'cathay-pacific': '#005A3C',
+  'qantas': '#E0112B',
+  'air-new-zealand': '#0D0D0D',
+  'ana': '#00467F',
+  'japan-airlines': '#C8102E',
+  'korean-air': '#00256C',
+  'china-airlines': '#003366',
+  'eva-air': '#00654B',
+  'etihad-airways': '#BD8B13',
+  'el-al': '#0033A0',
+  'air-canada': '#F01428',
+  'westjet': '#00263A',
+  'aeromexico': '#00295B',
+  'avianca': '#E31937',
+  'copa-airlines': '#005DAA',
+  'latam': '#ED1651',
+  'virgin-atlantic': '#E10A0A',
+  'iberia': '#D71921',
+  'tap-portugal': '#00965E',
+  'aer-lingus': '#006272',
+  'turkish-airlines': '#C8102E',
+  'finnair': '#0B1560',
+  'swiss': '#E2001A',
+  'sas': '#00205B',
+  'norwegian': '#D81939',
+  'icelandair': '#003893',
+};
+
+function renderAirlineCard(airline, baseUrl) {
+  const brandColor = airlineBrandColors[airline.slug] || '#3B82F6';
+
+  return `
+    <a href="/airlines/${escapeHtml(airline.slug)}"
+       class="group block bg-[#faf8f5] overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+      <!-- Thin colored accent line at top -->
+      <div class="h-1" style="background-color: ${brandColor};"></div>
+      <!-- Light header -->
+      <div class="px-4 py-2 flex items-center justify-between" style="background-color: #f5f2ed; border-bottom: 1px solid #d4c8b8;">
+        <div class="flex items-center gap-2">
+          <img src="${baseUrl}/images/airline-icons/${escapeHtml(airline.slug)}.png?v=5"
+               alt="${escapeHtml(airline.name)} logo"
+               class="w-6 h-6 object-contain"
+               onerror="this.src='${baseUrl}/images/airline-icons/${escapeHtml(airline.slug)}.svg?v=5'; this.onerror=function(){this.style.display='none';};">
+          <span class="font-semibold text-sm" style="color: #3d3629;">${escapeHtml(airline.name)}</span>
+        </div>
+        <span class="text-xs font-medium tracking-wider" style="color: #a09485;">BOARDING PASS</span>
+      </div>
+      <!-- Ticket body -->
+      <div class="flex relative">
+        <!-- Semi-circle cutouts -->
+        <div class="absolute left-[7.5rem] sm:left-[8.5rem] top-0 w-4 h-2 rounded-b-full" style="background-color: #f5f2ed;"></div>
+        <div class="absolute left-[7.5rem] sm:left-[8.5rem] bottom-0 w-4 h-2 rounded-t-full" style="background-color: ${brandColor};"></div>
+        <div class="absolute right-[6.5rem] sm:right-[7.5rem] top-0 w-4 h-2 rounded-b-full" style="background-color: #f5f2ed;"></div>
+        <div class="absolute right-[6.5rem] sm:right-[7.5rem] bottom-0 w-4 h-2 rounded-t-full" style="background-color: ${brandColor};"></div>
+        <!-- Left stub with IATA code -->
+        <div class="w-28 sm:w-32 p-4 flex flex-col items-center justify-center shrink-0" style="border-right: 2px dashed #d4c8b8;">
+          <span class="font-mono text-3xl font-bold" style="color: #4a4237;">${escapeHtml(airline.iata_code)}</span>
+          <span class="text-xs mt-1" style="color: #8c8279;">${escapeHtml(airline.icao_code || '')}</span>
+        </div>
+        <!-- Main ticket content -->
+        <div class="flex-1 p-5 min-w-0">
+          <div class="flex justify-between items-start gap-2">
+            <div class="min-w-0">
+              <p class="text-xs uppercase tracking-wider" style="color: #a09485;">Hub</p>
+              <h3 class="font-display text-lg font-semibold group-hover:text-primary transition-colors truncate" style="color: #3d3629;">
+                ${escapeHtml(airline.headquarters)}
+              </h3>
+            </div>
+            <div class="text-right shrink-0">
+              <p class="text-xs uppercase tracking-wider" style="color: #a09485;">Fleet</p>
+              <p class="font-mono text-xl font-bold" style="color: #3d3629;">${formatNumber(airline.fleet_size)}</p>
+            </div>
+          </div>
+          <div class="mt-4 pt-4 flex justify-between text-sm" style="border-top: 1px solid #e0d9cf; color: #7a7062;">
+            <span class="flex items-center gap-1">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+              ${airline.aircraft_types || 0} types
+            </span>
+            <span class="shrink-0">Founded ${airline.founded || 'N/A'}</span>
+          </div>
+        </div>
+        <!-- Barcode stub -->
+        <div class="w-24 sm:w-28 bg-white flex items-center justify-center shrink-0" style="border-left: 1px dashed #d4c8b8;">
+          <svg viewBox="0 0 100 40" class="h-20 w-auto rotate-90" preserveAspectRatio="xMidYMid meet">
+            <rect x="0" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="2" y="0" width="2" height="40" fill="#1e293b"/>
+            <rect x="5" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="8" y="0" width="3" height="40" fill="#1e293b"/>
+            <rect x="12" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="14" y="0" width="2" height="40" fill="#1e293b"/>
+            <rect x="18" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="20" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="23" y="0" width="3" height="40" fill="#1e293b"/>
+            <rect x="27" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="30" y="0" width="2" height="40" fill="#1e293b"/>
+            <rect x="33" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="36" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="38" y="0" width="3" height="40" fill="#1e293b"/>
+            <rect x="42" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="45" y="0" width="2" height="40" fill="#1e293b"/>
+            <rect x="48" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="51" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="53" y="0" width="3" height="40" fill="#1e293b"/>
+            <rect x="57" y="0" width="2" height="40" fill="#1e293b"/>
+            <rect x="61" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="63" y="0" width="2" height="40" fill="#1e293b"/>
+            <rect x="67" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="70" y="0" width="3" height="40" fill="#1e293b"/>
+            <rect x="74" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="77" y="0" width="2" height="40" fill="#1e293b"/>
+            <rect x="80" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="83" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="85" y="0" width="3" height="40" fill="#1e293b"/>
+            <rect x="89" y="0" width="2" height="40" fill="#1e293b"/>
+            <rect x="93" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="95" y="0" width="2" height="40" fill="#1e293b"/>
+            <rect x="98" y="0" width="2" height="40" fill="#1e293b"/>
+          </svg>
+        </div>
+      </div>
+    </a>`;
+}
+
 // === Shared Components ===
 
 function renderHead({ title, description, url, image, jsonLd }) {
@@ -128,42 +268,66 @@ function renderHead({ title, description, url, image, jsonLd }) {
         uniform float u_time;
         uniform vec2 u_resolution;
 
-        float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+        // Draw a single Mario-style cloud (3 bumps)
+        float cloud(vec2 uv, vec2 pos, float size) {
+          vec2 p = uv - pos;
+          p.x /= 1.5;
 
-        float noise(vec2 p) {
-          vec2 i = floor(p);
-          vec2 f = fract(p);
-          f = f * f * (3.0 - 2.0 * f);
-          float a = hash(i);
-          float b = hash(i + vec2(1.0, 0.0));
-          float c = hash(i + vec2(0.0, 1.0));
-          float d = hash(i + vec2(1.0, 1.0));
-          return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
-        }
+          float d1 = length(p - vec2(-0.04, 0.0) * size) - 0.025 * size;
+          float d2 = length(p - vec2(0.0, 0.012) * size) - 0.032 * size;
+          float d3 = length(p - vec2(0.04, 0.0) * size) - 0.025 * size;
+          float d4 = length(p - vec2(0.0, -0.008) * size) - 0.04 * size;
 
-        float fbm(vec2 p) {
-          float value = 0.0;
-          float amplitude = 0.5;
-          for (int i = 0; i < 6; i++) {
-            value += amplitude * noise(p);
-            p *= 2.0;
-            amplitude *= 0.5;
-          }
-          return value;
+          float d = min(min(d1, d2), min(d3, d4));
+          return 1.0 - step(0.0, d);
         }
 
         void main() {
           vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-          uv.x *= u_resolution.x / u_resolution.y;
-          vec2 movement = vec2(u_time * 0.02, u_time * 0.008);
-          float clouds = fbm(uv * 2.0 + movement);
-          clouds = smoothstep(0.4, 0.7, clouds);
-          clouds *= 0.5;
+          float aspect = u_resolution.x / u_resolution.y;
+
+          // Pixelate
+          float pixelCount = 100.0;
+          vec2 pixelUV = floor(uv * pixelCount) / pixelCount;
+
+          vec2 p = pixelUV;
+          p.x *= aspect;
+
+          // Very slow movement
+          float t = u_time * 0.008;
+
+          // Clouds spread across the sky
+          float c = 0.0;
+          // Top clouds
+          c = max(c, cloud(p, vec2(mod(t * 0.6, 4.0) - 0.5, 0.93), 1.0));
+          c = max(c, cloud(p, vec2(mod(t * 0.4 + 2.0, 4.5) - 0.3, 0.86), 0.8));
+          c = max(c, cloud(p, vec2(mod(t * 0.5 + 1.2, 3.8) - 0.4, 0.90), 0.9));
+          c = max(c, cloud(p, vec2(mod(t * 0.44 + 0.3, 4.1) - 0.7, 0.88), 0.75));
+          // Middle clouds
+          c = max(c, cloud(p, vec2(mod(t * 0.45 + 3.0, 4.8) - 0.6, 0.70), 0.75));
+          c = max(c, cloud(p, vec2(mod(t * 0.38 + 0.8, 4.2) - 0.3, 0.55), 0.85));
+          c = max(c, cloud(p, vec2(mod(t * 0.52 + 2.2, 5.0) - 0.9, 0.45), 0.7));
+          c = max(c, cloud(p, vec2(mod(t * 0.42 + 1.5, 3.9) - 0.5, 0.62), 0.8));
+          c = max(c, cloud(p, vec2(mod(t * 0.48 + 3.8, 4.4) - 0.7, 0.38), 0.9));
+          c = max(c, cloud(p, vec2(mod(t * 0.36 + 2.8, 4.6) - 0.2, 0.50), 0.72));
+          c = max(c, cloud(p, vec2(mod(t * 0.41 + 3.6, 4.0) - 3.6, 0.58), 0.82));
+          // Bottom clouds
+          c = max(c, cloud(p, vec2(mod(t * 0.5 + 3.5, 5.0) - 1.0, 0.08), 0.9));
+          c = max(c, cloud(p, vec2(mod(t * 0.35 + 1.0, 4.2) - 0.2, 0.15), 0.7));
+          c = max(c, cloud(p, vec2(mod(t * 0.55 + 2.5, 4.0) - 0.8, 0.04), 0.85));
+          c = max(c, cloud(p, vec2(mod(t * 0.4 + 0.5, 3.6) - 0.1, 0.22), 0.65));
+          c = max(c, cloud(p, vec2(mod(t * 0.46 + 1.8, 4.3) - 0.4, 0.12), 0.78));
+
+          // Sky gradient
           vec3 skyTop = vec3(0.051, 0.157, 1.0);
-          vec3 skyBottom = vec3(0.2, 0.35, 1.0);
+          vec3 skyBottom = vec3(0.15, 0.3, 1.0);
           vec3 sky = mix(skyBottom, skyTop, uv.y);
-          vec3 cloudColor = vec3(0.85, 0.9, 1.0);
-          vec3 color = mix(sky, cloudColor, clouds * 0.7);
+
+          // Cloud color - very subtle, light blue-white tint
+          vec3 cloudColor = vec3(0.6, 0.7, 1.0);
+
+          // Subtle blend
+          vec3 color = mix(sky, cloudColor, c * 0.25);
           gl_FragColor = vec4(color, 1.0);
         }
       \`;
@@ -257,41 +421,7 @@ async function renderListPage(context, baseUrl) {
     ORDER BY a.fleet_size DESC
   `).all();
 
-  const airlineCards = airlines.map(airline => `
-    <a href="/airlines/${escapeHtml(airline.slug)}"
-       class="group block bg-white/20 backdrop-blur-xl rounded-2xl overflow-hidden hover:bg-white/30 hover:-translate-y-1 transition-all duration-300 border border-white/30">
-      <div class="p-6">
-        <div class="flex items-start justify-between gap-4 mb-4">
-          <div>
-            <h3 class="font-display text-xl font-bold text-white group-hover:text-white transition-colors">
-              ${escapeHtml(airline.name)}
-            </h3>
-            <p class="text-sm text-white/90">${escapeHtml(airline.headquarters)}</p>
-          </div>
-          <span class="shrink-0 bg-white/20 text-white text-sm font-bold px-3 py-1 rounded-lg">
-            ${escapeHtml(airline.iata_code)}
-          </span>
-        </div>
-
-        <p class="text-white/90 text-sm line-clamp-2 mb-4">${escapeHtml(airline.description?.substring(0, 150))}...</p>
-
-        <div class="grid grid-cols-3 gap-4 pt-4 border-t border-white/20">
-          <div class="text-center">
-            <p class="text-2xl font-bold text-white">${formatNumber(airline.fleet_size)}</p>
-            <p class="text-xs text-white/90">Aircraft</p>
-          </div>
-          <div class="text-center">
-            <p class="text-2xl font-bold text-white">${airline.aircraft_types || 0}</p>
-            <p class="text-xs text-white/90">Types</p>
-          </div>
-          <div class="text-center">
-            <p class="text-2xl font-bold text-white">${airline.destinations || 0}</p>
-            <p class="text-xs text-white/90">Destinations</p>
-          </div>
-        </div>
-      </div>
-    </a>
-  `).join('');
+  const airlineCards = airlines.map(airline => renderAirlineCard(airline, baseUrl)).join('');
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -343,7 +473,7 @@ async function renderListPage(context, baseUrl) {
   </div>
 
   <main class="max-w-7xl mx-auto px-4 py-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
       ${airlineCards}
     </div>
   </main>

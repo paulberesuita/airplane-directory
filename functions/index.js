@@ -5,7 +5,7 @@ export async function onRequestGet(context) {
   const baseUrl = `${url.protocol}//${url.host}`;
 
   try {
-    // Fetch all airlines with fleet counts
+    // Fetch top 6 airlines with fleet counts for homepage
     const { results: airlines } = await env.DB.prepare(`
       SELECT a.*, COUNT(DISTINCT af.aircraft_slug) as aircraft_types,
              SUM(af.count) as total_aircraft
@@ -13,6 +13,7 @@ export async function onRequestGet(context) {
       LEFT JOIN airline_fleet af ON a.slug = af.airline_slug
       GROUP BY a.id
       ORDER BY a.fleet_size DESC
+      LIMIT 6
     `).all();
 
     // Fetch all aircraft that are in active airline fleets
@@ -192,17 +193,21 @@ function renderHead({ title, description, url, image, jsonLd }) {
           c = max(c, cloud(p, vec2(mod(t * 0.6, 4.0) - 0.5, 0.93), 1.0));
           c = max(c, cloud(p, vec2(mod(t * 0.4 + 2.0, 4.5) - 0.3, 0.86), 0.8));
           c = max(c, cloud(p, vec2(mod(t * 0.5 + 1.2, 3.8) - 0.4, 0.90), 0.9));
+          c = max(c, cloud(p, vec2(mod(t * 0.44 + 0.3, 4.1) - 0.7, 0.88), 0.75));
           // Middle clouds
           c = max(c, cloud(p, vec2(mod(t * 0.45 + 3.0, 4.8) - 0.6, 0.70), 0.75));
           c = max(c, cloud(p, vec2(mod(t * 0.38 + 0.8, 4.2) - 0.3, 0.55), 0.85));
           c = max(c, cloud(p, vec2(mod(t * 0.52 + 2.2, 5.0) - 0.9, 0.45), 0.7));
           c = max(c, cloud(p, vec2(mod(t * 0.42 + 1.5, 3.9) - 0.5, 0.62), 0.8));
           c = max(c, cloud(p, vec2(mod(t * 0.48 + 3.8, 4.4) - 0.7, 0.38), 0.9));
+          c = max(c, cloud(p, vec2(mod(t * 0.36 + 2.8, 4.6) - 0.2, 0.50), 0.72));
+          c = max(c, cloud(p, vec2(mod(t * 0.41 + 3.6, 4.0) - 3.6, 0.58), 0.82));
           // Bottom clouds
           c = max(c, cloud(p, vec2(mod(t * 0.5 + 3.5, 5.0) - 1.0, 0.08), 0.9));
           c = max(c, cloud(p, vec2(mod(t * 0.35 + 1.0, 4.2) - 0.2, 0.15), 0.7));
           c = max(c, cloud(p, vec2(mod(t * 0.55 + 2.5, 4.0) - 0.8, 0.04), 0.85));
           c = max(c, cloud(p, vec2(mod(t * 0.4 + 0.5, 3.6) - 0.1, 0.22), 0.65));
+          c = max(c, cloud(p, vec2(mod(t * 0.46 + 1.8, 4.3) - 0.4, 0.12), 0.78));
 
           // Sky gradient
           vec3 skyTop = vec3(0.051, 0.157, 1.0);
@@ -264,22 +269,147 @@ function renderHead({ title, description, url, image, jsonLd }) {
   </script>`;
 }
 
+// Airline brand colors
+const airlineBrandColors = {
+  'united-airlines': '#002244',
+  'american-airlines': '#0078D2',
+  'delta-air-lines': '#003366',
+  'southwest-airlines': '#304CB2',
+  'jetblue-airways': '#003876',
+  'alaska-airlines': '#01426A',
+  'spirit-airlines': '#FFE302',
+  'frontier-airlines': '#00A651',
+  'british-airways': '#075AAA',
+  'lufthansa': '#05164D',
+  'air-france': '#002157',
+  'klm': '#00A1E4',
+  'emirates': '#D71921',
+  'qatar-airways': '#5C0632',
+  'singapore-airlines': '#F59E0B',
+  'cathay-pacific': '#005A3C',
+  'qantas': '#E0112B',
+  'air-new-zealand': '#0D0D0D',
+  'ana': '#00467F',
+  'japan-airlines': '#C8102E',
+  'korean-air': '#00256C',
+  'china-airlines': '#003366',
+  'eva-air': '#00654B',
+  'etihad-airways': '#BD8B13',
+  'el-al': '#0033A0',
+  'air-canada': '#F01428',
+  'westjet': '#00263A',
+  'aeromexico': '#00295B',
+  'avianca': '#E31937',
+  'copa-airlines': '#005DAA',
+  'latam': '#ED1651',
+  'virgin-atlantic': '#E10A0A',
+  'iberia': '#D71921',
+  'tap-portugal': '#00965E',
+  'aer-lingus': '#006272',
+  'turkish-airlines': '#C8102E',
+  'finnair': '#0B1560',
+  'swiss': '#E2001A',
+  'sas': '#00205B',
+  'norwegian': '#D81939',
+  'icelandair': '#003893',
+};
+
 function renderAirlineCard(airline, baseUrl) {
+  const brandColor = airlineBrandColors[airline.slug] || '#3B82F6';
+  // For light colors like Spirit's yellow, we need dark text
+  const needsDarkText = ['spirit-airlines'].includes(airline.slug);
+  const textColor = needsDarkText ? 'text-slate-800' : 'text-white';
+  const textMutedColor = needsDarkText ? 'text-slate-600' : 'text-white/80';
+
+  // Boarding pass style card with header and cutouts
   return `
     <a href="/airlines/${escapeHtml(airline.slug)}"
-       class="group block bg-white overflow-hidden hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
-      <div class="p-6 text-center">
-        <div class="h-16 mx-auto mb-4 flex items-center justify-center">
-          <img src="${baseUrl}/images/airline-icons/${escapeHtml(airline.slug)}.svg?v=4"
+       class="group block bg-[#faf8f5] overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+      <!-- Thin colored accent line at top -->
+      <div class="h-1" style="background-color: ${brandColor};"></div>
+      <!-- Light header -->
+      <div class="px-4 py-2 flex items-center justify-between" style="background-color: #f5f2ed; border-bottom: 1px solid #d4c8b8;">
+        <div class="flex items-center gap-2">
+          <img src="${baseUrl}/images/airline-icons/${escapeHtml(airline.slug)}.png?v=5"
                alt="${escapeHtml(airline.name)} logo"
-               class="h-16 w-16 object-contain"
-               onerror="this.src='${baseUrl}/images/airline-icons/${escapeHtml(airline.slug)}.png?v=4'; this.onerror=function(){this.style.display='none'; this.parentElement.innerHTML='<span class=\\'font-display font-bold text-slate-300 text-4xl\\'>${escapeHtml(airline.iata_code)}</span>';};">
+               class="w-6 h-6 object-contain"
+               onerror="this.src='${baseUrl}/images/airline-icons/${escapeHtml(airline.slug)}.svg?v=5'; this.onerror=function(){this.style.display='none';};">
+          <span class="font-semibold text-sm" style="color: #3d3629;">${escapeHtml(airline.name)}</span>
         </div>
-        <h3 class="font-display font-semibold text-slate-800 group-hover:text-primary transition-colors mb-1">
-          ${escapeHtml(airline.name)}
-        </h3>
-        <p class="text-sm text-slate-400 mb-3">${escapeHtml(airline.headquarters)}</p>
-        <p class="text-xs text-slate-500">${formatNumber(airline.fleet_size)} aircraft · ${airline.aircraft_types || 0} types</p>
+        <span class="text-xs font-medium tracking-wider" style="color: #a09485;">BOARDING PASS</span>
+      </div>
+      <!-- Ticket body -->
+      <div class="flex relative">
+        <!-- Semi-circle cutouts -->
+        <div class="absolute left-[7.5rem] sm:left-[8.5rem] top-0 w-4 h-2 rounded-b-full" style="background-color: #f5f2ed;"></div>
+        <div class="absolute left-[7.5rem] sm:left-[8.5rem] bottom-0 w-4 h-2 rounded-t-full" style="background-color: ${brandColor};"></div>
+        <div class="absolute right-[6.5rem] sm:right-[7.5rem] top-0 w-4 h-2 rounded-b-full" style="background-color: #f5f2ed;"></div>
+        <div class="absolute right-[6.5rem] sm:right-[7.5rem] bottom-0 w-4 h-2 rounded-t-full" style="background-color: ${brandColor};"></div>
+        <!-- Left stub with IATA code -->
+        <div class="w-28 sm:w-32 p-4 flex flex-col items-center justify-center shrink-0" style="border-right: 2px dashed #d4c8b8;">
+          <span class="font-mono text-3xl font-bold" style="color: #4a4237;">${escapeHtml(airline.iata_code)}</span>
+          <span class="text-xs mt-1" style="color: #8c8279;">${escapeHtml(airline.icao_code || '')}</span>
+        </div>
+        <!-- Main ticket content -->
+        <div class="flex-1 p-5 min-w-0">
+          <div class="flex justify-between items-start gap-2">
+            <div class="min-w-0">
+              <p class="text-xs uppercase tracking-wider" style="color: #a09485;">Hub</p>
+              <h3 class="font-display text-lg font-semibold group-hover:text-primary transition-colors truncate" style="color: #3d3629;">
+                ${escapeHtml(airline.headquarters)}
+              </h3>
+            </div>
+            <div class="text-right shrink-0">
+              <p class="text-xs uppercase tracking-wider" style="color: #a09485;">Fleet</p>
+              <p class="font-mono text-xl font-bold" style="color: #3d3629;">${formatNumber(airline.fleet_size)}</p>
+            </div>
+          </div>
+          <div class="mt-4 pt-4 flex justify-between text-sm" style="border-top: 1px solid #e0d9cf; color: #7a7062;">
+            <span class="flex items-center gap-1">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+              ${airline.aircraft_types || 0} types
+            </span>
+            <span class="shrink-0">Founded ${airline.founded || 'N/A'}</span>
+          </div>
+        </div>
+        <!-- Barcode stub -->
+        <div class="w-24 sm:w-28 bg-white flex items-center justify-center shrink-0" style="border-left: 1px dashed #d4c8b8;">
+          <svg viewBox="0 0 100 40" class="h-20 w-auto rotate-90" preserveAspectRatio="xMidYMid meet">
+            <rect x="0" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="2" y="0" width="2" height="40" fill="#1e293b"/>
+            <rect x="5" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="8" y="0" width="3" height="40" fill="#1e293b"/>
+            <rect x="12" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="14" y="0" width="2" height="40" fill="#1e293b"/>
+            <rect x="18" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="20" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="23" y="0" width="3" height="40" fill="#1e293b"/>
+            <rect x="27" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="30" y="0" width="2" height="40" fill="#1e293b"/>
+            <rect x="33" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="36" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="38" y="0" width="3" height="40" fill="#1e293b"/>
+            <rect x="42" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="45" y="0" width="2" height="40" fill="#1e293b"/>
+            <rect x="48" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="51" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="53" y="0" width="3" height="40" fill="#1e293b"/>
+            <rect x="57" y="0" width="2" height="40" fill="#1e293b"/>
+            <rect x="61" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="63" y="0" width="2" height="40" fill="#1e293b"/>
+            <rect x="67" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="70" y="0" width="3" height="40" fill="#1e293b"/>
+            <rect x="74" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="77" y="0" width="2" height="40" fill="#1e293b"/>
+            <rect x="80" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="83" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="85" y="0" width="3" height="40" fill="#1e293b"/>
+            <rect x="89" y="0" width="2" height="40" fill="#1e293b"/>
+            <rect x="93" y="0" width="1" height="40" fill="#1e293b"/>
+            <rect x="95" y="0" width="2" height="40" fill="#1e293b"/>
+            <rect x="98" y="0" width="2" height="40" fill="#1e293b"/>
+          </svg>
+        </div>
       </div>
     </a>`;
 }
@@ -477,7 +607,7 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
           </svg>
         </a>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         ${airlineCards}
       </div>
     </section>

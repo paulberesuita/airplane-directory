@@ -4,6 +4,37 @@ What we shipped. Builder appends here after each feature.
 
 ---
 
+## 2026-02-05
+
+### Boarding Pass Card Design
+- **Redesigned airline cards** on both homepage and /airlines page using boarding pass/ticket style
+- **Visual elements:**
+  - Thin brand-colored accent line at top
+  - Light cream header with logo and airline name
+  - Left stub with large IATA code
+  - Main content area with hub city and fleet count
+  - SVG barcode rotated 90° on right stub
+  - Semi-circle cutouts at perforation lines (brand-colored at bottom)
+- **Warm color palette:** Replaced gray tones with cream/tan (`#faf8f5`, `#f5f2ed`, `#d4c8b8`)
+- **41 airline brand colors** mapped for accent lines and cutouts
+- **Homepage shows top 6 airlines** — "View all" links to full list
+- **Uploaded colored logos** for American Airlines and Alaska Airlines to R2
+
+### Card Style Demo Page
+- **Added `/demo/cards` page** — Visual comparison of 7 playful card styles for airline display
+- **7 card styles included:**
+  1. Logo Mosaic / Icon Grid — Tight grid of logos, names on hover
+  2. Pixel-Border Cards — CSS clip-path stepped edges
+  3. Floating Cards — Subtle CSS bobbing animation
+  4. Stamp Collection — Passport stamp aesthetic with rotated cards
+  5. Boarding Pass Style — Horizontal ticket layout with barcode
+  6. Airplane Window Frames — Rounded frames like looking out a window
+  7. Compact Pills/Chips — Small rounded badges
+- Uses same 6 airlines across all styles for easy comparison
+- Same sky background with Mario clouds as main site
+
+---
+
 ## 2026-01-27
 
 ### SEO Improvements
