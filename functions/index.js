@@ -5,12 +5,13 @@ export async function onRequestGet(context) {
   const baseUrl = `${url.protocol}//${url.host}`;
 
   try {
-    // Fetch top 6 airlines with fleet counts for homepage
+    // Fetch top 6 airlines with fleet counts for homepage (exclude Alaska, include Spirit)
     const { results: airlines } = await env.DB.prepare(`
       SELECT a.*, COUNT(DISTINCT af.aircraft_slug) as aircraft_types,
              SUM(af.count) as total_aircraft
       FROM airlines a
       LEFT JOIN airline_fleet af ON a.slug = af.airline_slug
+      WHERE a.slug != 'alaska-airlines'
       GROUP BY a.id
       ORDER BY a.fleet_size DESC
       LIMIT 6
