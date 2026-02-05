@@ -4,6 +4,48 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ---
 
+## 2026-02-05
+
+### Aircraft Image Improvements - IN PROGRESS
+
+Attempted to improve aircraft images but made things worse. Reverted changes.
+
+**What we tried:**
+- Uploaded 17 new images for aircraft that were missing from R2 (A318, A319neo, A320, A330-800neo, A330-900neo, A340-300/500/600, 737 MAX 7/10, 747-8i, 777-200LR, 777-8/9, 787-10, CRJ-900, E190-E2)
+- Then attempted to "improve" existing images by replacing them with side-profile takeoff/landing shots
+- Many replacement images were worse: too far away, from below, or aircraft didn't fill the frame
+
+**What went wrong:**
+- Searched for "takeoff" images which often show aircraft tiny in the distance
+- Searched for "side profile" which sometimes returned bottom views
+- Didn't visually verify images before uploading
+- Parallel downloads caused some file mix-ups
+- CDN caching (1-year with `immutable`) made testing difficult
+
+**Reverted by:**
+- Removed `?v=2` cache-busting from image URLs
+- CDN now serves original cached versions
+
+**What good aircraft images look like:**
+- Close-up shot where aircraft fills most of the frame
+- Side profile view (NOT from below/belly shots)
+- Full body visible from nose to tail
+- Flying OR on taxiway/runway - either is fine
+- Clear, well-lit photo
+
+**Still needs fixing:**
+- Some aircraft have poor images (bottom views, too far away, in hangars)
+- Need to manually review each image and find better replacements one-by-one
+- Should visually verify each image before uploading
+
+**Technical notes:**
+- Images served from R2 via `functions/images/[[path]].js`
+- CDN cache: `Cache-Control: public, max-age=31536000, immutable`
+- To bust cache, add `?v=N` query param to URLs in templates
+- R2 upload path: `images/aircraft/[slug].jpg` (include `images/` prefix)
+
+---
+
 ## 2026-02-04
 
 ### Airline Logo Fix - Icon Only (COMPLETE)
