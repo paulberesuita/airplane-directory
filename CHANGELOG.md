@@ -6,6 +6,27 @@ What we shipped. Builder appends here after each feature.
 
 ## 2026-02-05
 
+### Aircraft Images
+- **Uploaded 17 missing aircraft images** to R2 storage from Wikimedia Commons
+  - Airbus: A318, A319neo, A320, A330-800neo, A330-900neo, A340-300, A340-500, A340-600
+  - Boeing: 737 MAX 7, 737 MAX 10, 747-8i, 777-200LR, 777-8, 777-9, 787-10
+  - Regional: Bombardier CRJ-900, Embraer E190-E2
+- All 45 aircraft now have real photos displayed
+
+### Stamp Collection Card Design for Aircraft
+- **Applied stamp collection style** to aircraft cards on homepage and /aircraft page
+- **Visual elements:**
+  - Double border with warm tan color (`#8b7355`)
+  - Dashed inner frame around image
+  - Vintage cream background (`#f5f0e6`)
+  - Italic manufacturer name
+  - Aircraft specs displayed as stamp-like details
+- Uses `object-contain` to show full aircraft body in images
+
+### Plausible Analytics
+- **Added Plausible analytics** to all pages (homepage, airlines, aircraft, manufacturer, about)
+- Privacy-friendly, no cookies, GDPR compliant
+
 ### Boarding Pass Card Design
 - **Redesigned airline cards** on both homepage and /airlines page using boarding pass/ticket style
 - **Visual elements:**

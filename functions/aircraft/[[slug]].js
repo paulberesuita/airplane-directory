@@ -334,49 +334,51 @@ async function renderListPage(context, baseUrl) {
   const cards = aircraft.map(a => {
     const rangeInMiles = kmToMiles(a.range_km);
     const speedInMph = kmhToMph(a.cruise_speed_kmh);
-    const statusClass = a.status === 'In Production'
-      ? 'bg-success-bg text-success'
-      : a.status === 'In Service'
-        ? 'bg-primary/10 text-primary'
-        : 'bg-slate-100 text-muted';
-
-    const imageHtml = a.image_url
-      ? `<div class="aspect-[16/9] overflow-hidden bg-slate-100">
-           <img src="${baseUrl}/images/aircraft-styled/${escapeHtml(a.slug)}.jpg" alt="${escapeHtml(a.name)}"
-                class="w-full h-full object-cover transition-transform duration-300" loading="lazy"
-                onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center bg-slate-100\\'><span class=\\'text-4xl opacity-30\\'>&#9992;</span></div>'">
-         </div>`
-      : `<div class="aspect-[16/9] bg-slate-100 flex items-center justify-center">
-           <span class="text-4xl opacity-30">&#9992;</span>
-         </div>`;
-
     const year = a.first_flight ? a.first_flight.split('-')[0] : '';
 
+    const imageHtml = a.image_url
+      ? `<img src="${baseUrl}/images/aircraft/${escapeHtml(a.slug)}.jpg" alt="${escapeHtml(a.name)}"
+             class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy"
+             onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center\\'><span class=\\'text-5xl\\'>✈</span></div>'">`
+      : `<div class="w-full h-full flex items-center justify-center"><span class="text-5xl">✈</span></div>`;
+
+    // Stamp collection style card
     return `
       <a href="/aircraft/${escapeHtml(a.slug)}"
-         class="aircraft-card group block bg-white/20 backdrop-blur-xl rounded-2xl overflow-hidden hover:bg-white/30 transition-all duration-300"
+         class="aircraft-card group block p-3 transition-transform duration-300 hover:scale-[1.02]"
+         style="background-color: #f5f0e6; border: 4px double #8b7355;"
          data-manufacturer="${escapeHtml(a.manufacturer)}">
-        ${imageHtml}
-        <div class="p-4">
-          <div class="flex items-start justify-between gap-2 mb-2">
-            <h3 class="font-semibold font-display text-white group-hover:text-white transition-colors">${escapeHtml(a.name)}</h3>
-            <span class="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full bg-white/20 text-white">${escapeHtml(a.status)}</span>
+
+        <!-- Inner dashed frame with image -->
+        <div class="border-2 border-dashed p-2 mb-3" style="border-color: #c9b896;">
+          <div class="aspect-[16/10] overflow-hidden" style="background-color: #e8e0d0;">
+            ${imageHtml}
           </div>
-          <p class="text-sm text-white font-medium mb-2">${escapeHtml(a.manufacturer)}</p>
-          <p class="text-sm text-white/90 line-clamp-2 mb-4">${escapeHtml(a.description)}</p>
-          <div class="flex items-center gap-1 pt-3 border-t border-white/20">
-            <div class="flex-1 text-center py-1.5 rounded bg-white/10">
-              <p class="text-xs text-white/90 mb-0.5">Pax</p>
-              <p class="text-sm font-semibold text-white">${a.passengers}</p>
-            </div>
-            <div class="flex-1 text-center py-1.5 rounded bg-white/10">
-              <p class="text-xs text-white/90 mb-0.5">Range</p>
-              <p class="text-sm font-semibold text-white">${formatNumber(rangeInMiles)} mi</p>
-            </div>
-            <div class="flex-1 text-center py-1.5 rounded bg-white/10">
-              <p class="text-xs text-white/90 mb-0.5">Speed</p>
-              <p class="text-sm font-semibold text-white">${formatNumber(speedInMph)} mph</p>
-            </div>
+        </div>
+
+        <!-- Aircraft name and manufacturer -->
+        <div class="text-center mb-3">
+          <h3 class="font-display text-lg font-bold mb-1" style="color: #4a3f2f;">
+            ${escapeHtml(a.name)}
+          </h3>
+          <p class="text-sm italic" style="color: #7a6b55; font-family: Georgia, serif;">
+            ${escapeHtml(a.manufacturer)} · ${year}
+          </p>
+        </div>
+
+        <!-- Specs in vintage style -->
+        <div class="flex justify-center gap-4 text-center pt-3" style="border-top: 1px solid #c9b896;">
+          <div>
+            <p class="text-xs uppercase tracking-wider mb-0.5" style="color: #9a8b75;">Passengers</p>
+            <p class="font-mono font-bold" style="color: #4a3f2f;">${a.passengers}</p>
+          </div>
+          <div style="border-left: 1px solid #c9b896; padding-left: 1rem;">
+            <p class="text-xs uppercase tracking-wider mb-0.5" style="color: #9a8b75;">Range</p>
+            <p class="font-mono font-bold" style="color: #4a3f2f;">${formatNumber(rangeInMiles)} mi</p>
+          </div>
+          <div style="border-left: 1px solid #c9b896; padding-left: 1rem;">
+            <p class="text-xs uppercase tracking-wider mb-0.5" style="color: #9a8b75;">Speed</p>
+            <p class="font-mono font-bold" style="color: #4a3f2f;">${formatNumber(speedInMph)} mph</p>
           </div>
         </div>
       </a>`;
@@ -404,7 +406,7 @@ async function renderListPage(context, baseUrl) {
   })}
   <style>
     .aircraft-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-    .aircraft-card:hover { transform: translateY(-4px); }
+    .aircraft-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
     .filter-btn.active { background: rgba(255,255,255,0.95); color: #3B82F6; border-color: white; }
     .line-clamp-2 {
       display: -webkit-box;
