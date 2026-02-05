@@ -269,10 +269,10 @@ function renderAirlineCard(airline, baseUrl) {
     <a href="/airlines/${escapeHtml(airline.slug)}"
        class="group block bg-white overflow-hidden hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
       <div class="p-6 text-center">
-        <div class="h-24 mx-auto mb-4 flex items-center justify-center px-4">
+        <div class="h-16 mx-auto mb-4 flex items-center justify-center">
           <img src="${baseUrl}/images/airline-icons/${escapeHtml(airline.slug)}.png"
                alt="${escapeHtml(airline.name)} logo"
-               class="max-h-full w-auto max-w-[200px] object-contain"
+               class="h-16 w-16 object-contain"
                onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\\'font-display font-bold text-slate-300 text-4xl\\'>${escapeHtml(airline.iata_code)}</span>';">
         </div>
         <h3 class="font-display font-semibold text-slate-800 group-hover:text-primary transition-colors mb-1">
