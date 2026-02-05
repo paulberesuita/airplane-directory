@@ -5,16 +5,15 @@ export async function onRequestGet(context) {
   const baseUrl = `${url.protocol}//${url.host}`;
 
   try {
-    // Fetch top 6 airlines with fleet counts for homepage (exclude Alaska, include Spirit)
+    // Fetch specific 6 airlines for homepage feature
     const { results: airlines } = await env.DB.prepare(`
       SELECT a.*, COUNT(DISTINCT af.aircraft_slug) as aircraft_types,
              SUM(af.count) as total_aircraft
       FROM airlines a
       LEFT JOIN airline_fleet af ON a.slug = af.airline_slug
-      WHERE a.slug != 'alaska-airlines'
+      WHERE a.slug IN ('united-airlines', 'american-airlines', 'delta-air-lines', 'southwest-airlines', 'spirit-airlines', 'jetblue-airways')
       GROUP BY a.id
       ORDER BY a.fleet_size DESC
-      LIMIT 6
     `).all();
 
     // Fetch all aircraft that are in active airline fleets
