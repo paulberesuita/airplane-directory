@@ -4,6 +4,27 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ---
 
+## 2026-02-04
+
+### Airline Logo Fix - Icon Only (COMPLETE)
+
+Fixed three problem logos with clean, high-quality versions.
+
+**Fixed:**
+- **Delta Air Lines** - Replaced Simple Icons SVG (had "DELTA" text) with clean triangle-only SVG extracted from Wikimedia Commons
+- **Alaska Airlines** - Replaced blurry 32x32 PNG with clean 600x600 Eskimo face icon from SeekLogo
+- **Spirit Airlines** - Replaced watermarked Airhex tail with clean 600x600 wordmark from SeekLogo (Spirit has no icon-only logo)
+
+**Key learnings:**
+- Logos are served from R2 via `functions/images/[[path]].js` with 1-year cache (`max-age=31536000`)
+- CDN caching is aggressive - must use query param cache busting (`?v=N`) when replacing files
+- Airhex tail logos have AIRHEX.COM watermarks - not usable
+- SeekLogo has clean, high-quality logos via URL pattern: `https://images.seeklogo.com/logo-png/{prefix}/{digit}/{name}-logo-png_seeklogo-{id}.png`
+- Wikimedia Commons can be accessed directly (not through Wikipedia) for official logos
+- Some airlines (Spirit) don't have icon-only logos - their brand IS the wordmark
+
+---
+
 ## 2026-01-27
 
 ### Sitemap Function Deployment
