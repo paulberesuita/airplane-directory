@@ -116,6 +116,13 @@ function renderHead({ title, description, url, image, jsonLd }) {
 
   ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : ''}
 
+  <!-- Privacy-friendly analytics by Plausible -->
+  <script async src="https://plausible.io/js/pa-r_sufjC9BuCQ2pwIVqJc-.js"></script>
+  <script>
+    window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+    plausible.init()
+  </script>
+
   <!-- Fonts & Tailwind -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -169,42 +176,66 @@ function renderHead({ title, description, url, image, jsonLd }) {
         uniform float u_time;
         uniform vec2 u_resolution;
 
-        float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+        // Draw a single Mario-style cloud (3 bumps)
+        float cloud(vec2 uv, vec2 pos, float size) {
+          vec2 p = uv - pos;
+          p.x /= 1.5;
 
-        float noise(vec2 p) {
-          vec2 i = floor(p);
-          vec2 f = fract(p);
-          f = f * f * (3.0 - 2.0 * f);
-          float a = hash(i);
-          float b = hash(i + vec2(1.0, 0.0));
-          float c = hash(i + vec2(0.0, 1.0));
-          float d = hash(i + vec2(1.0, 1.0));
-          return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
-        }
+          float d1 = length(p - vec2(-0.04, 0.0) * size) - 0.025 * size;
+          float d2 = length(p - vec2(0.0, 0.012) * size) - 0.032 * size;
+          float d3 = length(p - vec2(0.04, 0.0) * size) - 0.025 * size;
+          float d4 = length(p - vec2(0.0, -0.008) * size) - 0.04 * size;
 
-        float fbm(vec2 p) {
-          float value = 0.0;
-          float amplitude = 0.5;
-          for (int i = 0; i < 6; i++) {
-            value += amplitude * noise(p);
-            p *= 2.0;
-            amplitude *= 0.5;
-          }
-          return value;
+          float d = min(min(d1, d2), min(d3, d4));
+          return 1.0 - step(0.0, d);
         }
 
         void main() {
           vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-          uv.x *= u_resolution.x / u_resolution.y;
-          vec2 movement = vec2(u_time * 0.02, u_time * 0.008);
-          float clouds = fbm(uv * 2.0 + movement);
-          clouds = smoothstep(0.4, 0.7, clouds);
-          clouds *= 0.5;
+          float aspect = u_resolution.x / u_resolution.y;
+
+          // Pixelate
+          float pixelCount = 100.0;
+          vec2 pixelUV = floor(uv * pixelCount) / pixelCount;
+
+          vec2 p = pixelUV;
+          p.x *= aspect;
+
+          // Very slow movement
+          float t = u_time * 0.008;
+
+          // Clouds spread across the sky
+          float c = 0.0;
+          // Top clouds
+          c = max(c, cloud(p, vec2(mod(t * 0.6, 4.0) - 0.5, 0.93), 1.0));
+          c = max(c, cloud(p, vec2(mod(t * 0.4 + 2.0, 4.5) - 0.3, 0.86), 0.8));
+          c = max(c, cloud(p, vec2(mod(t * 0.5 + 1.2, 3.8) - 0.4, 0.90), 0.9));
+          c = max(c, cloud(p, vec2(mod(t * 0.44 + 0.3, 4.1) - 0.7, 0.88), 0.75));
+          // Middle clouds
+          c = max(c, cloud(p, vec2(mod(t * 0.45 + 3.0, 4.8) - 0.6, 0.70), 0.75));
+          c = max(c, cloud(p, vec2(mod(t * 0.38 + 0.8, 4.2) - 0.3, 0.55), 0.85));
+          c = max(c, cloud(p, vec2(mod(t * 0.52 + 2.2, 5.0) - 0.9, 0.45), 0.7));
+          c = max(c, cloud(p, vec2(mod(t * 0.42 + 1.5, 3.9) - 0.5, 0.62), 0.8));
+          c = max(c, cloud(p, vec2(mod(t * 0.48 + 3.8, 4.4) - 0.7, 0.38), 0.9));
+          c = max(c, cloud(p, vec2(mod(t * 0.36 + 2.8, 4.6) - 0.2, 0.50), 0.72));
+          c = max(c, cloud(p, vec2(mod(t * 0.41 + 3.6, 4.0) - 3.6, 0.58), 0.82));
+          // Bottom clouds
+          c = max(c, cloud(p, vec2(mod(t * 0.5 + 3.5, 5.0) - 1.0, 0.08), 0.9));
+          c = max(c, cloud(p, vec2(mod(t * 0.35 + 1.0, 4.2) - 0.2, 0.15), 0.7));
+          c = max(c, cloud(p, vec2(mod(t * 0.55 + 2.5, 4.0) - 0.8, 0.04), 0.85));
+          c = max(c, cloud(p, vec2(mod(t * 0.4 + 0.5, 3.6) - 0.1, 0.22), 0.65));
+          c = max(c, cloud(p, vec2(mod(t * 0.46 + 1.8, 4.3) - 0.4, 0.12), 0.78));
+
+          // Sky gradient
           vec3 skyTop = vec3(0.051, 0.157, 1.0);
-          vec3 skyBottom = vec3(0.2, 0.35, 1.0);
+          vec3 skyBottom = vec3(0.15, 0.3, 1.0);
           vec3 sky = mix(skyBottom, skyTop, uv.y);
-          vec3 cloudColor = vec3(0.85, 0.9, 1.0);
-          vec3 color = mix(sky, cloudColor, clouds * 0.7);
+
+          // Cloud color - very subtle, light blue-white tint
+          vec3 cloudColor = vec3(0.6, 0.7, 1.0);
+
+          // Subtle blend
+          vec3 color = mix(sky, cloudColor, c * 0.25);
           gl_FragColor = vec4(color, 1.0);
         }
       \`;
