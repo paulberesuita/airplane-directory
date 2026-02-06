@@ -4,6 +4,42 @@ What we shipped. Builder appends here after each feature.
 
 ---
 
+## 2026-02-06
+
+### Pixel Accents on Vintage Base — Aircraft Detail Page
+- **Added Press Start 2P pixel font** from Google Fonts for subtle 8-bit/Mario accents
+- **Pixel border treatment** — replaced `4px double` borders with layered box-shadow pixel borders on:
+  - Aircraft image frame, data plate, all 8 tech spec cards
+  - Related variant cards, related aircraft cards, legacy section card
+- **Pixel font applied to:**
+  - Data plate header ("AIRCRAFT DATA") at 10px
+  - Data plate stat labels (PASSENGERS, RANGE, SPEED, FIRST FLIGHT) at 8px
+  - Status badge (IN PRODUCTION) at 9px
+  - Source type badges (M, D, N) at 10px
+  - IATA code badges on airline cards at 8px
+- **Section heading icons** replaced SVG icons with pixel-font characters:
+  - Technical Specs: `#`, History: `*`, Variants: `~`, Airlines: `+`, Sources: `@`
+- **Fun fact decoration** — replaced star (&#10022;) with `?` in pixel font (Mario question-block reference)
+- **Not changed** (kept current borders): fun fact card, history timeline cards, airline cards, description panel, sources panel
+
+### Vintage Aviation Collector Redesign — Aircraft Detail Page
+- **Redesigned entire aircraft detail page** to match vintage stamp/boarding pass aesthetic
+- **Sections restyled:**
+  - Status badge: cream background, brown border, rectangular label (was translucent pill)
+  - Description: cream panel with brown border, Georgia serif italic (was floating white text)
+  - Quick stats: single vintage "data plate" with double brown border, dashed inner frame, 4-column grid with monospace values, no icons (was 4 separate SaaS-style cards)
+  - Fun fact: cream with dashed brown border and star decoration (was pink-to-orange gradient)
+  - Technical specs (8 cards): cream with double brown borders, dashed row dividers, Georgia serif italic headers (was glass morphism)
+  - History timeline: brown dots/lines, cream cards with tan borders, monospace years (was amber/colored gradients)
+  - Airlines operating: cream cards with left brand-color accent line, monospace IATA codes (was white cards with blue badges)
+  - Related variants + related aircraft: mini stamp cards matching aircraft list page (was glass morphism)
+  - Sources: cream card with brown-toned badge indicators (was white with colored filled badges)
+  - Back CTA: brown text (was blue)
+- **Added `airlineBrandColors` map** to detail page for airline accent lines
+- **Homepage CTA button:** replaced blue pill `.btn-gradient` with vintage `.btn-vintage` — cream background, double brown border, Georgia serif, rounded-lg
+
+---
+
 ## 2026-02-05
 
 ### Aircraft Images

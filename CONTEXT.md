@@ -4,6 +4,57 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ---
 
+## 2026-02-06
+
+### Pixel Accents on Vintage Base (COMPLETE)
+
+Added subtle 8-bit pixel accents to bridge the Mario pixel cloud sky with the vintage cream/brown content.
+
+**Key decisions:**
+- Press Start 2P used ONLY at small sizes (8-10px) for labels, badges, status — never for headings or body text
+- Georgia serif italic headings preserved for elegance — pixel font is accent only
+- Pixel border uses layered box-shadows (2px brown, 1px cream, 2px brown, subtle offset shadow) instead of `4px double`
+- Section heading icons switched from SVGs to pixel-font characters (#, *, ~, +, @) in pixel-bordered squares
+- Fun fact `?` decoration references Mario question-mark blocks
+- Deliberately kept existing borders on: fun fact (dashed), history timeline (1px solid), airline cards (brand accent lines), description/sources panels
+
+**Pixel border CSS:**
+```css
+.pixel-border {
+  border: none;
+  box-shadow: 0 0 0 2px #8b7355, 0 0 0 3px #f5f0e6, 0 0 0 5px #8b7355, 2px 2px 0 5px rgba(0,0,0,0.08);
+}
+```
+
+**Files modified:**
+- `functions/aircraft/[[slug]].js` — pixel font import, Tailwind config, CSS classes, all detail page sections
+
+---
+
+### Vintage Aviation Collector Redesign (COMPLETE)
+
+Transformed the aircraft detail page and homepage CTA to match the existing stamp/boarding pass card aesthetic.
+
+**Vintage Palette (consistent across all pages now):**
+- Backgrounds: `#f5f0e6` (cream), `#faf8f5` (off-white), `#e8e0d0` (tan)
+- Borders: `#8b7355` (brown double), `#c9b896` (tan dashed), `#d4c8b8`
+- Text: `#4a3f2f` (dark brown), `#7a6b55` (medium), `#9a8b75` (muted)
+- Fonts: Georgia serif italic for headings, monospace for values
+
+**Key decisions:**
+- Replaced all glass morphism (`bg-white/20 backdrop-blur-xl`) with cream cards + double brown borders
+- Removed all SaaS-style colored icon circles from quick stats
+- Used `border: 4px double #8b7355` as the primary "stamp card" border pattern
+- Used `border: 2px dashed #c9b896` for inner frames and dividers
+- Added `airlineBrandColors` map to `[[slug]].js` (duplicated from `index.js`) for airline accent lines
+- Removed `.btn-gradient` CSS (blue pill with grain noise) in favor of `.btn-vintage` (cream museum placard)
+
+**Files modified:**
+- `functions/index.js` — CTA button only
+- `functions/aircraft/[[slug]].js` — entire detail page (all 10+ sections)
+
+---
+
 ## 2026-02-05
 
 ### Aircraft Image Improvements - IN PROGRESS

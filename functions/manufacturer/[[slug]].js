@@ -236,6 +236,22 @@ function renderHead({ title, description, url, image, jsonLd }) {
 
           // Subtle blend
           vec3 color = mix(sky, cloudColor, c * 0.25);
+
+          // Pixel airplane
+          float planeX = mod(t * 8.0, 1.4) - 0.15;
+          float planeY = 0.65;
+          float bx = floor((pixelUV.x - planeX) * pixelCount);
+          float by = floor((pixelUV.y - planeY) * pixelCount);
+          float pl = 0.0;
+          if (abs(by - 3.0) < 0.5 && bx > -4.5 && bx < -3.5) pl = 1.0;
+          if (abs(by - 2.0) < 0.5 && bx > -4.5 && bx < -2.5) pl = 1.0;
+          if (abs(by - 1.0) < 0.5 && bx > -4.5 && bx < 4.5) pl = 1.0;
+          if (abs(by) < 0.5 && bx > -5.5 && bx < 5.5) pl = 1.0;
+          if (abs(by + 1.0) < 0.5 && bx > -4.5 && bx < 4.5) pl = 1.0;
+          if (abs(by + 2.0) < 0.5 && bx > -2.5 && bx < 1.5) pl = 1.0;
+          if (abs(by + 3.0) < 0.5 && bx > -1.5 && bx < 0.5) pl = 1.0;
+          color = mix(color, vec3(0.8, 0.85, 1.0), pl * 0.6);
+
           gl_FragColor = vec4(color, 1.0);
         }
       \`;

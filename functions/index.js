@@ -102,7 +102,7 @@ function renderHead({ title, description, url, image, jsonLd }) {
   </script>
 
   <!-- Fonts & Tailwind -->
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@600;700&family=Inter:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -226,6 +226,22 @@ function renderHead({ title, description, url, image, jsonLd }) {
 
           // Subtle blend
           vec3 color = mix(sky, cloudColor, c * 0.25);
+
+          // Pixel airplane
+          float planeX = mod(t * 8.0, 1.4) - 0.15;
+          float planeY = 0.65;
+          float bx = floor((pixelUV.x - planeX) * pixelCount);
+          float by = floor((pixelUV.y - planeY) * pixelCount);
+          float pl = 0.0;
+          if (abs(by - 3.0) < 0.5 && bx > -4.5 && bx < -3.5) pl = 1.0;
+          if (abs(by - 2.0) < 0.5 && bx > -4.5 && bx < -2.5) pl = 1.0;
+          if (abs(by - 1.0) < 0.5 && bx > -4.5 && bx < 4.5) pl = 1.0;
+          if (abs(by) < 0.5 && bx > -5.5 && bx < 5.5) pl = 1.0;
+          if (abs(by + 1.0) < 0.5 && bx > -4.5 && bx < 4.5) pl = 1.0;
+          if (abs(by + 2.0) < 0.5 && bx > -2.5 && bx < 1.5) pl = 1.0;
+          if (abs(by + 3.0) < 0.5 && bx > -1.5 && bx < 0.5) pl = 1.0;
+          color = mix(color, vec3(0.8, 0.85, 1.0), pl * 0.6);
+
           gl_FragColor = vec4(color, 1.0);
         }
       \`;
@@ -328,10 +344,10 @@ function renderAirlineCard(airline, baseUrl) {
   const textColor = needsDarkText ? 'text-slate-800' : 'text-white';
   const textMutedColor = needsDarkText ? 'text-slate-600' : 'text-white/80';
 
-  // Boarding pass style card with header and cutouts
+  // Boarding pass style card with pixel accents
   return `
     <a href="/airlines/${escapeHtml(airline.slug)}"
-       class="group block bg-[#faf8f5] overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+       class="group block bg-[#faf8f5] overflow-hidden transition-all duration-300">
       <!-- Thin colored accent line at top -->
       <div class="h-1" style="background-color: ${brandColor};"></div>
       <!-- Light header -->
@@ -343,7 +359,7 @@ function renderAirlineCard(airline, baseUrl) {
                onerror="this.src='${baseUrl}/images/airline-icons/${escapeHtml(airline.slug)}.svg?v=5'; this.onerror=function(){this.style.display='none';};">
           <span class="font-semibold text-sm" style="color: #3d3629;">${escapeHtml(airline.name)}</span>
         </div>
-        <span class="text-xs font-medium tracking-wider" style="color: #a09485;">BOARDING PASS</span>
+        <span class="pixel-text tracking-wider" style="font-size: 8px; color: #a09485;">BOARDING PASS</span>
       </div>
       <!-- Ticket body -->
       <div class="flex relative">
@@ -354,20 +370,20 @@ function renderAirlineCard(airline, baseUrl) {
         <div class="absolute right-[6.5rem] sm:right-[7.5rem] bottom-0 w-4 h-2 rounded-t-full" style="background-color: ${brandColor};"></div>
         <!-- Left stub with IATA code -->
         <div class="w-28 sm:w-32 p-4 flex flex-col items-center justify-center shrink-0" style="border-right: 2px dashed #d4c8b8;">
-          <span class="font-mono text-3xl font-bold" style="color: #4a4237;">${escapeHtml(airline.iata_code)}</span>
-          <span class="text-xs mt-1" style="color: #8c8279;">${escapeHtml(airline.icao_code || '')}</span>
+          <span class="pixel-text" style="font-size: 20px; color: #4a4237;">${escapeHtml(airline.iata_code)}</span>
+          <span class="pixel-text mt-2" style="font-size: 7px; color: #8c8279;">${escapeHtml(airline.icao_code || '')}</span>
         </div>
         <!-- Main ticket content -->
         <div class="flex-1 p-5 min-w-0">
           <div class="flex justify-between items-start gap-2">
             <div class="min-w-0">
-              <p class="text-xs uppercase tracking-wider" style="color: #a09485;">Hub</p>
-              <h3 class="font-display text-lg font-semibold group-hover:text-primary transition-colors truncate" style="color: #3d3629;">
+              <p class="pixel-text uppercase tracking-wider" style="font-size: 8px; color: #a09485;">HUB</p>
+              <h3 class="font-display text-lg font-semibold truncate" style="color: #3d3629;">
                 ${escapeHtml(airline.headquarters)}
               </h3>
             </div>
             <div class="text-right shrink-0">
-              <p class="text-xs uppercase tracking-wider" style="color: #a09485;">Fleet</p>
+              <p class="pixel-text uppercase tracking-wider" style="font-size: 8px; color: #a09485;">FLEET</p>
               <p class="font-mono text-xl font-bold" style="color: #3d3629;">${formatNumber(airline.fleet_size)}</p>
             </div>
           </div>
@@ -427,55 +443,58 @@ function renderAircraftCard(aircraft, baseUrl) {
   const year = aircraft.first_flight ? aircraft.first_flight.split('-')[0] : '';
 
   const imageHtml = aircraft.image_url
-    ? `<img src="${baseUrl}/images/aircraft/${escapeHtml(aircraft.slug)}.jpg"
+    ? `<img src="${baseUrl}/images/aircraft/${escapeHtml(aircraft.slug)}.jpg?v=4"
            alt="${escapeHtml(aircraft.name)}"
-           class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+           class="w-full h-full object-cover"
            loading="lazy"
            onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center\\'><span class=\\'text-5xl\\'>✈</span></div>'">`
     : `<div class="w-full h-full flex items-center justify-center"><span class="text-5xl">✈</span></div>`;
 
-  // Stamp collection style aircraft card
+  // Stamp collection style aircraft card with pixel-clip frame
   return `
-    <a href="/aircraft/${escapeHtml(aircraft.slug)}"
-       class="aircraft-card group block p-3 transition-transform duration-300 hover:scale-[1.02]"
-       style="background-color: #f5f0e6; border: 4px double #8b7355;"
-       data-manufacturer="${escapeHtml(aircraft.manufacturer)}"
-       data-name="${escapeHtml(aircraft.name.toLowerCase())}"
-       data-description="${escapeHtml((aircraft.description || '').toLowerCase())}">
+    <div class="aircraft-card pixel-clip p-1 transition-transform duration-300 hover:scale-[1.02]"
+         style="background-color: #8b7355;"
+         data-manufacturer="${escapeHtml(aircraft.manufacturer)}"
+         data-name="${escapeHtml(aircraft.name.toLowerCase())}"
+         data-description="${escapeHtml((aircraft.description || '').toLowerCase())}">
+      <a href="/aircraft/${escapeHtml(aircraft.slug)}"
+         class="group block pixel-clip p-3"
+         style="background-color: #f5f0e6;">
 
-      <!-- Inner dashed frame with image -->
-      <div class="border-2 border-dashed p-2 mb-3" style="border-color: #c9b896;">
-        <div class="aspect-[16/10] overflow-hidden" style="background-color: #e8e0d0;">
-          ${imageHtml}
+        <!-- Image -->
+        <div class="mb-3">
+          <div class="aspect-[16/10] overflow-hidden" style="background-color: #e8e0d0;">
+            ${imageHtml}
+          </div>
         </div>
-      </div>
 
-      <!-- Aircraft name and manufacturer -->
-      <div class="text-center mb-3">
-        <h3 class="font-display text-lg font-bold mb-1" style="color: #4a3f2f;">
-          ${escapeHtml(aircraft.name)}
-        </h3>
-        <p class="text-sm italic" style="color: #7a6b55; font-family: Georgia, serif;">
-          ${escapeHtml(aircraft.manufacturer)} · ${year}
-        </p>
-      </div>
+        <!-- Aircraft name and manufacturer -->
+        <div class="text-center mb-3">
+          <h3 class="font-display text-lg font-bold mb-1" style="color: #4a3f2f;">
+            ${escapeHtml(aircraft.name)}
+          </h3>
+          <p class="text-sm italic" style="color: #7a6b55; font-family: Georgia, serif;">
+            ${escapeHtml(aircraft.manufacturer)} · ${year}
+          </p>
+        </div>
 
-      <!-- Specs in vintage style -->
-      <div class="flex justify-center gap-4 text-center pt-3" style="border-top: 1px solid #c9b896;">
-        <div>
-          <p class="text-xs uppercase tracking-wider mb-0.5" style="color: #9a8b75;">Passengers</p>
-          <p class="font-mono font-bold" style="color: #4a3f2f;">${aircraft.passengers}</p>
+        <!-- Specs in vintage style -->
+        <div class="flex justify-center gap-4 text-center pt-3" style="border-top: 1px solid #c9b896;">
+          <div>
+            <p class="text-xs uppercase tracking-wider mb-0.5" style="color: #9a8b75;">Passengers</p>
+            <p class="font-mono font-bold" style="color: #4a3f2f;">${aircraft.passengers}</p>
+          </div>
+          <div style="border-left: 1px solid #c9b896; padding-left: 1rem;">
+            <p class="text-xs uppercase tracking-wider mb-0.5" style="color: #9a8b75;">Range</p>
+            <p class="font-mono font-bold" style="color: #4a3f2f;">${formatNumber(rangeInMiles)} mi</p>
+          </div>
+          <div style="border-left: 1px solid #c9b896; padding-left: 1rem;">
+            <p class="text-xs uppercase tracking-wider mb-0.5" style="color: #9a8b75;">Speed</p>
+            <p class="font-mono font-bold" style="color: #4a3f2f;">${formatNumber(speedInMph)} mph</p>
+          </div>
         </div>
-        <div style="border-left: 1px solid #c9b896; padding-left: 1rem;">
-          <p class="text-xs uppercase tracking-wider mb-0.5" style="color: #9a8b75;">Range</p>
-          <p class="font-mono font-bold" style="color: #4a3f2f;">${formatNumber(rangeInMiles)} mi</p>
-        </div>
-        <div style="border-left: 1px solid #c9b896; padding-left: 1rem;">
-          <p class="text-xs uppercase tracking-wider mb-0.5" style="color: #9a8b75;">Speed</p>
-          <p class="font-mono font-bold" style="color: #4a3f2f;">${formatNumber(speedInMph)} mph</p>
-        </div>
-      </div>
-    </a>`;
+      </a>
+    </div>`;
 }
 
 function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
@@ -545,6 +564,18 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
   <style>
     .aircraft-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     .aircraft-card:hover { transform: translateY(-4px); }
+    .pixel-text {
+      font-family: 'Press Start 2P', monospace;
+      line-height: 1.6;
+    }
+    .pixel-clip {
+      clip-path: polygon(
+        0 8px, 4px 8px, 4px 4px, 8px 4px, 8px 0,
+        calc(100% - 8px) 0, calc(100% - 8px) 4px, calc(100% - 4px) 4px, calc(100% - 4px) 8px, 100% 8px,
+        100% calc(100% - 8px), calc(100% - 4px) calc(100% - 8px), calc(100% - 4px) calc(100% - 4px), calc(100% - 8px) calc(100% - 4px), calc(100% - 8px) 100%,
+        8px 100%, 8px calc(100% - 4px), 4px calc(100% - 4px), 4px calc(100% - 8px), 0 calc(100% - 8px)
+      );
+    }
     .line-clamp-2 {
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -556,6 +587,19 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
       50% { transform: translateY(-6px) rotate(-45deg); }
     }
     .float-animation { animation: float 3s ease-in-out infinite; }
+    .btn-vintage {
+      background-color: #8b7355;
+    }
+    .btn-vintage:hover {
+      background-color: #6b5640;
+    }
+    .btn-vintage-inner {
+      background-color: #f5f0e6;
+      color: #4a3f2f;
+    }
+    .btn-vintage:hover .btn-vintage-inner {
+      background-color: #ebe4d4;
+    }
   </style>
 </head>
 <body class="font-sans">
@@ -629,12 +673,12 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
 
       <!-- View All Link -->
       <div class="text-center">
-        <a href="/aircraft" class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white font-medium px-6 py-3 rounded-xl hover:bg-white/30 transition-all border border-white/30">
-          Browse all ${aircraft.length} aircraft
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-          </svg>
-        </a>
+        <div class="btn-vintage pixel-clip p-1 inline-block transition-all">
+          <a href="/aircraft" class="btn-vintage-inner pixel-clip inline-flex items-center gap-3 px-10 py-4 pixel-text transition-all" style="font-size: 10px;">
+            <span>BROWSE ALL ${aircraft.length} AIRCRAFT</span>
+            <span>&gt;</span>
+          </a>
+        </div>
       </div>
     </section>
   </main>
