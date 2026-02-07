@@ -387,7 +387,8 @@ async function renderListPage(context, baseUrl) {
 
   const filterButtons = manufacturers.map(m => `
     <button onclick="filterByManufacturer('${escapeHtml(m)}')"
-            class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:border-white/50 transition-all backdrop-blur-sm"
+            class="filter-btn px-3 py-1.5 text-sm font-medium transition-all"
+            style="border: 1px solid #8b7355; color: #8b7355;"
             data-manufacturer="${escapeHtml(m)}">
       ${escapeHtml(m)}
     </button>
@@ -411,11 +412,11 @@ async function renderListPage(context, baseUrl) {
            data-manufacturer="${escapeHtml(a.manufacturer)}">
         <a href="/aircraft/${escapeHtml(a.slug)}"
            class="group block pixel-clip p-3"
-           style="background-color: #f5f0e6;">
+           style="background-color: #ffffff;">
 
           <!-- Image -->
           <div class="mb-3">
-            <div class="aspect-[16/10] overflow-hidden" style="background-color: #e8e0d0;">
+            <div class="aspect-[16/10] overflow-hidden" style="background-color: #f0f0f0;">
               ${imageHtml}
             </div>
           </div>
@@ -471,7 +472,8 @@ async function renderListPage(context, baseUrl) {
   })}
   <style>
     .aircraft-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-    .filter-btn.active { background: rgba(255,255,255,0.95); color: #3B82F6; border-color: white; }
+    .filter-btn:hover { background-color: #f5f0e6; }
+    .filter-btn.active { background-color: #8b7355 !important; color: #ffffff !important; border-color: #8b7355 !important; }
     .line-clamp-2 {
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -494,29 +496,40 @@ async function renderListPage(context, baseUrl) {
   ${renderHeader(baseUrl)}
 
   <!-- Hero -->
-  <div class="text-white">
-    <div class="max-w-7xl mx-auto px-4 py-12 md:py-16">
-      <h1 class="font-display text-3xl md:text-4xl font-semibold mb-3 text-white">Aircraft</h1>
-      <p class="text-white text-lg max-w-2xl">
-        Every plane type flown by major airlines. Browse specs, history, and details.
-      </p>
+  <div class="max-w-6xl mx-auto px-6 md:px-8 py-8 md:py-10">
+    <div class="pixel-clip p-1" style="background-color: #8b7355;">
+      <div class="pixel-clip p-5 md:p-8" style="background-color: #ffffff;">
+        <div class="md:flex md:items-start md:justify-between md:gap-8 mb-6">
+          <div>
+            <h1 class="font-display text-3xl md:text-4xl font-semibold mb-2" style="color: #4a3f2f;">Aircraft</h1>
+            <p class="leading-relaxed" style="color: #6b5d4d;">
+              Every plane type flown by major airlines. Browse specs, history, and details.
+            </p>
+          </div>
+          <div class="shrink-0 mt-3 md:mt-0 text-center">
+            <span class="pixel-text uppercase block mb-1" style="font-size: 7px; color: #8b7355;">Total</span>
+            <span class="text-3xl font-semibold" style="color: #4a3f2f; font-family: 'Georgia', serif;">${aircraft.length}</span>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div style="border-top: 1px solid #e5e5e5; padding-top: 16px;">
+          <p class="pixel-text uppercase mb-3" style="font-size: 7px; color: #8b7355; letter-spacing: 0.1em;">Filter by manufacturer</p>
+          <div id="manufacturer-filters" class="flex flex-wrap gap-2">
+            <button onclick="filterByManufacturer('')"
+                    class="filter-btn active px-3 py-1.5 text-sm font-medium transition-all"
+                    style="border: 1px solid #8b7355; color: #8b7355;"
+                    data-manufacturer="">
+              All
+            </button>
+            ${filterButtons}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <main class="max-w-7xl mx-auto px-4 py-8">
-    <!-- Manufacturer Filters -->
-    <div class="mb-8">
-      <p class="text-white/90 text-sm font-medium mb-3 uppercase tracking-wide">Filter by manufacturer</p>
-      <div id="manufacturer-filters" class="flex flex-wrap gap-2">
-        <button onclick="filterByManufacturer('')"
-                class="filter-btn active px-4 py-2 rounded-lg text-sm font-medium bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:border-white/50 transition-all backdrop-blur-sm"
-                data-manufacturer="">
-          All Aircraft
-        </button>
-        ${filterButtons}
-      </div>
-    </div>
-
+  <main class="max-w-6xl mx-auto px-6 md:px-8 py-4">
     <!-- Results Count -->
     <div class="flex items-center justify-between mb-6">
       <p id="results-count" class="text-white/80 font-medium">${aircraft.length} aircraft</p>

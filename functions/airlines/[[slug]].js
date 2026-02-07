@@ -215,7 +215,7 @@ function renderHead({ title, description, url, image, jsonLd }) {
   </script>
 
   <!-- Fonts & Tailwind -->
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@600;700&family=Inter:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -545,33 +545,30 @@ async function renderDetailPage(context, slug, baseUrl) {
   const manufacturers = [...new Set(fleet.map(f => f.manufacturer))];
 
   const fleetCards = fleet.map(f => `
-    <a href="/aircraft/${escapeHtml(f.aircraft_slug)}"
-       class="group block bg-card rounded-xl overflow-hidden hover:shadow-lg transition-all">
-      <div class="aspect-[16/10] overflow-hidden bg-slate-100">
-        <img src="${baseUrl}/images/airlines/${escapeHtml(slug)}/${escapeHtml(f.aircraft_slug)}.jpg"
-             alt="${escapeHtml(airline.name)} ${escapeHtml(f.name)}"
-             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-             loading="lazy"
-             onerror="this.onerror=null; this.src='${baseUrl}/images/aircraft-styled/${escapeHtml(f.aircraft_slug)}.jpg'; this.onerror=function(){this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center bg-slate-100\\'><span class=\\'text-4xl opacity-30\\'>&#9992;</span></div>';}">
-      </div>
-      <div class="p-4">
-        <div class="flex items-start justify-between gap-2 mb-2">
-          <h3 class="font-display font-semibold text-slate-800 group-hover:text-primary transition-colors">
-            ${escapeHtml(f.name)}
-          </h3>
-          <span class="shrink-0 bg-primary text-white text-xs font-bold px-2 py-1 rounded">
-            ${f.count}
-          </span>
+    <div class="pixel-clip p-1 transition-transform duration-300 hover:scale-[1.02]" style="background-color: #8b7355;">
+      <a href="/aircraft/${escapeHtml(f.aircraft_slug)}"
+         class="group block pixel-clip p-3" style="background-color: #ffffff;">
+        <div class="mb-3">
+          <div class="aspect-[16/10] overflow-hidden" style="background-color: #f0f0f0;">
+            <img src="${baseUrl}/images/airlines/${escapeHtml(slug)}/${escapeHtml(f.aircraft_slug)}.jpg"
+                 alt="${escapeHtml(airline.name)} ${escapeHtml(f.name)}"
+                 class="w-full h-full object-cover"
+                 loading="lazy"
+                 onerror="this.onerror=null; this.src='${baseUrl}/images/aircraft-styled/${escapeHtml(f.aircraft_slug)}.jpg'; this.onerror=function(){this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center\\' style=\\'background-color:#e8e0d0\\'><span class=\\'text-4xl opacity-30\\'>&#9992;</span></div>';}">
+          </div>
         </div>
-        <p class="text-sm text-muted mb-3">${escapeHtml(f.manufacturer)}</p>
-        ${f.notes ? `<p class="text-xs text-muted">${escapeHtml(f.notes)}</p>` : ''}
-
-        <div class="flex items-center gap-4 mt-3 pt-3 border-t border-slate-100 text-xs text-muted">
-          <span>${escapeHtml(f.passengers)} pax</span>
-          <span>${formatNumber(Math.round(f.range_km * 0.621371))} mi range</span>
+        <div class="flex items-start justify-between gap-2 mb-1">
+          <h3 class="font-display font-semibold" style="color: #4a3f2f;">${escapeHtml(f.name)}</h3>
+          <span class="shrink-0 pixel-text px-2 py-1" style="font-size: 9px; background-color: #8b7355; color: #f5f0e6;">${f.count}</span>
         </div>
-      </div>
-    </a>
+        <p class="text-sm italic mb-2" style="color: #7a6b55; font-family: Georgia, serif;">${escapeHtml(f.manufacturer)}</p>
+        ${f.notes ? `<p class="text-xs mb-2" style="color: #9a8b75;">${escapeHtml(f.notes)}</p>` : ''}
+        <div class="flex items-center gap-4 pt-2 text-xs" style="border-top: 1px solid #e5e5e5; color: #9a8b75;">
+          <span class="pixel-text" style="font-size: 8px;">${escapeHtml(f.passengers)} PAX</span>
+          <span class="pixel-text" style="font-size: 8px;">${formatNumber(Math.round(f.range_km * 0.621371))} MI</span>
+        </div>
+      </a>
+    </div>
   `).join('');
 
   // Build multiple JSON-LD schemas
@@ -628,6 +625,20 @@ async function renderDetailPage(context, slug, baseUrl) {
     jsonLd: null
   })}
   ${multipleJsonLd}
+  <style>
+    .pixel-clip {
+      clip-path: polygon(
+        0 8px, 4px 8px, 4px 4px, 8px 4px, 8px 0,
+        calc(100% - 8px) 0, calc(100% - 8px) 4px, calc(100% - 4px) 4px, calc(100% - 4px) 8px, 100% 8px,
+        100% calc(100% - 8px), calc(100% - 4px) calc(100% - 8px), calc(100% - 4px) calc(100% - 4px), calc(100% - 8px) calc(100% - 4px), calc(100% - 8px) 100%,
+        8px 100%, 8px calc(100% - 4px), 4px calc(100% - 4px), 4px calc(100% - 8px), 0 calc(100% - 8px)
+      );
+    }
+    .pixel-text {
+      font-family: 'Press Start 2P', monospace;
+      line-height: 1.6;
+    }
+  </style>
 </head>
 <body class="font-sans">
   <canvas id="sky-canvas"></canvas>
@@ -635,58 +646,73 @@ async function renderDetailPage(context, slug, baseUrl) {
   ${renderHeader(baseUrl)}
 
   <!-- Hero -->
-  <div class="text-white">
-    <div class="max-w-7xl mx-auto px-4 py-8 md:py-12">
-      <a href="/airlines" class="inline-flex items-center text-white/70 hover:text-white text-sm mb-4 transition-colors">
-        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-        </svg>
-        All Airlines
-      </a>
+  <div class="max-w-6xl mx-auto px-6 md:px-8 py-8 md:py-10">
+    <a href="/airlines" class="inline-flex items-center text-white/70 hover:text-white text-sm mb-5 transition-colors">
+      <span class="pixel-text mr-2" style="font-size: 10px;">&lt;</span>
+      All Airlines
+    </a>
 
-      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-        <div>
-          <div class="flex items-center gap-3 mb-2">
-            <span class="bg-white/20 text-white text-lg font-bold px-3 py-1 rounded-lg">${escapeHtml(airline.iata_code)}</span>
+    <div class="pixel-clip p-1" style="background-color: #8b7355;">
+      <div class="pixel-clip" style="background-color: #ffffff;">
+        <div class="p-5 md:p-8">
+          <div class="md:flex md:items-start md:justify-between md:gap-8">
+            <!-- Left: Identity -->
+            <div class="mb-6 md:mb-0 md:flex-1">
+              <div class="flex items-center gap-4 mb-4">
+                <img src="${baseUrl}/images/airline-icons/${escapeHtml(slug)}.png?v=5"
+                     alt="${escapeHtml(airline.name)} logo"
+                     class="w-14 h-14 object-contain shrink-0"
+                     onerror="this.src='${baseUrl}/images/airline-icons/${escapeHtml(slug)}.svg?v=5'; this.onerror=function(){this.style.display='none';};">
+                <div>
+                  <h1 class="font-display text-3xl md:text-4xl font-semibold" style="color: #4a3f2f;">${escapeHtml(airline.name)}</h1>
+                  <p class="text-sm mt-1" style="color: #8b7355;">${escapeHtml(airline.headquarters)} · Founded ${airline.founded} · ${escapeHtml(airline.iata_code)}/${escapeHtml(airline.icao_code || '')}</p>
+                </div>
+              </div>
+
+              <p class="leading-relaxed" style="color: #6b5d4d;">${escapeHtml(airline.description)}</p>
+
+              ${airline.website ? `
+              <a href="${escapeHtml(airline.website)}" target="_blank" rel="noopener"
+                 class="inline-flex items-center gap-2 mt-4 hover:opacity-70 transition-opacity text-sm font-medium" style="color: #8b7355;">
+                Visit website
+                <span class="pixel-text" style="font-size: 8px;">&gt;</span>
+              </a>
+              ` : ''}
+            </div>
+
+            <!-- Right: Stats -->
+            <div class="shrink-0 flex gap-6 md:gap-8 md:pt-1">
+              <div class="text-center">
+                <span class="pixel-text uppercase block mb-1" style="font-size: 7px; color: #8b7355;">Fleet Types</span>
+                <span class="text-3xl font-semibold" style="color: #4a3f2f; font-family: 'Georgia', serif;">${fleet.length}</span>
+              </div>
+              <div class="text-center">
+                <span class="pixel-text uppercase block mb-1" style="font-size: 7px; color: #8b7355;">Aircraft</span>
+                <span class="text-3xl font-semibold" style="color: #4a3f2f; font-family: 'Georgia', serif;">${totalAircraft.toLocaleString()}</span>
+              </div>
+            </div>
           </div>
-          <h1 class="font-display text-3xl md:text-4xl font-semibold drop-shadow-lg">${escapeHtml(airline.name)}</h1>
-          <p class="text-white/80 mt-2 drop-shadow">${escapeHtml(airline.headquarters)} · Founded ${airline.founded}</p>
-          <p class="text-white/90 mt-4 drop-shadow">${escapeHtml(airline.description)}</p>
-          ${airline.website ? `
-            <a href="${escapeHtml(airline.website)}" target="_blank" rel="noopener"
-               class="inline-flex items-center gap-1 text-white/80 hover:text-white mt-3 text-sm font-medium drop-shadow">
-              Visit ${escapeHtml(airline.name)}
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-              </svg>
-            </a>
-          ` : ''}
         </div>
       </div>
     </div>
   </div>
 
-  <main class="max-w-7xl mx-auto px-4 py-8">
+  <main class="max-w-6xl mx-auto px-6 md:px-8 py-8">
 
     <!-- Fleet Header -->
-    <div class="flex items-center justify-between mb-6">
-      <h2 class="font-display text-2xl font-semibold text-white drop-shadow">Fleet</h2>
-      <p class="text-white/70">
-        ${manufacturers.join(', ')} aircraft
-      </p>
+    <div class="flex items-center gap-3 mb-6">
+      <h2 class="font-display text-2xl font-semibold text-white" style="font-style: italic;">Fleet</h2>
     </div>
 
     <!-- Fleet Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
       ${fleetCards}
     </div>
 
     <!-- Back Link -->
     <div class="text-center mt-12">
-      <a href="/airlines" class="inline-flex items-center gap-2 text-white hover:text-white/80 font-medium drop-shadow">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-        </svg>
+      <a href="/airlines" class="inline-flex items-center gap-2 pixel-text uppercase hover:opacity-70 transition-opacity" style="font-size: 8px; color: rgba(255,255,255,0.7);">
+        <span>&lt;</span>
         View All Airlines
       </a>
     </div>
@@ -720,7 +746,7 @@ function renderErrorPage(baseUrl, message) {
   <div class="window-frame">
   ${renderHeader(baseUrl)}
 
-  <div class="max-w-5xl mx-auto px-4 py-20 text-center">
+  <div class="max-w-6xl mx-auto px-4 py-20 text-center">
     <div class="inline-flex items-center justify-center w-24 h-24 bg-red-50 rounded-full mb-6">
       <span class="text-4xl">&#9992;</span>
     </div>

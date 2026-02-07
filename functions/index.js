@@ -459,11 +459,11 @@ function renderAircraftCard(aircraft, baseUrl) {
          data-description="${escapeHtml((aircraft.description || '').toLowerCase())}">
       <a href="/aircraft/${escapeHtml(aircraft.slug)}"
          class="group block pixel-clip p-3"
-         style="background-color: #f5f0e6;">
+         style="background-color: #ffffff;">
 
         <!-- Image -->
         <div class="mb-3">
-          <div class="aspect-[16/10] overflow-hidden" style="background-color: #e8e0d0;">
+          <div class="aspect-[16/10] overflow-hidden" style="background-color: #f0f0f0;">
             ${imageHtml}
           </div>
         </div>
@@ -594,11 +594,11 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
       background-color: #6b5640;
     }
     .btn-vintage-inner {
-      background-color: #f5f0e6;
+      background-color: #ffffff;
       color: #4a3f2f;
     }
     .btn-vintage:hover .btn-vintage-inner {
-      background-color: #ebe4d4;
+      background-color: #f5f0e6;
     }
   </style>
 </head>
@@ -621,10 +621,10 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 relative text-center">
       <div class="max-w-3xl mx-auto">
         <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-4 leading-tight">
-          Every aircraft. Every airline.
+          What plane are you flying today?
         </h1>
         <p class="text-white text-lg md:text-xl leading-relaxed">
-          Discover what planes fly your favorite routes. Explore fleet details, specs, and history for 41 airlines worldwide.
+          Find your airline. Discover your aircraft.
         </p>
       </div>
     </div>
