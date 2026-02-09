@@ -23,7 +23,7 @@ export async function onRequestGet(context) {
     return new Response(html, {
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600'
+        'Cache-Control': 'public, max-age=3600, stale-while-revalidate=7200'
       }
     });
   } catch (error) {
@@ -54,6 +54,12 @@ function renderHead({ title, description, url, jsonLd }) {
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <!-- Preconnect to external origins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://plausible.io">
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
 
   <!-- Open Graph -->
   <meta property="og:title" content="${escapeHtml(title)}">

@@ -132,6 +132,12 @@ function renderHead({ title, description, url, image, jsonLd }) {
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
+  <!-- Preconnect to external origins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://plausible.io">
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+
   <!-- Open Graph -->
   <meta property="og:title" content="${escapeHtml(title)}">
   <meta property="og:description" content="${escapeHtml(description)}">
@@ -400,7 +406,7 @@ async function renderListPage(context, baseUrl) {
     const year = a.first_flight ? a.first_flight.split('-')[0] : '';
 
     const imageHtml = a.image_url
-      ? `<img src="${baseUrl}/images/aircraft/${escapeHtml(a.slug)}.jpg?v=4" alt="${escapeHtml(a.name)}"
+      ? `<img src="${baseUrl}/images/aircraft/${escapeHtml(a.slug)}.webp?v=5" alt="${escapeHtml(a.name)}"
              class="w-full h-full object-cover" loading="lazy"
              onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center\\'><span class=\\'text-5xl\\'>✈</span></div>'">`
       : `<div class="w-full h-full flex items-center justify-center"><span class="text-5xl">✈</span></div>`;
@@ -612,7 +618,7 @@ async function renderListPage(context, baseUrl) {
   return new Response(html, {
     headers: {
       'Content-Type': 'text/html; charset=utf-8',
-      'Cache-Control': 'public, max-age=300'
+      'Cache-Control': 'public, max-age=300, stale-while-revalidate=600'
     }
   });
 }
@@ -678,7 +684,7 @@ async function renderDetailPage(context, slug, baseUrl) {
     ORDER BY f.count DESC
   `).bind(slug).all();
 
-  const imageUrl = aircraft.image_url ? `${baseUrl}/images/aircraft-styled/${aircraft.slug}.jpg` : null;
+  const imageUrl = aircraft.image_url ? `${baseUrl}/images/aircraft-styled/${aircraft.slug}.webp` : null;
   const rangeInMiles = kmToMiles(aircraft.range_km);
   const speedInMph = kmhToMph(aircraft.cruise_speed_kmh);
   const year = aircraft.first_flight ? aircraft.first_flight.split('-')[0] : '';
@@ -1062,7 +1068,7 @@ async function renderDetailPage(context, slug, baseUrl) {
             <div class="border-2 border-dashed p-1 mb-2" style="border-color: #c9b896;">
             ${v.image_url
               ? `<div class="aspect-[4/3] overflow-hidden" style="background-color: #e8e0d0;">
-                   <img src="${baseUrl}/images/aircraft-styled/${escapeHtml(v.slug)}.jpg" alt="${escapeHtml(v.name)}"
+                   <img src="${baseUrl}/images/aircraft-styled/${escapeHtml(v.slug)}.webp" alt="${escapeHtml(v.name)}"
                         class="w-full h-full object-contain transition-transform duration-300" loading="lazy">
                  </div>`
               : `<div class="aspect-[4/3] flex items-center justify-center" style="background-color: #e8e0d0;">
@@ -1121,7 +1127,7 @@ async function renderDetailPage(context, slug, baseUrl) {
             <div class="border-2 border-dashed p-1 mb-2" style="border-color: #c9b896;">
             ${r.image_url
               ? `<div class="aspect-[4/3] overflow-hidden" style="background-color: #e8e0d0;">
-                   <img src="${baseUrl}/images/aircraft-styled/${escapeHtml(r.slug)}.jpg" alt="${escapeHtml(r.name)}"
+                   <img src="${baseUrl}/images/aircraft-styled/${escapeHtml(r.slug)}.webp" alt="${escapeHtml(r.name)}"
                         class="w-full h-full object-contain transition-transform duration-300" loading="lazy">
                  </div>`
               : `<div class="aspect-[4/3] flex items-center justify-center" style="background-color: #e8e0d0;">
@@ -1200,7 +1206,7 @@ async function renderDetailPage(context, slug, baseUrl) {
   return new Response(html, {
     headers: {
       'Content-Type': 'text/html; charset=utf-8',
-      'Cache-Control': 'public, max-age=300'
+      'Cache-Control': 'public, max-age=300, stale-while-revalidate=600'
     }
   });
 }

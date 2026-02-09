@@ -6,9 +6,10 @@ export async function onRequestGet(context) {
 
   try {
     // Fetch all aircraft, airline, and manufacturer slugs with dates
+    // Use updated_at (falls back to created_at for older rows)
     const [{ results: aircraft }, { results: airlines }, { results: manufacturers }] = await Promise.all([
-      env.DB.prepare('SELECT slug, created_at FROM aircraft ORDER BY slug').all(),
-      env.DB.prepare('SELECT slug, created_at FROM airlines ORDER BY slug').all(),
+      env.DB.prepare('SELECT slug, COALESCE(updated_at, created_at) as last_modified FROM aircraft ORDER BY slug').all(),
+      env.DB.prepare('SELECT slug, COALESCE(updated_at, created_at) as last_modified FROM airlines ORDER BY slug').all(),
       env.DB.prepare('SELECT DISTINCT LOWER(manufacturer) as slug FROM aircraft ORDER BY manufacturer').all()
     ]);
 
@@ -38,7 +39,7 @@ export async function onRequestGet(context) {
         loc: `${baseUrl}/airlines/${a.slug}`,
         priority: '0.8',
         changefreq: 'weekly',
-        lastmod: formatDate(a.created_at)
+        lastmod: formatDate(a.last_modified)
       })),
 
       // Aircraft detail pages
@@ -46,7 +47,7 @@ export async function onRequestGet(context) {
         loc: `${baseUrl}/aircraft/${a.slug}`,
         priority: '0.8',
         changefreq: 'weekly',
-        lastmod: formatDate(a.created_at)
+        lastmod: formatDate(a.last_modified)
       })),
 
       // Manufacturer detail pages
@@ -71,7 +72,7 @@ ${urls.map(u => `  <url>
     return new Response(sitemap, {
       headers: {
         'Content-Type': 'application/xml; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600'
+        'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400'
       }
     });
   } catch (error) {

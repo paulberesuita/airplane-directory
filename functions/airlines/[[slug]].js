@@ -191,6 +191,12 @@ function renderHead({ title, description, url, image, jsonLd }) {
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
+  <!-- Preconnect to external origins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://plausible.io">
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+
   <!-- Open Graph -->
   <meta property="og:title" content="${escapeHtml(title)}">
   <meta property="og:description" content="${escapeHtml(description)}">
@@ -509,7 +515,7 @@ async function renderListPage(context, baseUrl) {
   return new Response(html, {
     headers: {
       'Content-Type': 'text/html; charset=utf-8',
-      'Cache-Control': 'public, max-age=300'
+      'Cache-Control': 'public, max-age=300, stale-while-revalidate=600'
     }
   });
 }
@@ -554,7 +560,7 @@ async function renderDetailPage(context, slug, baseUrl) {
                  alt="${escapeHtml(airline.name)} ${escapeHtml(f.name)}"
                  class="w-full h-full object-cover"
                  loading="lazy"
-                 onerror="this.onerror=null; this.src='${baseUrl}/images/aircraft-styled/${escapeHtml(f.aircraft_slug)}.jpg'; this.onerror=function(){this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center\\' style=\\'background-color:#e8e0d0\\'><span class=\\'text-4xl opacity-30\\'>&#9992;</span></div>';}">
+                 onerror="this.onerror=null; this.src='${baseUrl}/images/aircraft-styled/${escapeHtml(f.aircraft_slug)}.webp'; this.onerror=function(){this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center\\' style=\\'background-color:#e8e0d0\\'><span class=\\'text-4xl opacity-30\\'>&#9992;</span></div>';}">
           </div>
         </div>
         <div class="flex items-start justify-between gap-2 mb-1">
@@ -726,7 +732,7 @@ async function renderDetailPage(context, slug, baseUrl) {
   return new Response(html, {
     headers: {
       'Content-Type': 'text/html; charset=utf-8',
-      'Cache-Control': 'public, max-age=300'
+      'Cache-Control': 'public, max-age=300, stale-while-revalidate=600'
     }
   });
 }

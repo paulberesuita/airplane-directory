@@ -4,6 +4,18 @@ What we shipped. Builder appends here after each feature.
 
 ---
 
+## 2026-02-09
+
+### SEO Improvements (Cross-Site Audit)
+- **Added AI crawler rules to robots.txt** — explicit Allow for GPTBot, ClaudeBot, Claude-Web, Anthropic-AI, PerplexityBot, Cohere-AI, Google-Extended
+- **Added `updated_at` column** to aircraft and airlines tables (migration 011) — sitemap now uses `updated_at` instead of `created_at` for accurate lastmod dates
+- **Added preconnect hints** to all pages — `fonts.googleapis.com`, `fonts.gstatic.com`, `plausible.io`, `cdn.tailwindcss.com`
+- **Added `stale-while-revalidate`** to all SSR cache headers and `_headers` file for better perceived performance
+- **Converted all aircraft images to WebP** — 94% size reduction (222MB JPG total down to ~13MB WebP), uploaded to R2, updated all HTML references
+- **Added `.webp` caching rule** to `_headers` file
+
+---
+
 ## 2026-02-06
 
 ### Pixel Accents on Vintage Base — Aircraft Detail Page

@@ -4,6 +4,35 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ---
 
+## 2026-02-09
+
+### SEO Audit — Gaps Found from Haunted Places & Latino Leaders
+
+Cross-referenced SEO implementations across all three directories. Found 6 gaps in airplane-directory. Fixed all quick wins plus WebP conversion.
+
+**Key decisions:**
+- **Sitemap lastmod strategy**: Use `updated_at` (not `created_at`) so lastmod only changes when content actually changes. Avoids "lastmod spamming" that erodes Google's trust in sitemap signals. COALESCE fallback to `created_at` for rows without `updated_at`.
+- **WebP conversion**: Used `cwebp -q 80` for quality. 94% size reduction across 90 images. Kept original JPGs in R2 as backup. All HTML references now point to `.webp`.
+- **stale-while-revalidate**: Set to 600s (10 min) for SSR pages, 7200s for about page, 86400s for sitemap. Lets Cloudflare serve stale content while revalidating in background.
+- **AI crawlers**: Explicitly allowed in robots.txt — we want AI models to index our content.
+
+**Remaining gaps (not yet implemented):**
+- Dynamic OG image generation (branded social sharing images per aircraft/airline)
+- Legacy URL redirect handling
+
+**Files modified:**
+- `public/robots.txt` — AI crawler rules
+- `public/_headers` — stale-while-revalidate, .webp caching
+- `functions/sitemap.xml.js` — updated_at queries, stale-while-revalidate
+- `functions/index.js` — preconnect, cache headers, .webp references
+- `functions/aircraft/[[slug]].js` — preconnect, cache headers, .webp references
+- `functions/airlines/[[slug]].js` — preconnect, cache headers, .webp fallback
+- `functions/manufacturer/[[slug]].js` — preconnect, cache headers, .webp references
+- `functions/about.js` — preconnect, cache headers
+- `migrations/011_add_updated_at.sql` — new columns
+
+---
+
 ## 2026-02-06
 
 ### Pixel Accents on Vintage Base (COMPLETE)
