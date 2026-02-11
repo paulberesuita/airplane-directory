@@ -186,6 +186,10 @@ Add to `<head>` in every SSR function:
 </div>
 ```
 
+### Breadcrumbs
+
+**No visible breadcrumbs.** Google reads breadcrumb hierarchy from JSON-LD structured data — visible breadcrumb nav is unnecessary UI clutter. Keep BreadcrumbList schemas in JSON-LD, don't render `<nav aria-label="Breadcrumb">` on the page.
+
 ### Image Placeholder (no image)
 
 ```html

@@ -1,7 +1,7 @@
 ---
 name: content
 description: Owns all data and content pages. Researches aircraft, fills specs/images, verifies data, builds content pages, fixes data quality. Triggers on "content", "research", "discover", "data", "images", "build pages", or "verify".
-tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch
+tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch, Skill
 model: opus
 ---
 
@@ -137,15 +137,17 @@ Also check:
 
 ## Task Types
 
-| Task | Skill to Read | Example |
-|------|--------------|---------|
-| Discover new aircraft | `/research-discovery` | "Research Embraer E-Jet family" |
-| Coverage overview | `/research-discovery` | "How many aircraft have images?" |
-| Find/upload images | `/research-discovery images` | "Fill missing images for Boeing" |
-| Deep research on aircraft | `/deep-research` | "Deep dive on Boeing 737-800 specs" |
-| Verify data quality | `/deep-research verify` | "Verify specs for A320 family" |
-| Verify airline fleet | `/deep-research airline` | "Verify Delta Air Lines fleet" |
-| Build content page | `/project-architecture` | "Build comparison page for A320 vs 737" |
+| Task | How to Execute | Example |
+|------|---------------|---------|
+| Discover new aircraft | Skill tool: `skill="research-discovery"` | "Research Embraer E-Jet family" |
+| Coverage overview | Skill tool: `skill="research-discovery"` | "How many aircraft have images?" |
+| Fill images | Skill tool: `skill="research-discovery", args="images Boeing"` | "Fill missing images for Boeing" |
+| Deep research on aircraft | Skill tool: `skill="deep-research", args="[slug]"` | "Deep dive on Boeing 737-800 specs" |
+| Verify data quality | Skill tool: `skill="deep-research", args="verify Boeing"` | "Verify specs for A320 family" |
+| Verify airline fleet | Skill tool: `skill="deep-research", args="airline delta-air-lines"` | "Verify Delta Air Lines fleet" |
+| Build content page | Read `/project-architecture`, then build | "Build comparison page for A320 vs 737" |
+
+**IMPORTANT:** For discover, deep research, images, and verify tasks — always use the **Skill tool** to invoke the skill. Do NOT do ad-hoc web research yourself. The skills handle all research, writing, and D1 updates internally.
 
 ---
 
@@ -164,17 +166,9 @@ Don't build a page for a manufacturer if <60% of their aircraft have images. Fil
 
 Use `TaskCreate` to track progress. Follow the skill workflow.
 
-### 4. Deploy
+### 4. Deploy & Verify
 
-Invoke `/cloudflare-deploy`.
-
-### 5. Verify
-
-```bash
-curl -sI https://airlineplanes.com/[route] | head -3
-```
-
-### 6. Update Sitemap
+Deploy with `/cloudflare-deploy`. Verify the page loads and check SEO elements.
 
 After adding new page types, rebuild sitemap.
 
@@ -182,77 +176,9 @@ After adding new page types, rebuild sitemap.
 
 ## Data Reference
 
-```sql
-CREATE TABLE aircraft (
-  id INTEGER PRIMARY KEY,
-  slug TEXT UNIQUE NOT NULL,
-  name TEXT NOT NULL,
-  manufacturer TEXT NOT NULL,
-  description TEXT,
-  first_flight_year INTEGER,
-  passengers INTEGER,
-  range_km INTEGER,
-  cruise_speed_kmh INTEGER,
-  length_m REAL,
-  wingspan_m REAL,
-  engines INTEGER,
-  status TEXT,
-  image_url TEXT,
-  fun_fact TEXT,
-  family_slug TEXT,
-  variant_order INTEGER,
-  max_takeoff_weight_kg INTEGER,
-  fuel_capacity_liters INTEGER,
-  service_ceiling_m INTEGER,
-  takeoff_distance_m INTEGER,
-  landing_distance_m INTEGER,
-  climb_rate_fpm INTEGER,
-  cargo_capacity_m3 REAL,
-  max_payload_kg INTEGER,
-  engine_thrust_kn REAL,
-  engine_manufacturer TEXT,
-  total_orders INTEGER,
-  total_delivered INTEGER,
-  list_price_usd INTEGER
-);
-```
+DB schema is in `/project-architecture`. Key tables: `aircraft`, `aircraft_sources`, `aircraft_history`, `airlines`, `airline_fleet`.
 
 **Status values:** `in production` | `out of production` | `in development`
-
-### Other Tables
-
-```sql
-CREATE TABLE aircraft_sources (
-  aircraft_slug TEXT, field_name TEXT, source_url TEXT,
-  source_name TEXT, source_type TEXT, accessed_at TEXT, notes TEXT
-);
-
-CREATE TABLE aircraft_history (
-  aircraft_slug TEXT, content_type TEXT, year INTEGER,
-  title TEXT, content TEXT
-);
-
-CREATE TABLE airlines (
-  slug TEXT UNIQUE, name TEXT, iata_code TEXT, icao_code TEXT,
-  headquarters TEXT, founded INTEGER, fleet_size INTEGER,
-  destinations INTEGER, description TEXT, website TEXT
-);
-
-CREATE TABLE airline_fleet (
-  airline_slug TEXT, aircraft_slug TEXT, count INTEGER, notes TEXT
-);
-```
-
-### Page → Data Mapping
-
-| Page | Query |
-|------|-------|
-| Homepage | Airlines + fleet stats via JOIN, Aircraft in US fleets via `INNER JOIN airline_fleet` |
-| Airlines List | `SELECT * FROM airlines ORDER BY fleet_size DESC` |
-| Airline Detail | Airline info + fleet with JOIN to aircraft table |
-| Aircraft Detail | Aircraft + `SELECT * FROM aircraft_history WHERE aircraft_slug = ?` + Airlines operating via JOIN |
-| Manufacturer | `SELECT * FROM aircraft WHERE manufacturer = ?` |
-| Comparison | `SELECT * FROM aircraft WHERE slug IN (?, ?)` |
 
 ---
 
