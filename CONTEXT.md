@@ -6,6 +6,24 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ## 2026-02-11
 
+### Content Agent Must Have Skill Tool
+
+**Problem:** Content agent was doing ad-hoc web research (WebSearch/WebFetch) instead of invoking `/deep-research` or `/research-discovery` skills. Root cause: the `tools:` frontmatter in `content.md` listed `Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch` but not `Skill`. Without the Skill tool available, the agent couldn't invoke skills and fell back to doing raw research itself.
+
+**Fix:** Added `Skill` to the content agent's tools list. Also renamed the task types table column from "Skill to Read" to "How to Execute" with explicit `Skill tool: skill="research-discovery", args="images Boeing"` syntax, plus a bold note: always use the Skill tool for discover/research/images/verify tasks.
+
+**Lesson:** If an agent is supposed to invoke skills, it needs `Skill` in its tools list. The table saying "read this skill" was ambiguous — agents interpreted it as "read the skill file for instructions, then do the work yourself." Explicit invocation syntax removes ambiguity.
+
+---
+
+### No Visible Breadcrumbs
+
+**Decision:** Added convention to `/tasty-design`: no visible breadcrumb `<nav>` elements. Keep JSON-LD BreadcrumbList schemas only.
+
+**Why:** Google reads breadcrumb hierarchy from structured data, not from visible HTML. Visible breadcrumbs are UI clutter that add no SEO value.
+
+---
+
 ### Agent System and Skills Alignment with Haunted-Places
 
 **Decision:** Brought airplane-directory's agent system, skills, and docs fully in line with the haunted-places project structure.

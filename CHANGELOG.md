@@ -6,6 +6,18 @@ What we shipped. Builder appends here after each feature.
 
 ## 2026-02-11
 
+### Content Agent Skill Tool + No-Breadcrumbs Convention
+
+**Fixed:**
+- **Content agent missing Skill tool** — Agent couldn't invoke `/research-discovery` or `/deep-research` because `Skill` wasn't in its tools list. Added it and changed task types table from ambiguous "Skill to Read" to explicit `Skill tool: skill="...", args="..."` invocation syntax.
+- **Content agent Data Reference slimmed** — Removed ~60 lines of inline SQL schema, now points to `/project-architecture` where the schema lives.
+- **Content agent Build Process** — Combined 3 separate deploy/verify/sitemap steps into single "Deploy & Verify" step matching HP pattern.
+
+**Added:**
+- **No-breadcrumbs convention in `/tasty-design`** — Google reads breadcrumbs from JSON-LD structured data; visible breadcrumb nav is unnecessary clutter. Keep BreadcrumbList schemas, don't render visible `<nav>` breadcrumbs.
+
+---
+
 ### Aligned Agent System and Skills with Haunted-Places
 
 **Changed:**
