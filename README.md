@@ -10,22 +10,20 @@ Cloudflare Pages + D1 (SQLite) + R2 (images). Vanilla HTML/JS + Tailwind CDN. Al
 
 ## Agents
 
-| Agent | Purpose |
-|-------|---------|
-| **content** | Data + content pages (research, verify, build) |
-| **product** | UX features, interactive tools, delights |
-| **seo** | Technical SEO (audit, fix, deploy) |
-| **marketing** | Outreach, backlinks, campaigns |
+Each agent is fully autonomous within its domain. No agent invokes another.
 
-## Deploy
-
-```bash
-wrangler pages deploy ./public --project-name=airplane-directory
-```
+| Agent | Owns |
+|-------|------|
+| **content** | Data, specs, images, content pages |
+| **product** | UX features, mini-apps, delights |
+| **seo** | Technical SEO audits, fixes, deploys |
+| **marketing** | Outreach, backlinks, partnerships |
 
 ## Docs
 
-- `CLAUDE.md` — How we work, agents, skills
-- `BACKLOG.md` — Idea parking lot
-- `CHANGELOG.md` — What we shipped
-- `CONTEXT.md` — Key decisions & lessons learned
+| Doc | Purpose |
+|-----|---------|
+| `CLAUDE.md` | How we work (agents, skills, workflow) |
+| `BACKLOG.md` | Idea parking lot for future work |
+| `CHANGELOG.md` | What we shipped |
+| `CONTEXT.md` | Key decisions & lessons learned |

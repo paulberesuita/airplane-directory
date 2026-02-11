@@ -25,7 +25,7 @@ Read these skills:
 |------|--------|----------------|
 | Core UX complete | Navigation, search, filters working | Check what features exist |
 | Mini-apps shipped | Fun tools that drive traffic and shares | Count tools at /tools/ |
-| Delights active | Thoughtful details that make people smile | Spot-check pages |
+| Delights active | Thoughtful details on every page type | Read `/delights` for inventory |
 | Mobile-friendly | All pages work on mobile | Responsive design |
 | No broken experiences | Zero reported issues | Check backlog for bugs |
 
@@ -40,6 +40,7 @@ Read these skills:
 1. **Check what's built:**
    - Read `functions/` directory structure
    - Check `public/tools/` for mini-apps
+   - Read `/delights` for current delights inventory and ideas
    - Note what's working vs missing
 
 2. **Check the backlog:**
@@ -64,9 +65,6 @@ Read these skills:
 **Delights:**
 - [Delight 1] — active on [pages]
 
-**In Backlog:**
-- [Item 1] -> `specs/item-1.md`
-
 **Issues:**
 - [Any problems]
 
@@ -89,7 +87,7 @@ Read these skills:
 2. **Items in backlog?** -> Build the highest-impact one
 3. **Core UX gaps?** -> Fill them (search, filters, navigation)
 4. **No mini-apps?** -> Build one (drives traffic + shares)
-5. **Everything working?** -> Add a delight (read `/delights`)
+5. **Everything working?** -> Add a delight (read `/delights` for ideas)
 
 ---
 
@@ -120,26 +118,21 @@ functions/tools/[name].js         # Server-rendered tool
 ```
 
 ### Delights
-Thoughtful details that make people smile:
+Small, thoughtful details that make people smile. See `/delights` for full inventory and ideas.
 - Motion, interactions, personality, sound
 - Noticed, not announced — people discover them
-- Enhances, never blocks the core UX
+- Enhances, never blocks the core experience
 
 ---
 
 ## Build Process
 
-### 1. Verify Spec Exists
-
-If building from backlog, confirm the idea is listed in `BACKLOG.md`.
-If not there, add a line to `BACKLOG.md` under `## Product`.
-
-### 2. Read Standards
+### 1. Read Standards
 
 - `/tasty-design` for colors, typography, components
 - `/project-architecture` for shared modules, D1 patterns
 
-### 3. Build
+### 2. Build
 
 Use `TaskCreate` to track progress.
 
@@ -154,11 +147,11 @@ Use `TaskCreate` to track progress.
 - [ ] Shareable results
 - [ ] SEO content below the fold
 
-### 4. Deploy
+### 3. Deploy
 
-Invoke `/cloudflare-deploy`.
+Deploy with `/cloudflare-deploy`.
 
-### 5. Report
+### 4. Report
 
 ```
 Done. **[Feature]** deployed at [URL].
@@ -198,6 +191,5 @@ Then recommend next action based on updated state.
 
 - Data research, aircraft discovery, content pages (Content agent)
 - Outreach campaigns, backlink building (Marketing agent)
-- SEO audits or technical SEO fixes (SEO agent)
-- Build without a spec
-- Add scope beyond the spec
+- SEO audits or ranking analysis (SEO agent)
+- Add scope beyond what was asked

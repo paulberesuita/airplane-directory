@@ -54,7 +54,7 @@ Skills are **detailed instructions** for specific tasks. Agents invoke skills wh
 | Skill | What it does |
 |-------|--------------|
 | `/tasty-design` | Colors, typography, components |
-| `/project-architecture` | DB schema, SSR patterns, D1/R2 usage |
+| `/project-architecture` | DB schema, SSR patterns, routing, shared modules |
 | `/cloudflare-deploy` | Deploy commands |
 **Agent-owned skills:**
 | Agent | Skills |
