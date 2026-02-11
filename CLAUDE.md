@@ -2,7 +2,7 @@
 
 A directory of commercial aircraft with specs, history, and images. Browse by manufacturer, explore airline fleets, compare aircraft, and enjoy aviation mini-apps.
 
-**Live:** [airplanedirectory.com](https://airplanedirectory.com)
+**Live:** [airlineplanes.com](https://airlineplanes.com)
 
 ---
 
@@ -56,13 +56,12 @@ Skills are **detailed instructions** for specific tasks. Agents invoke skills wh
 | `/design-system` | Colors, typography, components |
 | `/coding-standards` | API patterns, D1/R2 usage |
 | `/cloudflare-deploy` | Deploy commands |
-| `/add-to-backlog` | Write spec + add to backlog |
 
 **Agent-owned skills:**
 | Agent | Skills |
 |-------|--------|
 | **content** | `/research-data`, `/research-images`, `/verify-data`, `/verify-airline`, `/query-data`, `/build-seo-page` |
-| **product** | `/build-tool` |
+| **product** | `/mini-tools` |
 | **seo** | `/optimize-seo` |
 | **marketing** | `/cold-campaign` |
 
@@ -71,8 +70,6 @@ Skills are **detailed instructions** for specific tasks. Agents invoke skills wh
 `BACKLOG.md` is where agents note ideas and observations for later — not a work queue.
 
 Agents discover their own immediate work through state checks. The backlog is the "not now, but someday" list. Each agent owns a section (`## Content`, `## Product`, `## SEO`, `## Marketing`).
-
-**Specs for bigger ideas:** When an idea needs detail, invoke `/add-to-backlog` to write a spec at `specs/[name].md` and link it from the backlog entry.
 
 ### Documentation = What happened
 
@@ -117,7 +114,6 @@ After work completes, always update:
 │       └── aircraft/
 ├── migrations/             # SQL migrations
 ├── scripts/                # Seed scripts
-├── specs/                  # Feature specifications
 ├── .claude/
 │   ├── agents/             # Autonomous workers
 │   │   ├── content.md      # Data + content pages
@@ -125,13 +121,12 @@ After work completes, always update:
 │   │   ├── seo.md          # Technical SEO audit + fix
 │   │   └── marketing.md    # Outreach, backlinks, partnerships
 │   └── skills/             # Skill definitions (how to do it)
-│       ├── add-to-backlog/
 │       ├── build-seo-page/
-│       ├── build-tool/
 │       ├── cloudflare-deploy/
 │       ├── coding-standards/
 │       ├── cold-campaign/
 │       ├── design-system/
+│       ├── mini-tools/
 │       ├── optimize-seo/
 │       ├── query-data/
 │       ├── research-data/
@@ -197,7 +192,7 @@ functions/
 | Environment | URL |
 |-------------|-----|
 | Preview | `airplane-directory.pages.dev` |
-| Production | `airplanedirectory.com` |
+| Production | `airlineplanes.com` |
 
 **Single deploy** updates both Preview and Production.
 

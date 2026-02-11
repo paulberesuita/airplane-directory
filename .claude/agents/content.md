@@ -167,14 +167,12 @@ Use `TaskCreate` to track progress. Follow the skill workflow.
 
 ### 4. Deploy
 
-```bash
-wrangler pages deploy ./public --project-name=airplane-directory
-```
+Invoke `/cloudflare-deploy`.
 
 ### 5. Verify
 
 ```bash
-curl -sI https://airplanedirectory.com/[route] | head -3
+curl -sI https://airlineplanes.com/[route] | head -3
 ```
 
 ### 6. Update Sitemap

@@ -23,7 +23,7 @@ Read these skills:
 
 | Goal | Target | How to Measure |
 |------|--------|----------------|
-| All pages indexed | Every page in Google | `site:airplanedirectory.com` count |
+| All pages indexed | Every page in Google | `site:airlineplanes.com` count |
 | SEO elements complete | Title, description, OG, schema on every page | Audit checks |
 | Sitemap current | All pages included, no dead URLs | Sitemap health check |
 | No thin content | All aircraft have substantial descriptions | Thin content query |
@@ -39,13 +39,13 @@ Read these skills:
 
 ```bash
 # Sitemap exists
-curl -sI https://airplanedirectory.com/sitemap.xml | head -1
+curl -sI https://airlineplanes.com/sitemap.xml | head -1
 
 # Robots.txt exists
-curl -s https://airplanedirectory.com/robots.txt
+curl -s https://airlineplanes.com/robots.txt
 
 # Sample meta tags
-curl -s https://airplanedirectory.com/aircraft/boeing-737-800 | grep -E '<title>|<meta name="description"'
+curl -s https://airlineplanes.com/aircraft/boeing-737-800 | grep -E '<title>|<meta name="description"'
 
 # Thin content count
 npx wrangler d1 execute airplane-directory-db --remote --command "
@@ -123,15 +123,13 @@ Read `/coding-standards` and `/design-system` before editing.
 
 ### 3. Deploy
 
-```bash
-wrangler pages deploy ./public --project-name=airplane-directory
-```
+Invoke `/cloudflare-deploy`.
 
 ### 4. Verify
 
 ```bash
 # Check the fix is live
-curl -s https://airplanedirectory.com/[page] | grep -E '<title>|<meta|ld\+json'
+curl -s https://airlineplanes.com/[page] | grep -E '<title>|<meta|ld\+json'
 ```
 
 ### 5. Report

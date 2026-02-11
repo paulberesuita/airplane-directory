@@ -165,7 +165,6 @@ wrangler pages deploy ./public --project-name=airplane-directory
 
 ### 9. Update Documentation
 
-- **STRUCTURE.md** — Add new URL pattern if not already documented
 - **CHANGELOG.md** — "Added: [page type] for [name]"
 - **CONTEXT.md** — SEO rationale, data requirements, lessons learned
 
@@ -177,4 +176,4 @@ wrangler pages deploy ./public --project-name=airplane-directory
 - Don't build pages without sufficient data
 - All pages need proper SEO elements
 - Test on mobile before deploying
-- Update STRUCTURE.md, CHANGELOG.md and CONTEXT.md when done
+- Update CHANGELOG.md and CONTEXT.md when done

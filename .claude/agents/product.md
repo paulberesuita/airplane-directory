@@ -131,8 +131,8 @@ Hidden surprises that add to the aviation vibe:
 
 ### 1. Verify Spec Exists
 
-If building from backlog, confirm spec exists at `specs/[feature].md`.
-If no spec, write one first (invoke `/add-to-backlog`).
+If building from backlog, confirm the idea is listed in `BACKLOG.md`.
+If not there, add a line to `BACKLOG.md` under `## Product`.
 
 ### 2. Read Standards
 
@@ -156,9 +156,7 @@ Use `TaskCreate` to track progress.
 
 ### 4. Deploy
 
-```bash
-wrangler pages deploy ./public --project-name=airplane-directory
-```
+Invoke `/cloudflare-deploy`.
 
 ### 5. Report
 
@@ -182,7 +180,7 @@ When backlog is low, present ideas:
 
 Present 3-5 ideas with Impact (High/Med/Low) and Effort (High/Med/Low).
 
-When user picks one -> invoke `/add-to-backlog`.
+When user picks one -> add a line to `BACKLOG.md` under `## Product`.
 
 ---
 
