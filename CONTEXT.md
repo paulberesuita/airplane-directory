@@ -6,6 +6,16 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ## 2026-02-11
 
+### Extracted `/research-images` from `/research-discovery`
+
+**Decision:** Created a standalone `/research-images` skill by extracting the ~30-line "Images Mode" section from `/research-discovery`. The discovery skill now just says "use `/research-images`."
+
+**Why:** The image search workflow (source priority, download, R2 upload, D1 update, verify) is its own distinct task. Having it embedded in `/research-discovery` meant you had to go through the batch discovery flow even to fix one image. Now `/research-images boeing-737-800` works directly — useful after `/deep-research` reveals an aircraft needs a better image.
+
+**Lesson:** When a skill section is self-contained, has its own inputs/outputs, and is useful outside the parent workflow — extract it. Same principle as the `/build-seo-page` merge, but in reverse: merge when duplicating, extract when independently useful.
+
+---
+
 ### Content Agent Must Have Skill Tool
 
 **Problem:** Content agent was doing ad-hoc web research (WebSearch/WebFetch) instead of invoking `/deep-research` or `/research-discovery` skills. Root cause: the `tools:` frontmatter in `content.md` listed `Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch` but not `Skill`. Without the Skill tool available, the agent couldn't invoke skills and fell back to doing raw research itself.

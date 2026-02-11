@@ -6,6 +6,18 @@ What we shipped. Builder appends here after each feature.
 
 ## 2026-02-11
 
+### Extracted `/research-images` from `/research-discovery`
+
+**Added:**
+- **`/research-images` skill** — Standalone image search skill extracted from `/research-discovery`. Supports both batch mode (`/research-images Boeing`) and single-aircraft mode (`/research-images boeing-737-800`). Full workflow: source priority list, download/upload R2/update D1, category-specific tips.
+
+**Changed:**
+- **`/research-discovery` images section slimmed** — Now just says "use `/research-images`" instead of embedding the full workflow.
+- **Content agent task types** — Added `research-images` entries for batch and single modes.
+- **CLAUDE.md** — Added `/research-images` to content agent skills list.
+
+---
+
 ### Content Agent Skill Tool + No-Breadcrumbs Convention
 
 **Fixed:**
