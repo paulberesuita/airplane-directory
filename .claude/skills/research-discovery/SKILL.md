@@ -152,38 +152,9 @@ Update CHANGELOG.md and CONTEXT.md.
 
 ## Images Mode — Fill Missing Images
 
-When invoked with `/research-discovery images [manufacturer]`, find and upload images.
+When invoked with `/research-discovery images [manufacturer]`, use `/research-images [manufacturer]` to find and upload images.
 
-### 1. Find Aircraft Needing Images
-
-```bash
-npx wrangler d1 execute airplane-directory-db --remote --command "SELECT slug, name FROM aircraft WHERE manufacturer = '[manufacturer]' AND (image_url IS NULL OR image_url = '') LIMIT 20;"
-```
-
-### 2. For EACH Aircraft (do all steps before moving to next)
-
-**A. Find the image (try in order):**
-
-1. **Wikipedia API** — `curl -s "https://en.wikipedia.org/w/api.php?action=query&titles=[Name]&prop=pageimages&piprop=original&format=json"`
-2. **Wikimedia Commons** — Search for aircraft photos
-3. **Planespotters.net** — High quality aircraft photos
-4. **Manufacturer press images** — boeing.com/company/media, airbus.com/en/newsroom
-5. **Flickr Creative Commons** — With license filter
-
-**B. Download, upload to R2, update DB — ALL IN ONE GO:**
-```bash
-curl -L "[IMAGE_URL]" -o temp/[slug]-new.jpg
-npx wrangler r2 object put airplane-directory-assets/aircraft/[slug].jpg --file=./temp/[slug]-new.jpg --remote
-npx wrangler d1 execute airplane-directory-db --remote --command "UPDATE aircraft SET image_url = 'aircraft/[slug].jpg' WHERE slug = '[slug]';"
-```
-
-**C. Verify:** `curl -sI "https://airlineplanes.com/images/aircraft/[slug].jpg" | head -3`
-
-**If you cannot find a photo of the actual aircraft, skip it.** A missing image is better than a wrong image.
-
-### 3. Report & Deploy
-
-Update CHANGELOG.md, then deploy with `/cloudflare-deploy`.
+See the `/research-images` skill for the full image search workflow, source priority, and upload steps.
 
 ---
 

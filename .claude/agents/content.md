@@ -141,7 +141,8 @@ Also check:
 |------|---------------|---------|
 | Discover new aircraft | Skill tool: `skill="research-discovery"` | "Research Embraer E-Jet family" |
 | Coverage overview | Skill tool: `skill="research-discovery"` | "How many aircraft have images?" |
-| Fill images | Skill tool: `skill="research-discovery", args="images Boeing"` | "Fill missing images for Boeing" |
+| Fill images (batch) | Skill tool: `skill="research-images", args="Boeing"` | "Fill missing images for Boeing" |
+| Fill image (single) | Skill tool: `skill="research-images", args="boeing-737-800"` | "Find image for 737-800" |
 | Deep research on aircraft | Skill tool: `skill="deep-research", args="[slug]"` | "Deep dive on Boeing 737-800 specs" |
 | Verify data quality | Skill tool: `skill="deep-research", args="verify Boeing"` | "Verify specs for A320 family" |
 | Verify airline fleet | Skill tool: `skill="deep-research", args="airline delta-air-lines"` | "Verify Delta Air Lines fleet" |
