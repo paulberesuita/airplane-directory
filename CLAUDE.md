@@ -59,7 +59,7 @@ Skills are **detailed instructions** for specific tasks. Agents invoke skills wh
 **Agent-owned skills:**
 | Agent | Skills |
 |-------|--------|
-| **content** | `/research-data`, `/research-images`, `/verify-data`, `/verify-airline`, `/query-data`, `/build-seo-page` |
+| **content** | `/research-data`, `/research-images`, `/verify-data`, `/verify-airline`, `/query-data` |
 | **product** | `/mini-tools`, `/delights` |
 | **seo** | `/seo-audit` |
 | **marketing** | `/outreach` |

@@ -144,8 +144,8 @@ Also check:
 | Verify data quality | `/verify-data` | "Verify specs for A320 family" |
 | Verify airline fleet | `/verify-airline` | "Verify Delta Air Lines fleet" |
 | Query the database | `/query-data` | "How many aircraft have images?" |
-| Build content page | `/build-seo-page` | "Build comparison page for A320 vs 737" |
-| Build sitemap | `/build-seo-page` (sitemap) | "Rebuild sitemap" |
+| Build content page | `/project-architecture` | "Build comparison page for A320 vs 737" |
+| Build sitemap | `/project-architecture` | "Rebuild sitemap" |
 | Fix data quality | Direct SQL migrations | "Fix missing first_flight_year values" |
 
 ---

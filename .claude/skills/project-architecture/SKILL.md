@@ -249,3 +249,33 @@ export async function onRequestGet(context) {
 4. **Cache public pages** — `Cache-Control: public, max-age=300` for HTML
 5. **CORS on API only** — Add `Access-Control-Allow-Origin: *` to `/api/` endpoints only
 6. **API keys in env vars** — Never in code, use `wrangler pages secret put`
+
+---
+
+## Page Building Rules
+
+**Page types and URL patterns:**
+
+| Type | URL Pattern | Minimum Data |
+|------|-------------|--------------|
+| Manufacturer page | `/manufacturer/[slug]` | Existing manufacturer data |
+| Category page | `/[category]/[slug]` | 5+ aircraft in category |
+| Comparison page | `/compare/[aircraft1]-vs-[aircraft2]` | Two aircraft with specs |
+| Top-10 list | `/best/[topic]` | Curated selection |
+
+**Don't build pages with incomplete data.** Check image coverage and spec completeness first.
+
+**SEO elements required on every page:**
+- Title tag (unique, keyword-rich, <60 chars)
+- Meta description (<160 chars)
+- Open Graph + Twitter card tags
+- Canonical URL
+- JSON-LD structured data
+- Internal links to related aircraft
+- Semantic HTML (h1, article, nav)
+
+**Structured data types:**
+- Manufacturer pages → `ItemList` with aircraft
+- Aircraft detail → `Product`
+- Comparison pages → `ItemList` with `ListItem`
+- Homepage → `WebSite`
