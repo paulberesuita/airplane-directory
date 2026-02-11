@@ -4,6 +4,35 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ---
 
+## 2026-02-11
+
+### Shared Modules Refactor
+
+Extracted duplicated code from 6 page functions into 3 shared modules under `functions/_shared/`. This was modeled after the haunted-places architecture.
+
+**Key decisions:**
+- **Superset Tailwind config** — the shared renderHead includes all colors used anywhere (primary, error, error-bg, success, success-bg, accent) and all fonts (Bebas Neue, Plus Jakarta Sans, Inter, Press Start 2P). Every page gets the full config even if it only uses a subset. Simplicity > micro-optimization.
+- **Options pattern for renderHead** — `renderHead(meta, { extraStyles, extraHead })` handles per-page variations. Pages like sources.js inject logbook-specific CSS via `extraStyles`, and pages inject their JSON-LD schemas via `extraHead`.
+- **Active page highlighting** — `renderHeader(activePage)` takes a string like 'airlines' or 'aircraft'. The matching nav item gets `text-white font-medium` while others get `text-white/70`. Homepage passes no argument.
+- **Standardized to Mario pixel clouds** — about.js previously had a smooth noise/fbm shader. Now all pages use the same Mario-style pixel cloud shader from layout.js. Visual consistency > per-page variety.
+- **Manufacturer header change** — manufacturer page previously had an SVG airplane icon + "AirlinePlanes" text header. Now uses the shared Bebas Neue "AIRLINEPLANES" header like all other pages. Consistency > uniqueness.
+- **`_shared/` directory convention** — Cloudflare Pages Functions ignores directories starting with `_`, so `functions/_shared/` won't create routes. Safe to put any shared code here.
+
+**Files created:**
+- `functions/_shared/utils.js` — 9 utility functions
+- `functions/_shared/constants.js` — airlineBrandColors, MANUFACTURER_DATA
+- `functions/_shared/layout.js` — renderHead, renderHeader, renderFooter, renderSkyShader (private)
+
+**Files modified:**
+- `functions/index.js` — 746 → 409 lines
+- `functions/about.js` — 399 → 172 lines
+- `functions/sources.js` — 442 → 203 lines
+- `functions/aircraft/[[slug]].js` — 1,351 → 990 lines
+- `functions/airlines/[[slug]].js` — 774 → 454 lines
+- `functions/manufacturer/[[slug]].js` — 772 → 448 lines
+
+---
+
 ## 2026-02-09
 
 ### Sources Page — Pilot's Flight Logbook

@@ -1,4 +1,5 @@
 // GET /about - About page (SSR)
+import { renderHead, renderHeader, renderFooter } from './_shared/layout.js';
 
 export async function onRequestGet(context) {
   const { env, request } = context;
@@ -32,219 +33,13 @@ export async function onRequestGet(context) {
   }
 }
 
-function escapeHtml(text) {
-  if (!text) return '';
-  return String(text)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-function renderHead({ title, description, url, jsonLd }) {
-  return `
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${escapeHtml(title)}</title>
-  <meta name="description" content="${escapeHtml(description)}">
-  <link rel="canonical" href="${escapeHtml(url)}">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-
-  <!-- Preconnect to external origins -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://plausible.io">
-  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="${escapeHtml(title)}">
-  <meta property="og:description" content="${escapeHtml(description)}">
-  <meta property="og:url" content="${escapeHtml(url)}">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="AirlinePlanes">
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="${escapeHtml(title)}">
-  <meta name="twitter:description" content="${escapeHtml(description)}">
-
-  ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : ''}
-
-  <!-- Privacy-friendly analytics by Plausible -->
-  <script async src="https://plausible.io/js/pa-r_sufjC9BuCQ2pwIVqJc-.js"></script>
-  <script>
-    window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-    plausible.init()
-  </script>
-
-  <!-- Fonts & Tailwind -->
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-            display: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
-          },
-          colors: {
-            'primary': '#3B82F6',
-            'primary-hover': '#2563EB',
-            'background': 'rgba(248, 250, 252, 0.85)',
-            'card': 'rgba(255, 255, 255, 0.95)',
-            'border': '#E2E8F0',
-            'muted': '#64748B',
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    body {
-      background-color: white;
-      padding: 0.75rem;
-      min-height: 100vh;
-    }
-    #sky-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-    .window-frame {
-      border-radius: 24px;
-      min-height: calc(100vh - 1.5rem);
-      overflow: hidden;
-    }
-  </style>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const canvas = document.getElementById('sky-canvas');
-      if (!canvas) return;
-      const gl = canvas.getContext('webgl');
-      if (!gl) return;
-
-      const vertexShader = \`
-        attribute vec2 a_position;
-        void main() { gl_Position = vec4(a_position, 0.0, 1.0); }
-      \`;
-
-      const fragmentShader = \`
-        precision mediump float;
-        uniform float u_time;
-        uniform vec2 u_resolution;
-
-        float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-
-        float noise(vec2 p) {
-          vec2 i = floor(p);
-          vec2 f = fract(p);
-          f = f * f * (3.0 - 2.0 * f);
-          float a = hash(i);
-          float b = hash(i + vec2(1.0, 0.0));
-          float c = hash(i + vec2(0.0, 1.0));
-          float d = hash(i + vec2(1.0, 1.0));
-          return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
-        }
-
-        float fbm(vec2 p) {
-          float value = 0.0;
-          float amplitude = 0.5;
-          for (int i = 0; i < 6; i++) {
-            value += amplitude * noise(p);
-            p *= 2.0;
-            amplitude *= 0.5;
-          }
-          return value;
-        }
-
-        void main() {
-          vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-          uv.x *= u_resolution.x / u_resolution.y;
-          vec2 movement = vec2(u_time * 0.02, u_time * 0.008);
-          float clouds = fbm(uv * 2.0 + movement);
-          clouds = smoothstep(0.4, 0.7, clouds);
-          clouds *= 0.5;
-          vec3 skyTop = vec3(0.051, 0.157, 1.0);
-          vec3 skyBottom = vec3(0.2, 0.35, 1.0);
-          vec3 sky = mix(skyBottom, skyTop, uv.y);
-          vec3 cloudColor = vec3(0.85, 0.9, 1.0);
-          vec3 color = mix(sky, cloudColor, clouds * 0.7);
-          gl_FragColor = vec4(color, 1.0);
-        }
-      \`;
-
-      function createShader(gl, type, source) {
-        const shader = gl.createShader(type);
-        gl.shaderSource(shader, source);
-        gl.compileShader(shader);
-        return shader;
-      }
-
-      const vs = createShader(gl, gl.VERTEX_SHADER, vertexShader);
-      const fs = createShader(gl, gl.FRAGMENT_SHADER, fragmentShader);
-      const program = gl.createProgram();
-      gl.attachShader(program, vs);
-      gl.attachShader(program, fs);
-      gl.linkProgram(program);
-      gl.useProgram(program);
-
-      const vertices = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
-      const buffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-      gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-
-      const aPosition = gl.getAttribLocation(program, 'a_position');
-      gl.enableVertexAttribArray(aPosition);
-      gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
-
-      const uTime = gl.getUniformLocation(program, 'u_time');
-      const uResolution = gl.getUniformLocation(program, 'u_resolution');
-
-      function resize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        gl.viewport(0, 0, canvas.width, canvas.height);
-      }
-      window.addEventListener('resize', resize);
-      resize();
-
-      function render(time) {
-        gl.uniform1f(uTime, time * 0.001);
-        gl.uniform2f(uResolution, canvas.width, canvas.height);
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-        requestAnimationFrame(render);
-      }
-      render(0);
-    });
-  </script>`;
-}
-
 function renderAboutPage(baseUrl, stats) {
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": baseUrl
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "About",
-        "item": `${baseUrl}/about`
-      }
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": baseUrl },
+      { "@type": "ListItem", "position": 2, "name": "About", "item": `${baseUrl}/about` }
     ]
   };
 
@@ -269,25 +64,17 @@ function renderAboutPage(baseUrl, stats) {
     description: 'AirlinePlanes is a comprehensive directory of commercial aircraft and the airlines that fly them. Learn about our mission to help travelers know what planes they fly on.',
     url: `${baseUrl}/about`,
     jsonLd: null
-  })}
+  }, {
+    extraHead: `
   <script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>
-  <script type="application/ld+json">${JSON.stringify(aboutPageSchema)}</script>
+  <script type="application/ld+json">${JSON.stringify(aboutPageSchema)}</script>`
+  })}
 </head>
 <body class="font-sans">
   <canvas id="sky-canvas"></canvas>
   <div class="window-frame">
 
-  <!-- Nav -->
-  <nav class="sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 pt-6 pb-4 flex items-center justify-between">
-      <a href="/" class="text-2xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRLINEPLANES</a>
-      <div class="flex gap-6 text-sm">
-        <a href="/airlines" class="text-white/70 hover:text-white transition-colors">Airlines</a>
-        <a href="/aircraft" class="text-white/70 hover:text-white transition-colors">Aircraft</a>
-        <a href="/about" class="text-white hover:text-white/80 transition-colors">About</a>
-      </div>
-    </div>
-  </nav>
+  ${renderHeader('about')}
 
   <!-- Hero -->
   <div class="text-white">
@@ -299,7 +86,7 @@ function renderAboutPage(baseUrl, stats) {
 
   <!-- Content -->
   <main class="max-w-4xl mx-auto px-4 py-8">
-    <div class="bg-white/95 backdrop-blur-sm rounded-2xl p-8 md:p-12 shadow-xl">
+    <div class="bg-white/95 backdrop-blur-sm rounded-2xl p-8 md:p-12">
 
       <!-- Mission -->
       <section class="mb-12">
@@ -377,20 +164,7 @@ function renderAboutPage(baseUrl, stats) {
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="mt-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-        <a href="/" class="text-xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRLINEPLANES</a>
-        <nav class="flex items-center gap-6">
-          <a href="/airlines" class="text-white/90 hover:text-white text-sm transition-colors">Airlines</a>
-          <a href="/aircraft" class="text-white/90 hover:text-white text-sm transition-colors">Aircraft</a>
-          <a href="/sources" class="text-white/90 hover:text-white text-sm transition-colors">Sources</a>
-          <a href="/about" class="text-white/90 hover:text-white text-sm transition-colors">About</a>
-        </nav>
-      </div>
-    </div>
-  </footer>
+  ${renderFooter()}
 
   </div>
 </body>

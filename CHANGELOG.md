@@ -4,6 +4,20 @@ What we shipped. Builder appends here after each feature.
 
 ---
 
+## 2026-02-11
+
+### Shared Modules Refactor — DRY Architecture
+- **Created `functions/_shared/utils.js`** — extracted 9 utility functions (escapeHtml, formatNumber, kmToMiles, kmhToMph, metersToFeet, kgToLbs, litersToGallons, formatPrice, formatDate)
+- **Created `functions/_shared/constants.js`** — extracted airlineBrandColors (40+ airlines) and MANUFACTURER_DATA (Boeing, Airbus, Embraer, Bombardier)
+- **Created `functions/_shared/layout.js`** — extracted renderHead (with meta, OG, fonts, Tailwind config, WebGL shader), renderHeader (with active page highlighting), renderFooter
+- **Refactored all 6 page functions** to import from shared modules instead of duplicating code
+- **Net reduction: ~1,364 lines** removed across the codebase (4,484 → 3,120 lines)
+- **Standardized header** — all pages now use Bebas Neue "AIRLINEPLANES" with consistent nav highlighting
+- **Standardized WebGL shader** — all pages now use the Mario pixel cloud sky (about.js previously had smooth clouds)
+- **Standardized footer** — all 5 nav links (Airlines, Aircraft, Manufacturers, Sources, About) on every page
+
+---
+
 ## 2026-02-09
 
 ### Sources Page — Pilot's Flight Logbook

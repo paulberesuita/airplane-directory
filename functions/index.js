@@ -1,4 +1,8 @@
 // GET / - Homepage with airlines and aircraft grid (SSR)
+import { escapeHtml, formatNumber, kmToMiles, kmhToMph } from './_shared/utils.js';
+import { airlineBrandColors } from './_shared/constants.js';
+import { renderHead, renderHeader, renderFooter } from './_shared/layout.js';
+
 export async function onRequestGet(context) {
   const { env, request } = context;
   const url = new URL(request.url);
@@ -42,306 +46,6 @@ export async function onRequestGet(context) {
     });
   }
 }
-
-function escapeHtml(text) {
-  if (!text) return '';
-  return String(text)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-function formatNumber(num) {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-}
-
-function kmToMiles(km) {
-  return Math.round(km * 0.621371);
-}
-
-function kmhToMph(kmh) {
-  return Math.round(kmh * 0.621371);
-}
-
-function renderHead({ title, description, url, image, jsonLd }) {
-  return `
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${escapeHtml(title)}</title>
-  <meta name="description" content="${escapeHtml(description)}">
-  <link rel="canonical" href="${escapeHtml(url)}">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-
-  <!-- Preconnect to external origins -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://plausible.io">
-  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="${escapeHtml(title)}">
-  <meta property="og:description" content="${escapeHtml(description)}">
-  <meta property="og:url" content="${escapeHtml(url)}">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="AirlinePlanes">
-  ${image ? `<meta property="og:image" content="${escapeHtml(image)}">` : ''}
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${escapeHtml(title)}">
-  <meta name="twitter:description" content="${escapeHtml(description)}">
-  ${image ? `<meta name="twitter:image" content="${escapeHtml(image)}">` : ''}
-
-  ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : ''}
-
-  <!-- Privacy-friendly analytics by Plausible -->
-  <script async src="https://plausible.io/js/pa-r_sufjC9BuCQ2pwIVqJc-.js"></script>
-  <script>
-    window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-    plausible.init()
-  </script>
-
-  <!-- Fonts & Tailwind -->
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@600;700&family=Inter:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-            display: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
-          },
-          colors: {
-            'primary': '#3B82F6',
-            'primary-hover': '#2563EB',
-            'background': 'rgba(248, 250, 252, 0.85)',
-            'card': 'rgba(255, 255, 255, 0.95)',
-            'border': '#E2E8F0',
-            'muted': '#64748B',
-            'accent': '#F87171',
-            'error': '#dc2626',
-            'error-bg': '#fef2f2',
-            'success': '#16a34a',
-            'success-bg': '#f0fdf4',
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    body {
-      background-color: white;
-      padding: 0.75rem;
-      min-height: 100vh;
-    }
-    #sky-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-    .window-frame {
-      border-radius: 24px;
-      min-height: calc(100vh - 1.5rem);
-      overflow: hidden;
-    }
-  </style>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const canvas = document.getElementById('sky-canvas');
-      if (!canvas) return;
-      const gl = canvas.getContext('webgl');
-      if (!gl) return;
-
-      const vertexShader = \`
-        attribute vec2 a_position;
-        void main() { gl_Position = vec4(a_position, 0.0, 1.0); }
-      \`;
-
-      const fragmentShader = \`
-        precision mediump float;
-        uniform float u_time;
-        uniform vec2 u_resolution;
-
-        // Draw a single Mario-style cloud (3 bumps) - smaller
-        float cloud(vec2 uv, vec2 pos, float size) {
-          vec2 p = uv - pos;
-          p.x /= 1.5;
-
-          float d1 = length(p - vec2(-0.04, 0.0) * size) - 0.025 * size;
-          float d2 = length(p - vec2(0.0, 0.012) * size) - 0.032 * size;
-          float d3 = length(p - vec2(0.04, 0.0) * size) - 0.025 * size;
-          float d4 = length(p - vec2(0.0, -0.008) * size) - 0.04 * size;
-
-          float d = min(min(d1, d2), min(d3, d4));
-          return 1.0 - step(0.0, d);
-        }
-
-        void main() {
-          vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-          float aspect = u_resolution.x / u_resolution.y;
-
-          // Pixelate
-          float pixelCount = 100.0;
-          vec2 pixelUV = floor(uv * pixelCount) / pixelCount;
-
-          vec2 p = pixelUV;
-          p.x *= aspect;
-
-          // Very slow movement
-          float t = u_time * 0.008;
-
-          // Clouds spread across the sky
-          float c = 0.0;
-          // Top clouds
-          c = max(c, cloud(p, vec2(mod(t * 0.6, 4.0) - 0.5, 0.93), 1.0));
-          c = max(c, cloud(p, vec2(mod(t * 0.4 + 2.0, 4.5) - 0.3, 0.86), 0.8));
-          c = max(c, cloud(p, vec2(mod(t * 0.5 + 1.2, 3.8) - 0.4, 0.90), 0.9));
-          c = max(c, cloud(p, vec2(mod(t * 0.44 + 0.3, 4.1) - 0.7, 0.88), 0.75));
-          // Middle clouds
-          c = max(c, cloud(p, vec2(mod(t * 0.45 + 3.0, 4.8) - 0.6, 0.70), 0.75));
-          c = max(c, cloud(p, vec2(mod(t * 0.38 + 0.8, 4.2) - 0.3, 0.55), 0.85));
-          c = max(c, cloud(p, vec2(mod(t * 0.52 + 2.2, 5.0) - 0.9, 0.45), 0.7));
-          c = max(c, cloud(p, vec2(mod(t * 0.42 + 1.5, 3.9) - 0.5, 0.62), 0.8));
-          c = max(c, cloud(p, vec2(mod(t * 0.48 + 3.8, 4.4) - 0.7, 0.38), 0.9));
-          c = max(c, cloud(p, vec2(mod(t * 0.36 + 2.8, 4.6) - 0.2, 0.50), 0.72));
-          c = max(c, cloud(p, vec2(mod(t * 0.41 + 3.6, 4.0) - 3.6, 0.58), 0.82));
-          // Bottom clouds
-          c = max(c, cloud(p, vec2(mod(t * 0.5 + 3.5, 5.0) - 1.0, 0.08), 0.9));
-          c = max(c, cloud(p, vec2(mod(t * 0.35 + 1.0, 4.2) - 0.2, 0.15), 0.7));
-          c = max(c, cloud(p, vec2(mod(t * 0.55 + 2.5, 4.0) - 0.8, 0.04), 0.85));
-          c = max(c, cloud(p, vec2(mod(t * 0.4 + 0.5, 3.6) - 0.1, 0.22), 0.65));
-          c = max(c, cloud(p, vec2(mod(t * 0.46 + 1.8, 4.3) - 0.4, 0.12), 0.78));
-
-          // Sky gradient
-          vec3 skyTop = vec3(0.051, 0.157, 1.0);
-          vec3 skyBottom = vec3(0.15, 0.3, 1.0);
-          vec3 sky = mix(skyBottom, skyTop, uv.y);
-
-          // Cloud color - very subtle, light blue-white tint
-          vec3 cloudColor = vec3(0.6, 0.7, 1.0);
-
-          // Subtle blend
-          vec3 color = mix(sky, cloudColor, c * 0.25);
-
-          // Pixel airplane
-          float planeX = mod(t * 8.0, 1.4) - 0.15;
-          float planeY = 0.65;
-          float bx = floor((pixelUV.x - planeX) * pixelCount);
-          float by = floor((pixelUV.y - planeY) * pixelCount);
-          float pl = 0.0;
-          if (abs(by - 3.0) < 0.5 && bx > -4.5 && bx < -3.5) pl = 1.0;
-          if (abs(by - 2.0) < 0.5 && bx > -4.5 && bx < -2.5) pl = 1.0;
-          if (abs(by - 1.0) < 0.5 && bx > -4.5 && bx < 4.5) pl = 1.0;
-          if (abs(by) < 0.5 && bx > -5.5 && bx < 5.5) pl = 1.0;
-          if (abs(by + 1.0) < 0.5 && bx > -4.5 && bx < 4.5) pl = 1.0;
-          if (abs(by + 2.0) < 0.5 && bx > -2.5 && bx < 1.5) pl = 1.0;
-          if (abs(by + 3.0) < 0.5 && bx > -1.5 && bx < 0.5) pl = 1.0;
-          color = mix(color, vec3(0.8, 0.85, 1.0), pl * 0.6);
-
-          gl_FragColor = vec4(color, 1.0);
-        }
-      \`;
-
-      function createShader(gl, type, source) {
-        const shader = gl.createShader(type);
-        gl.shaderSource(shader, source);
-        gl.compileShader(shader);
-        return shader;
-      }
-
-      const vs = createShader(gl, gl.VERTEX_SHADER, vertexShader);
-      const fs = createShader(gl, gl.FRAGMENT_SHADER, fragmentShader);
-      const program = gl.createProgram();
-      gl.attachShader(program, vs);
-      gl.attachShader(program, fs);
-      gl.linkProgram(program);
-      gl.useProgram(program);
-
-      const vertices = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
-      const buffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-      gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-
-      const aPosition = gl.getAttribLocation(program, 'a_position');
-      gl.enableVertexAttribArray(aPosition);
-      gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
-
-      const uTime = gl.getUniformLocation(program, 'u_time');
-      const uResolution = gl.getUniformLocation(program, 'u_resolution');
-
-      function resize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        gl.viewport(0, 0, canvas.width, canvas.height);
-      }
-      window.addEventListener('resize', resize);
-      resize();
-
-      function render(time) {
-        gl.uniform1f(uTime, time * 0.001);
-        gl.uniform2f(uResolution, canvas.width, canvas.height);
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-        requestAnimationFrame(render);
-      }
-      render(0);
-    });
-  </script>`;
-}
-
-// Airline brand colors
-const airlineBrandColors = {
-  'united-airlines': '#002244',
-  'american-airlines': '#0078D2',
-  'delta-air-lines': '#003366',
-  'southwest-airlines': '#304CB2',
-  'jetblue-airways': '#003876',
-  'alaska-airlines': '#01426A',
-  'spirit-airlines': '#FFE302',
-  'frontier-airlines': '#00A651',
-  'british-airways': '#075AAA',
-  'lufthansa': '#05164D',
-  'air-france': '#002157',
-  'klm': '#00A1E4',
-  'emirates': '#D71921',
-  'qatar-airways': '#5C0632',
-  'singapore-airlines': '#F59E0B',
-  'cathay-pacific': '#005A3C',
-  'qantas': '#E0112B',
-  'air-new-zealand': '#0D0D0D',
-  'ana': '#00467F',
-  'japan-airlines': '#C8102E',
-  'korean-air': '#00256C',
-  'china-airlines': '#003366',
-  'eva-air': '#00654B',
-  'etihad-airways': '#BD8B13',
-  'el-al': '#0033A0',
-  'air-canada': '#F01428',
-  'westjet': '#00263A',
-  'aeromexico': '#00295B',
-  'avianca': '#E31937',
-  'copa-airlines': '#005DAA',
-  'latam': '#ED1651',
-  'virgin-atlantic': '#E10A0A',
-  'iberia': '#D71921',
-  'tap-portugal': '#00965E',
-  'aer-lingus': '#006272',
-  'turkish-airlines': '#C8102E',
-  'finnair': '#0B1560',
-  'swiss': '#E2001A',
-  'sas': '#00205B',
-  'norwegian': '#D81939',
-  'icelandair': '#003893',
-};
 
 function renderAirlineCard(airline, baseUrl) {
   const brandColor = airlineBrandColors[airline.slug] || '#3B82F6';
@@ -453,8 +157,8 @@ function renderAircraftCard(aircraft, baseUrl) {
            alt="${escapeHtml(aircraft.name)}"
            class="w-full h-full object-cover"
            loading="lazy"
-           onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center\\'><span class=\\'text-5xl\\'>✈</span></div>'">`
-    : `<div class="w-full h-full flex items-center justify-center"><span class="text-5xl">✈</span></div>`;
+           onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center\\'><span class=\\'text-5xl\\'>&#9992;</span></div>'">`
+    : `<div class="w-full h-full flex items-center justify-center"><span class="text-5xl">&#9992;</span></div>`;
 
   // Stamp collection style aircraft card with pixel-clip frame
   return `
@@ -556,32 +260,9 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
   <script type="application/ld+json">${JSON.stringify(organizationSchema)}</script>
   <script type="application/ld+json">${JSON.stringify(airlineListSchema)}</script>`;
 
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  ${renderHead({
-    title: 'AirlinePlanes — Know What Airlines Fly',
-    description: `Explore the fleets of ${airlines.length} major airlines with ${formatNumber(totalAircraft)}+ aircraft. See which planes Emirates, British Airways, Lufthansa, Singapore Airlines and more operate.`,
-    url: baseUrl,
-    image: aircraft[0]?.image_url ? `${baseUrl}/images/aircraft-styled/${aircraft[0].slug}.webp` : null,
-    jsonLd: null
-  })}
-  ${multipleJsonLd}
-  <style>
+  const extraStyles = `
     .aircraft-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     .aircraft-card:hover { transform: translateY(-4px); }
-    .pixel-text {
-      font-family: 'Press Start 2P', monospace;
-      line-height: 1.6;
-    }
-    .pixel-clip {
-      clip-path: polygon(
-        0 8px, 4px 8px, 4px 4px, 8px 4px, 8px 0,
-        calc(100% - 8px) 0, calc(100% - 8px) 4px, calc(100% - 4px) 4px, calc(100% - 4px) 8px, 100% 8px,
-        100% calc(100% - 8px), calc(100% - 4px) calc(100% - 8px), calc(100% - 4px) calc(100% - 4px), calc(100% - 8px) calc(100% - 4px), calc(100% - 8px) 100%,
-        8px 100%, 8px calc(100% - 4px), 4px calc(100% - 4px), 4px calc(100% - 8px), 0 calc(100% - 8px)
-      );
-    }
     .line-clamp-2 {
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -606,21 +287,23 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
     .btn-vintage:hover .btn-vintage-inner {
       background-color: #f5f0e6;
     }
-  </style>
+  `;
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  ${renderHead({
+    title: 'AirlinePlanes — Know What Airlines Fly',
+    description: `Explore the fleets of ${airlines.length} major airlines with ${formatNumber(totalAircraft)}+ aircraft. See which planes Emirates, British Airways, Lufthansa, Singapore Airlines and more operate.`,
+    url: baseUrl,
+    image: aircraft[0]?.image_url ? `${baseUrl}/images/aircraft-styled/${aircraft[0].slug}.webp` : null,
+    jsonLd: null
+  }, { extraStyles, extraHead: multipleJsonLd })}
 </head>
 <body class="font-sans">
   <canvas id="sky-canvas"></canvas>
   <div class="window-frame">
-  <!-- Nav -->
-  <nav class="sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 pt-6 pb-4 flex items-center justify-between">
-      <a href="/" class="text-2xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRLINEPLANES</a>
-      <div class="flex gap-6 text-sm">
-        <a href="/airlines" class="text-white/70 hover:text-white transition-colors">Airlines</a>
-        <a href="/aircraft" class="text-white/70 hover:text-white transition-colors">Aircraft</a>
-      </div>
-    </div>
-  </nav>
+  ${renderHeader()}
 
   <!-- Hero Section -->
   <header class="relative">
@@ -690,26 +373,7 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
 
   </main>
 
-  <!-- Footer -->
-  <footer class="mt-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-        <a href="/" class="text-xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRLINEPLANES</a>
-        <nav class="flex items-center gap-6">
-          <a href="/airlines" class="text-white/90 hover:text-white text-sm transition-colors">Airlines</a>
-          <a href="/aircraft" class="text-white/90 hover:text-white text-sm transition-colors">Aircraft</a>
-          <a href="/manufacturer" class="text-white/90 hover:text-white text-sm transition-colors">Manufacturers</a>
-          <a href="/sources" class="text-white/90 hover:text-white text-sm transition-colors">Sources</a>
-          <a href="/about" class="text-white/90 hover:text-white text-sm transition-colors">About</a>
-        </nav>
-      </div>
-      <div class="border-t border-white/20 mt-8 pt-8 text-center">
-        <p class="text-white/80 text-sm">
-          All data verified against multiple independent aviation sources.
-        </p>
-      </div>
-    </div>
-  </footer>
+  ${renderFooter()}
 
   </div>
 </body>

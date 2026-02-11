@@ -1,4 +1,8 @@
 // GET /manufacturer and GET /manufacturer/[slug] - Manufacturer list and detail pages (SSR)
+import { escapeHtml, formatNumber, kmToMiles, kmhToMph } from '../_shared/utils.js';
+import { MANUFACTURER_DATA } from '../_shared/constants.js';
+import { renderHead, renderHeader, renderFooter } from '../_shared/layout.js';
+
 export async function onRequestGet(context) {
   const { env, request, params } = context;
   const url = new URL(request.url);
@@ -17,333 +21,6 @@ export async function onRequestGet(context) {
       headers: { 'Content-Type': 'text/html; charset=utf-8' }
     });
   }
-}
-
-// === Manufacturer Data ===
-// Since manufacturers don't have their own table, we define metadata here
-const MANUFACTURER_DATA = {
-  'boeing': {
-    slug: 'boeing',
-    name: 'Boeing',
-    founded: 1916,
-    headquarters: 'Arlington, Virginia, USA',
-    description: 'Boeing is one of the world\'s largest aerospace companies and a leading manufacturer of commercial jetliners, defense, space, and security systems. Founded by William Boeing in Seattle, the company has grown to become a global aviation icon, producing legendary aircraft like the 747 "Jumbo Jet" and the modern 787 Dreamliner.',
-    website: 'https://www.boeing.com',
-    logoColor: '#0033A0' // Boeing blue
-  },
-  'airbus': {
-    slug: 'airbus',
-    name: 'Airbus',
-    founded: 1970,
-    headquarters: 'Leiden, Netherlands / Toulouse, France',
-    description: 'Airbus is a European multinational aerospace corporation and the world\'s largest airliner manufacturer by revenue. Born from a consortium of European aviation companies, Airbus has revolutionized air travel with innovations like fly-by-wire controls and the double-deck A380, the world\'s largest passenger aircraft.',
-    website: 'https://www.airbus.com',
-    logoColor: '#00205B' // Airbus blue
-  },
-  'embraer': {
-    slug: 'embraer',
-    name: 'Embraer',
-    founded: 1969,
-    headquarters: 'Sao Jose dos Campos, Brazil',
-    description: 'Embraer is a Brazilian aerospace conglomerate that produces commercial, military, executive, and agricultural aircraft. The company is the world\'s third-largest producer of civil aircraft, behind Boeing and Airbus, and is particularly known for its regional jets that connect smaller cities to major hubs.',
-    website: 'https://www.embraer.com',
-    logoColor: '#003366' // Embraer blue
-  },
-  'bombardier': {
-    slug: 'bombardier',
-    name: 'Bombardier',
-    founded: 1942,
-    headquarters: 'Montreal, Quebec, Canada',
-    description: 'Bombardier is a Canadian multinational aerospace and transportation company. While they sold their commercial aviation division (including the CRJ series) to Mitsubishi in 2020, their regional jets remain popular with airlines worldwide. The company now focuses on business aviation with its Learjet, Challenger, and Global jet families.',
-    website: 'https://www.bombardier.com',
-    logoColor: '#C8102E' // Bombardier red
-  }
-};
-
-// === Utilities ===
-
-function escapeHtml(text) {
-  if (!text) return '';
-  return String(text)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-function formatNumber(num) {
-  if (!num) return '0';
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-}
-
-function kmToMiles(km) {
-  return Math.round(km * 0.621371);
-}
-
-function kmhToMph(kmh) {
-  return Math.round(kmh * 0.621371);
-}
-
-// === Shared Components ===
-
-function renderHead({ title, description, url, image, jsonLd }) {
-  return `
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${escapeHtml(title)}</title>
-  <meta name="description" content="${escapeHtml(description)}">
-  <link rel="canonical" href="${escapeHtml(url)}">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-
-  <!-- Preconnect to external origins -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://plausible.io">
-  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="${escapeHtml(title)}">
-  <meta property="og:description" content="${escapeHtml(description)}">
-  <meta property="og:url" content="${escapeHtml(url)}">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="AirlinePlanes">
-  ${image ? `<meta property="og:image" content="${escapeHtml(image)}">` : ''}
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${escapeHtml(title)}">
-  <meta name="twitter:description" content="${escapeHtml(description)}">
-  ${image ? `<meta name="twitter:image" content="${escapeHtml(image)}">` : ''}
-
-  ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : ''}
-
-  <!-- Privacy-friendly analytics by Plausible -->
-  <script async src="https://plausible.io/js/pa-r_sufjC9BuCQ2pwIVqJc-.js"></script>
-  <script>
-    window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-    plausible.init()
-  </script>
-
-  <!-- Fonts & Tailwind -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-            display: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
-          },
-          colors: {
-            'primary': '#3B82F6',
-            'primary-hover': '#2563EB',
-            'background': 'rgba(248, 250, 252, 0.85)',
-            'card': 'rgba(255, 255, 255, 0.95)',
-            'border': '#E2E8F0',
-            'muted': '#64748B',
-            'accent': '#F87171',
-            'success': '#16a34a',
-            'success-bg': '#f0fdf4',
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    #sky-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-  </style>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const canvas = document.getElementById('sky-canvas');
-      if (!canvas) return;
-      const gl = canvas.getContext('webgl');
-      if (!gl) return;
-
-      const vertexShader = \`
-        attribute vec2 a_position;
-        void main() { gl_Position = vec4(a_position, 0.0, 1.0); }
-      \`;
-
-      const fragmentShader = \`
-        precision mediump float;
-        uniform float u_time;
-        uniform vec2 u_resolution;
-
-        // Draw a single Mario-style cloud (3 bumps)
-        float cloud(vec2 uv, vec2 pos, float size) {
-          vec2 p = uv - pos;
-          p.x /= 1.5;
-
-          float d1 = length(p - vec2(-0.04, 0.0) * size) - 0.025 * size;
-          float d2 = length(p - vec2(0.0, 0.012) * size) - 0.032 * size;
-          float d3 = length(p - vec2(0.04, 0.0) * size) - 0.025 * size;
-          float d4 = length(p - vec2(0.0, -0.008) * size) - 0.04 * size;
-
-          float d = min(min(d1, d2), min(d3, d4));
-          return 1.0 - step(0.0, d);
-        }
-
-        void main() {
-          vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-          float aspect = u_resolution.x / u_resolution.y;
-
-          // Pixelate
-          float pixelCount = 100.0;
-          vec2 pixelUV = floor(uv * pixelCount) / pixelCount;
-
-          vec2 p = pixelUV;
-          p.x *= aspect;
-
-          // Very slow movement
-          float t = u_time * 0.008;
-
-          // Clouds spread across the sky
-          float c = 0.0;
-          // Top clouds
-          c = max(c, cloud(p, vec2(mod(t * 0.6, 4.0) - 0.5, 0.93), 1.0));
-          c = max(c, cloud(p, vec2(mod(t * 0.4 + 2.0, 4.5) - 0.3, 0.86), 0.8));
-          c = max(c, cloud(p, vec2(mod(t * 0.5 + 1.2, 3.8) - 0.4, 0.90), 0.9));
-          c = max(c, cloud(p, vec2(mod(t * 0.44 + 0.3, 4.1) - 0.7, 0.88), 0.75));
-          // Middle clouds
-          c = max(c, cloud(p, vec2(mod(t * 0.45 + 3.0, 4.8) - 0.6, 0.70), 0.75));
-          c = max(c, cloud(p, vec2(mod(t * 0.38 + 0.8, 4.2) - 0.3, 0.55), 0.85));
-          c = max(c, cloud(p, vec2(mod(t * 0.52 + 2.2, 5.0) - 0.9, 0.45), 0.7));
-          c = max(c, cloud(p, vec2(mod(t * 0.42 + 1.5, 3.9) - 0.5, 0.62), 0.8));
-          c = max(c, cloud(p, vec2(mod(t * 0.48 + 3.8, 4.4) - 0.7, 0.38), 0.9));
-          c = max(c, cloud(p, vec2(mod(t * 0.36 + 2.8, 4.6) - 0.2, 0.50), 0.72));
-          c = max(c, cloud(p, vec2(mod(t * 0.41 + 3.6, 4.0) - 3.6, 0.58), 0.82));
-          // Bottom clouds
-          c = max(c, cloud(p, vec2(mod(t * 0.5 + 3.5, 5.0) - 1.0, 0.08), 0.9));
-          c = max(c, cloud(p, vec2(mod(t * 0.35 + 1.0, 4.2) - 0.2, 0.15), 0.7));
-          c = max(c, cloud(p, vec2(mod(t * 0.55 + 2.5, 4.0) - 0.8, 0.04), 0.85));
-          c = max(c, cloud(p, vec2(mod(t * 0.4 + 0.5, 3.6) - 0.1, 0.22), 0.65));
-          c = max(c, cloud(p, vec2(mod(t * 0.46 + 1.8, 4.3) - 0.4, 0.12), 0.78));
-
-          // Sky gradient
-          vec3 skyTop = vec3(0.051, 0.157, 1.0);
-          vec3 skyBottom = vec3(0.15, 0.3, 1.0);
-          vec3 sky = mix(skyBottom, skyTop, uv.y);
-
-          // Cloud color - very subtle, light blue-white tint
-          vec3 cloudColor = vec3(0.6, 0.7, 1.0);
-
-          // Subtle blend
-          vec3 color = mix(sky, cloudColor, c * 0.25);
-
-          // Pixel airplane
-          float planeX = mod(t * 8.0, 1.4) - 0.15;
-          float planeY = 0.65;
-          float bx = floor((pixelUV.x - planeX) * pixelCount);
-          float by = floor((pixelUV.y - planeY) * pixelCount);
-          float pl = 0.0;
-          if (abs(by - 3.0) < 0.5 && bx > -4.5 && bx < -3.5) pl = 1.0;
-          if (abs(by - 2.0) < 0.5 && bx > -4.5 && bx < -2.5) pl = 1.0;
-          if (abs(by - 1.0) < 0.5 && bx > -4.5 && bx < 4.5) pl = 1.0;
-          if (abs(by) < 0.5 && bx > -5.5 && bx < 5.5) pl = 1.0;
-          if (abs(by + 1.0) < 0.5 && bx > -4.5 && bx < 4.5) pl = 1.0;
-          if (abs(by + 2.0) < 0.5 && bx > -2.5 && bx < 1.5) pl = 1.0;
-          if (abs(by + 3.0) < 0.5 && bx > -1.5 && bx < 0.5) pl = 1.0;
-          color = mix(color, vec3(0.8, 0.85, 1.0), pl * 0.6);
-
-          gl_FragColor = vec4(color, 1.0);
-        }
-      \`;
-
-      function createShader(gl, type, source) {
-        const shader = gl.createShader(type);
-        gl.shaderSource(shader, source);
-        gl.compileShader(shader);
-        return shader;
-      }
-
-      const vs = createShader(gl, gl.VERTEX_SHADER, vertexShader);
-      const fs = createShader(gl, gl.FRAGMENT_SHADER, fragmentShader);
-      const program = gl.createProgram();
-      gl.attachShader(program, vs);
-      gl.attachShader(program, fs);
-      gl.linkProgram(program);
-      gl.useProgram(program);
-
-      const vertices = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
-      const buffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-      gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-
-      const aPosition = gl.getAttribLocation(program, 'a_position');
-      gl.enableVertexAttribArray(aPosition);
-      gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
-
-      const uTime = gl.getUniformLocation(program, 'u_time');
-      const uResolution = gl.getUniformLocation(program, 'u_resolution');
-
-      function resize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        gl.viewport(0, 0, canvas.width, canvas.height);
-      }
-      window.addEventListener('resize', resize);
-      resize();
-
-      function render(time) {
-        gl.uniform1f(uTime, time * 0.001);
-        gl.uniform2f(uResolution, canvas.width, canvas.height);
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-        requestAnimationFrame(render);
-      }
-      render(0);
-    });
-  </script>`;
-}
-
-function renderHeader(baseUrl, activeManufacturer = false) {
-  return `
-  <header class="sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-2">
-        <div class="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
-          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
-          </svg>
-        </div>
-        <span class="text-xl font-bold font-display text-white drop-shadow">AirlinePlanes</span>
-      </a>
-      <nav class="flex gap-6 text-sm">
-        <a href="/airlines" class="text-white/70 hover:text-white transition-colors">Airlines</a>
-        <a href="/aircraft" class="text-white/70 hover:text-white transition-colors">Aircraft</a>
-        <a href="/manufacturer" class="${activeManufacturer ? 'text-white font-medium' : 'text-white/70 hover:text-white transition-colors'}">Manufacturers</a>
-      </nav>
-    </div>
-  </header>`;
-}
-
-function renderFooter() {
-  return `
-  <footer class="mt-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-        <a href="/" class="text-xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRLINEPLANES</a>
-        <nav class="flex items-center gap-6">
-          <a href="/airlines" class="text-white/90 hover:text-white text-sm transition-colors">Airlines</a>
-          <a href="/aircraft" class="text-white/90 hover:text-white text-sm transition-colors">Aircraft</a>
-          <a href="/sources" class="text-white/90 hover:text-white text-sm transition-colors">Sources</a>
-          <a href="/about" class="text-white/90 hover:text-white text-sm transition-colors">About</a>
-        </nav>
-      </div>
-    </div>
-  </footer>`;
 }
 
 // === List Page ===
@@ -454,7 +131,7 @@ async function renderListPage(context, baseUrl) {
 </head>
 <body class="bg-background text-slate-800 min-h-screen font-sans">
   <canvas id="sky-canvas"></canvas>
-  ${renderHeader(baseUrl, true)}
+  ${renderHeader('manufacturers')}
 
   <!-- Hero -->
   <div class="text-white">
@@ -651,7 +328,7 @@ async function renderDetailPage(context, slug, baseUrl) {
 </head>
 <body class="bg-background text-slate-800 min-h-screen font-sans">
   <canvas id="sky-canvas"></canvas>
-  ${renderHeader(baseUrl, true)}
+  ${renderHeader('manufacturers')}
 
   <!-- Hero -->
   <div class="text-white">
@@ -752,7 +429,7 @@ function renderErrorPage(baseUrl, message) {
 </head>
 <body class="bg-background text-slate-800 min-h-screen font-sans">
   <canvas id="sky-canvas"></canvas>
-  ${renderHeader(baseUrl, true)}
+  ${renderHeader('manufacturers')}
 
   <div class="max-w-5xl mx-auto px-4 py-20 text-center">
     <div class="inline-flex items-center justify-center w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full mb-6">
