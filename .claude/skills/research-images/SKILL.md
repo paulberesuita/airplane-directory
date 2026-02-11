@@ -59,30 +59,62 @@ curl -s "https://commons.wikimedia.org/w/api.php?action=query&list=search&srsear
 ```
 Then get URL: `action=query&titles=File:[filename]&prop=imageinfo&iiprop=url&format=json`
 
-**3. Planespotters.net** — High quality aircraft photos
+**3. Openverse (CC aggregator):**
+```bash
+curl -s "https://api.openverse.org/v1/images/?q=[Aircraft+Name]&license=by,by-sa,cc0,pdm&page_size=5" | jq '.results[0].url'
+```
+Aggregates Flickr, Wikimedia, and other CC sources. Use `license=by,by-sa,cc0,pdm` for permissive; add `by-nc,by-nc-sa` if none found.
 
-**4. Manufacturer press images:**
+**4. Planespotters.net** — High quality aircraft photos, check license per image
+
+**5. Jetphotos.com** — Large aviation photo database, check license per image
+
+**6. Manufacturer press images:**
 - boeing.com/company/media
 - airbus.com/en/newsroom
 - embraer.com/global/en/media
+- atr-aircraft.com/media
+- bombardier.com/en/media
 
-**5. Flickr Creative Commons** — With license filter
+**7. Flickr Creative Commons:**
+```
+WebSearch: site:flickr.com "[aircraft name]" creative commons
+```
+Check license on each photo — BY and BY-SA are safest. BY-NC-SA acceptable for non-commercial editorial use.
+
+**8. Airliners.net** — Massive aviation photo archive, check license per image
+
+**9. Aviation museums/archives:**
+- Smithsonian National Air and Space Museum (airandspace.si.edu)
+- Museum of Flight (museumofflight.org)
+- San Diego Air & Space Museum (Flickr: sdasm) — Thousands of public domain aviation photos
+- Library of Congress (loc.gov) — Historical aviation photos
+
+**10. Internet Archive** — Historical aviation photos, manufacturer brochures, vintage postcards. Pre-1929 publications are public domain.
 
 ### Source Priority
 
 1. **Wikimedia Commons** — Creative Commons, safest
 2. **Wikipedia article image** — Usually CC-licensed
-3. **Manufacturer press images** — Official photos, often freely usable
-4. **Planespotters.net** — High quality, check license
-5. **Flickr Creative Commons** — With license filter
-6. **Airliners.net** — Check license per image
+3. **Openverse** — CC aggregator, fast license filtering
+4. **Manufacturer press images** — Official photos, often freely usable
+5. **SDASM Flickr** — Public domain aviation archive (thousands of photos)
+6. **Planespotters.net** — High quality, check license
+7. **Jetphotos.com** — Large database, check license
+8. **Flickr Creative Commons** — With license filter
+9. **Airliners.net** — Check license per image
+10. **Aviation museums** — Smithsonian, Museum of Flight
+11. **Internet Archive** — Historical photos, pre-1929 public domain
+12. **Library of Congress** — Government photos, public domain
 
 ### Category-Specific Tips
 
-- **Widebody jets:** Wikipedia almost always has photos
-- **Regional jets:** Manufacturer press sites (Embraer, ATR, Bombardier)
-- **Historic/retired:** Wikimedia Commons, aviation museums
-- **Prototypes/in development:** Manufacturer press releases
+- **Widebody jets (777, A350, etc.):** Wikipedia almost always has photos — check here first
+- **Regional jets (E-Jets, CRJ, ATR):** Manufacturer press sites (Embraer, ATR, Bombardier)
+- **Historic/retired (707, DC-10, Concorde):** SDASM Flickr archive, Wikimedia Commons, aviation museums, Internet Archive
+- **Prototypes/in development (C919, MC-21):** Manufacturer press releases, aviation news sites
+- **Military-derived (KC-135, P-8):** Wikimedia Commons military aviation categories, US gov photos (public domain)
+- **Rare/low-production (VFW 614, Mercure):** Wikimedia Commons, aviation enthusiast Flickr accounts
 
 ### B. Download, Upload to R2, Update DB
 
