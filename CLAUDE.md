@@ -20,7 +20,7 @@ Both are ordered newest-first. Only read ~150 lines (last 1-2 sessions).
 
 ### Agents = Autonomous workers
 
-Agents are **autonomous workers** that receive a task, execute it fully, and report back. The main agent checks state, recommends actions, and spawns workers when you approve.
+Agents are **autonomous workers** that check state, recommend actions, and execute fully when you approve.
 
 | Agent | Owns | Triggers |
 |-------|------|----------|
@@ -66,17 +66,13 @@ Skills are **detailed instructions** for specific tasks. Agents invoke skills wh
 | **seo** | `/optimize-seo` |
 | **marketing** | `/cold-campaign` |
 
-### Backlog = What's planned
+### Backlog = Idea parking lot
 
-Each agent owns a section of `BACKLOG.md`:
-- `## Content > ### Inbox` — Content agent
-- `## Product > ### Inbox` — Product agent
-- `## SEO > ### Inbox` — SEO agent
-- `## Marketing > ### Inbox` — Marketing agent
+`BACKLOG.md` is where agents note ideas and observations for later — not a work queue.
 
-Agents never touch each other's sections.
+Agents discover their own immediate work through state checks. The backlog is the "not now, but someday" list. Each agent owns a section (`## Content`, `## Product`, `## SEO`, `## Marketing`).
 
-**Backlog items always have specs:** When adding to backlog, agents invoke `/add-to-backlog` which writes a full spec to `specs/[name].md`.
+**Specs for bigger ideas:** When an idea needs detail, invoke `/add-to-backlog` to write a spec at `specs/[name].md` and link it from the backlog entry.
 
 ### Documentation = What happened
 
@@ -143,7 +139,7 @@ After work completes, always update:
 │       ├── verify-airline/
 │       └── verify-data/
 ├── STRUCTURE.md            # Data model & page mapping
-├── BACKLOG.md              # Work queue (Inbox → Done)
+├── BACKLOG.md              # Idea parking lot (not-now, someday)
 ├── CHANGELOG.md            # Record of changes
 ├── CONTEXT.md              # Key decisions & lessons
 └── wrangler.toml           # Cloudflare config

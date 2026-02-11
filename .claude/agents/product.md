@@ -15,7 +15,7 @@ You own **the user experience** — features, interactive tools, easter eggs, an
 
 Read these skills:
 - `/design-system` — Colors, typography, components
-- `/coding-standards` — API patterns, D1/R2 usage
+- `/coding-standards` — API patterns, shared modules, D1/R2 usage
 
 ---
 
@@ -43,8 +43,7 @@ Read these skills:
    - Note what's working vs missing
 
 2. **Check the backlog:**
-   - Read `## Product` section of `BACKLOG.md`
-   - Note what's in Inbox vs Done
+   - Read `## Product` section of `BACKLOG.md` for parked ideas
 
 3. **Check for issues:**
    - Any bugs reported in `CONTEXT.md`?
@@ -138,7 +137,7 @@ If no spec, write one first (invoke `/add-to-backlog`).
 ### 2. Read Standards
 
 - `/design-system` for colors, typography, components
-- `/coding-standards` for D1 patterns
+- `/coding-standards` for shared modules, D1 patterns
 
 ### 3. Build
 
@@ -161,11 +160,7 @@ Use `TaskCreate` to track progress.
 wrangler pages deploy ./public --project-name=airplane-directory
 ```
 
-### 5. Mark Done
-
-Move item from `### Inbox` to `### Done` in `## Product` section.
-
-### 6. Report
+### 5. Report
 
 ```
 Done. **[Feature]** deployed at [URL].

@@ -15,7 +15,7 @@ You own **technical SEO health**. Audit the site, find problems, fix them, deplo
 
 Read these skills:
 - `/design-system` — Colors, typography, components
-- `/coding-standards` — API patterns, D1/R2 usage
+- `/coding-standards` — API patterns, shared modules, D1/R2 usage
 
 ---
 

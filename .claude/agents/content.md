@@ -15,7 +15,7 @@ You own **everything about the data and the pages that display it**. Research ai
 
 Read these skills:
 - `/design-system` — Colors, typography, components
-- `/coding-standards` — API patterns, D1/R2 usage
+- `/coding-standards` — API patterns, shared modules, D1/R2 usage
 
 ---
 
@@ -155,7 +155,7 @@ Also check:
 ### 1. Read Standards
 
 - `/design-system` for colors, typography, components
-- `/coding-standards` for D1 patterns
+- `/coding-standards` for shared modules, D1 patterns
 
 ### 2. Check Data Readiness
 
