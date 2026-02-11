@@ -22,27 +22,28 @@ Both are ordered newest-first. Only read ~150 lines (last 1-2 sessions).
 
 Agents are **autonomous workers** that receive a task, execute it fully, and report back. The main agent checks state, recommends actions, and spawns workers when you approve.
 
-| Agent | Focus | Triggers |
-|-------|-------|----------|
-| **content** | Research aircraft, fill specs/images, verify data | "content", "research", "discover", "data", "images" |
-| **seo** | Technical SEO, audits, programmatic pages | "seo", "sitemap", "meta tags", "build pages" |
-| **product** | UX features for users on the site | "product", "build", "ship" |
-| **mini-apps** | Fun interactive tools | "mini-apps", "quiz", "tool" |
-| **outreach** | Campaigns, backlinks, partnerships | "outreach", "backlinks" |
+| Agent | Owns | Triggers |
+|-------|------|----------|
+| **content** | Data + content pages (research, verify, build pages, fix data) | "content", "research", "discover", "build pages", "data" |
+| **product** | UX features, interactive tools, easter eggs | "product", "build", "ship", "mini-apps", "quiz" |
+| **seo** | Technical SEO (audit, fix, deploy) | "seo", "sitemap", "meta tags", "structured data", "seo audit" |
+| **marketing** | Outreach, backlinks, campaigns, partnerships | "marketing", "outreach", "backlinks", "partnerships" |
+
+Each agent is **fully autonomous** within its domain. No agent invokes another.
 
 **Flow:**
 ```
-You: "seo" or describe what you want
+You: "content" or describe what you want
     |
-Main agent checks state (runs queries)
+Agent checks state (runs queries)
     |
-Main agent recommends: "Boeing has 20 aircraft. Build manufacturer page?"
+Agent recommends: "Boeing has 12 aircraft but 40% missing images. Fill images first."
     |
 You: "do it" or "do 1 and 3" or "all of them"
     |
-Workers execute autonomously (can run in parallel/background)
+Agent executes autonomously (can run in parallel/background)
     |
-Workers report back: "Done. Built Boeing manufacturer page."
+Agent reports back: "Done. Filled 8 images for Boeing aircraft."
 ```
 
 ### Skills = How to do it
@@ -60,19 +61,18 @@ Skills are **detailed instructions** for specific tasks. Agents invoke skills wh
 **Agent-owned skills:**
 | Agent | Skills |
 |-------|--------|
-| **content** | `/research-data`, `/research-images`, `/verify-data`, `/verify-airline`, `/query-data` |
-| **seo** | `/build-seo-page`, `/optimize-seo` |
-| **mini-apps** | `/build-tool` |
-| **outreach** | `/cold-campaign` |
-| **product** | *(builds directly, no special skills)* |
+| **content** | `/research-data`, `/research-images`, `/verify-data`, `/verify-airline`, `/query-data`, `/build-seo-page` |
+| **product** | `/build-tool` |
+| **seo** | `/optimize-seo` |
+| **marketing** | `/cold-campaign` |
 
 ### Backlog = What's planned
 
 Each agent owns a section of `BACKLOG.md`:
+- `## Content > ### Inbox` — Content agent
 - `## Product > ### Inbox` — Product agent
 - `## SEO > ### Inbox` — SEO agent
-- `## Mini-Apps > ### Inbox` — Mini-Apps agent
-- `## Outreach > ### Inbox` — Outreach agent
+- `## Marketing > ### Inbox` — Marketing agent
 
 Agents never touch each other's sections.
 
@@ -124,11 +124,10 @@ After work completes, always update:
 ├── specs/                  # Feature specifications
 ├── .claude/
 │   ├── agents/             # Autonomous workers
-│   │   ├── content.md
-│   │   ├── seo.md
-│   │   ├── product.md
-│   │   ├── mini-apps.md
-│   │   └── outreach.md
+│   │   ├── content.md      # Data + content pages
+│   │   ├── product.md      # Features, tools, easter eggs
+│   │   ├── seo.md          # Technical SEO audit + fix
+│   │   └── marketing.md    # Outreach, backlinks, partnerships
 │   └── skills/             # Skill definitions (how to do it)
 │       ├── add-to-backlog/
 │       ├── build-seo-page/
