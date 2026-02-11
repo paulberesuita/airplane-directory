@@ -6,6 +6,41 @@ What we shipped. Builder appends here after each feature.
 
 ## 2026-02-11
 
+### Aligned Agent System and Skills with Haunted-Places
+
+**Changed:**
+- **4-agent system confirmed** — content, product, seo, marketing. Each autonomous, no agent invokes another.
+- **CLAUDE.md slimmed from 212 → 100 lines** — Moved tech stack, project structure, routing into `/project-architecture` skill. Added Quick Reference section with inline project structure and key patterns.
+- **BACKLOG.md rewritten** — From Inbox/In-Progress/Done work queue to flat idea parking lot with 4 sections (Content, Product, SEO, Marketing).
+- **README.md rewritten** — From stale template to actual project description.
+- **"Easter eggs" → "delights"** across all agents and skills. Created `/delights` skill for product agent.
+
+**Skill renames:**
+- `design-system` → `tasty-design`
+- `coding-standards` → `project-architecture`
+- `cold-campaign` → `outreach`
+- `optimize-seo` → `seo-audit`
+- `build-tool` → `mini-tools` (201 → 42 lines)
+
+**Skill merges:**
+- `/build-seo-page` merged into `/project-architecture` (page building rules section)
+- `/research-data` + `/research-images` + `/query-data` → `/research-discovery` (breadth: discover, images, coverage)
+- `/verify-data` + `/verify-airline` → `/deep-research` (depth: verify specs, airline fleets)
+
+**Removed:**
+- `/add-to-backlog` skill — ideas are one-liners in BACKLOG.md
+- `/build-seo-page` skill — merged into project-architecture
+- `specs/` directory — ideas parked in BACKLOG.md
+- 5 old content skills replaced by 2 (research-discovery, deep-research)
+
+**Fixed:**
+- Site URL: `airplanedirectory.com` → `airlineplanes.com` across all agents and skills
+- "Outreach agent" → "Marketing agent" in cold-campaign skill
+- STRUCTURE.md references removed (file never existed)
+- Deploy sections in all agents now reference `/cloudflare-deploy` instead of inline commands
+
+---
+
 ### Shared Modules Refactor — DRY Architecture
 - **Created `functions/_shared/utils.js`** — extracted 9 utility functions (escapeHtml, formatNumber, kmToMiles, kmhToMph, metersToFeet, kgToLbs, litersToGallons, formatPrice, formatDate)
 - **Created `functions/_shared/constants.js`** — extracted airlineBrandColors (40+ airlines) and MANUFACTURER_DATA (Boeing, Airbus, Embraer, Bombardier)

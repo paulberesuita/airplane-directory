@@ -6,6 +6,26 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ## 2026-02-11
 
+### Agent System and Skills Alignment with Haunted-Places
+
+**Decision:** Brought airplane-directory's agent system, skills, and docs fully in line with the haunted-places project structure.
+
+**Why:** Both projects share the same 4-agent model (content, product, seo, marketing) and the same shared skills. Keeping them aligned means patterns learned in one project transfer directly to the other. Skills should tell agents *what* to do, not *how* to code.
+
+**Key lessons applied from haunted-places:**
+- **Skills that mostly say "read these other skills" should be merged.** `/build-seo-page` was 180 lines that mostly repeated `/project-architecture` patterns. Merged the unique bits (page types table, SEO checklist, structured data types) into project-architecture.
+- **5 content skills → 2.** `/research-data`, `/research-images`, `/query-data` were all "breadth" work → merged into `/research-discovery`. `/verify-data`, `/verify-airline` were "depth" work → merged into `/deep-research`. Matches HP's discovery/deep-research split.
+- **CLAUDE.md should be slim with a Quick Reference.** Moved tech stack, full project structure, routing architecture, environments, and deploy commands into skills. CLAUDE.md went from 212 → 100 lines. Quick Reference section has inline project structure and key patterns for fast orientation.
+- **"Easter eggs" → "delights."** Better term — implies craft, not hidden throwaway surprises. Created `/delights` skill with aviation-specific ideas (contrail cursor, runway 404, altitude counter).
+- **Backlog is a parking lot, not a queue.** Agents discover work through state checks, not by reading a backlog. Removed Inbox/In-Progress/Done structure.
+
+**Final skill alignment (9 shared + domain-specific):**
+- Shared: cloudflare-deploy, tasty-design, project-architecture, delights, mini-tools, seo-audit, outreach, research-discovery, deep-research
+- HP-only: write-script (Ghost Story Radio)
+- AD has no unique skills — all content workflows covered by research-discovery and deep-research
+
+---
+
 ### Shared Modules Refactor
 
 Extracted duplicated code from 6 page functions into 3 shared modules under `functions/_shared/`. This was modeled after the haunted-places architecture.
