@@ -222,6 +222,41 @@ CREATE TABLE aircraft (
 
 **Status values:** `in production` | `out of production` | `in development`
 
+### Other Tables
+
+```sql
+CREATE TABLE aircraft_sources (
+  aircraft_slug TEXT, field_name TEXT, source_url TEXT,
+  source_name TEXT, source_type TEXT, accessed_at TEXT, notes TEXT
+);
+
+CREATE TABLE aircraft_history (
+  aircraft_slug TEXT, content_type TEXT, year INTEGER,
+  title TEXT, content TEXT
+);
+
+CREATE TABLE airlines (
+  slug TEXT UNIQUE, name TEXT, iata_code TEXT, icao_code TEXT,
+  headquarters TEXT, founded INTEGER, fleet_size INTEGER,
+  destinations INTEGER, description TEXT, website TEXT
+);
+
+CREATE TABLE airline_fleet (
+  airline_slug TEXT, aircraft_slug TEXT, count INTEGER, notes TEXT
+);
+```
+
+### Page → Data Mapping
+
+| Page | Query |
+|------|-------|
+| Homepage | Airlines + fleet stats via JOIN, Aircraft in US fleets via `INNER JOIN airline_fleet` |
+| Airlines List | `SELECT * FROM airlines ORDER BY fleet_size DESC` |
+| Airline Detail | Airline info + fleet with JOIN to aircraft table |
+| Aircraft Detail | Aircraft + `SELECT * FROM aircraft_history WHERE aircraft_slug = ?` + Airlines operating via JOIN |
+| Manufacturer | `SELECT * FROM aircraft WHERE manufacturer = ?` |
+| Comparison | `SELECT * FROM aircraft WHERE slug IN (?, ?)` |
+
 ---
 
 ## After Work Completes

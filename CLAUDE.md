@@ -34,15 +34,15 @@ Each agent is **fully autonomous** within its domain. No agent invokes another.
 **Flow:**
 ```
 You: "content" or describe what you want
-    |
+    ↓
 Agent checks state (runs queries)
-    |
+    ↓
 Agent recommends: "Boeing has 12 aircraft but 40% missing images. Fill images first."
-    |
+    ↓
 You: "do it" or "do 1 and 3" or "all of them"
-    |
+    ↓
 Agent executes autonomously (can run in parallel/background)
-    |
+    ↓
 Agent reports back: "Done. Filled 8 images for Boeing aircraft."
 ```
 
@@ -138,7 +138,6 @@ After work completes, always update:
 │       ├── research-images/
 │       ├── verify-airline/
 │       └── verify-data/
-├── STRUCTURE.md            # Data model & page mapping
 ├── BACKLOG.md              # Idea parking lot (not-now, someday)
 ├── CHANGELOG.md            # Record of changes
 ├── CONTEXT.md              # Key decisions & lessons
@@ -197,18 +196,18 @@ functions/
 
 | Environment | URL |
 |-------------|-----|
-| Local dev | `localhost:8788` |
 | Preview | `airplane-directory.pages.dev` |
 | Production | `airplanedirectory.com` |
+
+**Single deploy** updates both Preview and Production.
+
+**No local testing.** We deploy to preview/production and test there. Fast iteration > local parity issues.
 
 ---
 
 ## Deploy Commands
 
 ```bash
-# Local dev
-wrangler pages dev ./public --d1=DB=airplane-directory-db --local
-
 # Run migration
 npx wrangler d1 execute airplane-directory-db --file=./migrations/XXX.sql --remote
 

@@ -28,8 +28,15 @@ You own **outreach and partnerships** — getting the site linked to, mentioned,
 ### 1. Run State Checks
 
 - What's in `## Marketing` section of `BACKLOG.md`?
-- Any active outreach campaigns?
+- Any active outreach campaigns? (Check `.claude/config/instantly.md` for campaign IDs)
 - Previous results in `CONTEXT.md`?
+
+```bash
+# Check active Instantly campaigns
+API_KEY="[FROM .claude/config/instantly.md]"
+curl -s "https://api.instantly.ai/api/v2/campaigns" \
+  -H "Authorization: Bearer $API_KEY" | jq '.items[] | {name, id, status, leads_count}'
+```
 
 ### 2. Present State and Recommend
 
@@ -71,8 +78,10 @@ You own **outreach and partnerships** — getting the site linked to, mentioned,
 | Task | Skill to Read | Example |
 |------|--------------|---------|
 | Run outreach campaign | `/cold-campaign` | "Run link building campaign" |
+| Add leads to Instantly | `/cold-campaign` (add leads) | "Add resource page leads" |
 | Find targets | `/cold-campaign` (research) | "Find aviation blogger targets" |
 | Check campaign status | `/cold-campaign` (status) | "Check outreach status" |
+| Verify emails | `/cold-campaign` (verify) | "Verify all emails" |
 | Create new campaign | `/cold-campaign` (create) | "Create flight school campaign" |
 
 ---
@@ -91,6 +100,7 @@ You own **outreach and partnerships** — getting the site linked to, mentioned,
 - Quality over quantity — personalized, not spam
 - Provide value — give them something useful
 - One follow-up max, then move on
+- Verify emails before adding to campaigns
 - Track everything
 
 ---
