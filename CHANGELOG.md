@@ -11,6 +11,7 @@ What we shipped. Builder appends here after each feature.
 **Changed:**
 - **4-agent system confirmed** — content, product, seo, marketing. Each autonomous, no agent invokes another.
 - **CLAUDE.md slimmed from 212 → 100 lines** — Moved tech stack, project structure, routing into `/project-architecture` skill. Added Quick Reference section with inline project structure and key patterns.
+- **Product agent aligned** — Added `/delights` to state checks, removed stale specs template and "Verify Spec Exists" build step, 5-step → 4-step build process matching HP.
 - **BACKLOG.md rewritten** — From Inbox/In-Progress/Done work queue to flat idea parking lot with 4 sections (Content, Product, SEO, Marketing).
 - **README.md rewritten** — From stale template to actual project description.
 - **"Easter eggs" → "delights"** across all agents and skills. Created `/delights` skill for product agent.

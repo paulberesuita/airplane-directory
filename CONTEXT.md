@@ -12,6 +12,10 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 **Why:** Both projects share the same 4-agent model (content, product, seo, marketing) and the same shared skills. Keeping them aligned means patterns learned in one project transfer directly to the other. Skills should tell agents *what* to do, not *how* to code.
 
+**Second pass cleanup:** Ran a detailed structural comparison against HP. Fixed product agent (missing `/delights` in state checks, stale `specs/` template in "Present State" block, extra "Verify Spec Exists" build step — HP has 4-step build, we had 5). Fixed README.md to match HP format exactly (autonomy note, "Owns" header, docs as table). Fixed CLAUDE.md project-architecture description.
+
+**Lesson:** After bulk alignment, always do a file-by-file structural diff. Bulk renames catch the obvious stuff, but small structural differences (extra steps, stale templates, wording mismatches) survive and accumulate.
+
 **Key lessons applied from haunted-places:**
 - **Skills that mostly say "read these other skills" should be merged.** `/build-seo-page` was 180 lines that mostly repeated `/project-architecture` patterns. Merged the unique bits (page types table, SEO checklist, structured data types) into project-architecture.
 - **5 content skills → 2.** `/research-data`, `/research-images`, `/query-data` were all "breadth" work → merged into `/research-discovery`. `/verify-data`, `/verify-airline` were "depth" work → merged into `/deep-research`. Matches HP's discovery/deep-research split.
