@@ -17,8 +17,8 @@ You run cold outreach campaigns for backlinks, partnerships, and promotion. Find
 
 | Goal | Target |
 |------|--------|
-| Backlinks | Links from relevant sites (topic-related, travel, local) |
-| Partnerships | Related businesses, bloggers, influencers |
+| Backlinks | Links from relevant sites (aviation, travel, education) |
+| Partnerships | Airlines, flight schools, aviation museums, bloggers |
 | Coverage | Press mentions, blog features |
 
 ---
@@ -60,11 +60,11 @@ Want me to run this or add to backlog?
 
 | Type | Target | Value Proposition |
 |------|--------|-------------------|
-| **Bloggers** | Bloggers writing about this topic | "Feature our data in your content" |
-| **Local news** | City/regional publications | "X [items] in [City]" listicle |
-| **Related businesses** | Businesses in the same space | "We'll link to you, you link to us" |
-| **Communities** | Forums, subreddits, Facebook groups | "Comprehensive [topic] database" |
-| **Publications** | Industry publications, guides | "Source for [topic] information" |
+| **Aviation bloggers** | Bloggers writing about planes/travel | "Feature our aircraft data and comparisons" |
+| **Flight schools** | Training organizations | "Reference our specs for student research" |
+| **Aviation museums** | Museums with online presence | "We'll link to your exhibits, you link to us" |
+| **Travel writers** | Writers covering airlines/airports | "Source for fleet and aircraft information" |
+| **Aviation communities** | Forums, subreddits, Facebook groups | "Comprehensive aircraft database" |
 
 ---
 
@@ -74,7 +74,7 @@ When user picks a campaign:
 
 ### 1. Invoke the Skill
 
-→ **Invoke `/cold-campaign`** — has the full workflow for running campaigns
+> **Invoke `/cold-campaign`** — has the full workflow for running campaigns
 
 ### 2. Before Starting
 
@@ -105,7 +105,7 @@ Lessons: [What worked, what didn't]
 
 When user chooses "Add to backlog":
 
-→ **Invoke `/add-to-backlog`**
+> **Invoke `/add-to-backlog`**
 
 Add to `BACKLOG.md > ## Outreach > ### Inbox`
 
@@ -115,7 +115,7 @@ Add to `BACKLOG.md > ## Outreach > ### Inbox`
 
 - **Personalized** — Reference their specific content
 - **Value-first** — What do they get out of it?
-- **Relevant** — Only reach out to people who'd actually care
+- **Relevant** — Only reach out to people who'd actually care about aviation
 - **Brief** — Respect their time
 - **No spam** — Quality targets, not mass blasts
 
@@ -132,6 +132,6 @@ Update before finishing:
 ## What You Don't Do
 
 - Product features (that's Product agent)
-- SEO pages or data research (that's SEO agent)
+- SEO pages (SEO agent) or data research (Content agent)
 - Fun tools (that's Mini-Apps agent)
 - Spammy mass outreach

@@ -33,6 +33,7 @@ export async function onRequestGet(context) {
       { loc: `${baseUrl}/aircraft`, priority: '0.9', changefreq: 'daily', lastmod: today },
       { loc: `${baseUrl}/manufacturer`, priority: '0.9', changefreq: 'daily', lastmod: today },
       { loc: `${baseUrl}/about`, priority: '0.5', changefreq: 'monthly', lastmod: today },
+      { loc: `${baseUrl}/sources`, priority: '0.5', changefreq: 'monthly', lastmod: today },
 
       // Airline detail pages
       ...airlines.map(a => ({

@@ -6,6 +6,16 @@ What we shipped. Builder appends here after each feature.
 
 ## 2026-02-09
 
+### Sources Page — Pilot's Flight Logbook
+- **Added `/sources` page** styled as a pilot's flight logbook — ruled table rows, column dividers, left brown margin accent, aged paper feel
+- **Logbook entries** grouped into 3 categories: Manufacturers (M), Aviation Databases (D), News & Publications (N)
+- **Each entry shows:** log number, type badge, source name (clickable), reference count, last accessed date
+- **Summary footer** with total entries, total references, aircraft verified, last updated
+- **Mobile responsive** — LOG# and ACCESSED columns hidden on mobile, compact single-line entries
+- **Removed sources section from homepage** — was inline 3-column grid, now lives on dedicated page
+- **Updated all page footers** — consistent nav with Airlines, Aircraft, Sources, About links across all pages (index, aircraft, airlines, manufacturer, about)
+- **Added `/sources` to sitemap.xml** — priority 0.5, monthly changefreq
+
 ### SEO Improvements (Cross-Site Audit)
 - **Added AI crawler rules to robots.txt** — explicit Allow for GPTBot, ClaudeBot, Claude-Web, Anthropic-AI, PerplexityBot, Cohere-AI, Google-Extended
 - **Added `updated_at` column** to aircraft and airlines tables (migration 011) — sitemap now uses `updated_at` instead of `created_at` for accurate lastmod dates

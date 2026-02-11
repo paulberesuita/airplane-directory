@@ -378,8 +378,18 @@ function renderAboutPage(baseUrl, stats) {
   </main>
 
   <!-- Footer -->
-  <footer class="max-w-4xl mx-auto px-4 py-8 text-center">
-    <p class="text-white/70 text-sm">&copy; ${new Date().getFullYear()} AirlinePlanes. All rights reserved.</p>
+  <footer class="mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <a href="/" class="text-xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRLINEPLANES</a>
+        <nav class="flex items-center gap-6">
+          <a href="/airlines" class="text-white/90 hover:text-white text-sm transition-colors">Airlines</a>
+          <a href="/aircraft" class="text-white/90 hover:text-white text-sm transition-colors">Aircraft</a>
+          <a href="/sources" class="text-white/90 hover:text-white text-sm transition-colors">Sources</a>
+          <a href="/about" class="text-white/90 hover:text-white text-sm transition-colors">About</a>
+        </nav>
+      </div>
+    </div>
   </footer>
 
   </div>

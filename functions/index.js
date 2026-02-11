@@ -26,15 +26,7 @@ export async function onRequestGet(context) {
     // Get unique manufacturers
     const manufacturers = [...new Set(aircraft.map(a => a.manufacturer))].sort();
 
-    // Get source stats for trust section
-    const { results: sourceStats } = await env.DB.prepare(`
-      SELECT source_name, source_type, source_url, COUNT(*) as times_used
-      FROM aircraft_sources
-      GROUP BY source_name
-      ORDER BY times_used DESC
-    `).all();
-
-    const html = renderHomepage({ airlines, aircraft, manufacturers, baseUrl, sourceStats });
+    const html = renderHomepage({ airlines, aircraft, manufacturers, baseUrl });
 
     return new Response(html, {
       headers: {
@@ -511,7 +503,7 @@ function renderAircraftCard(aircraft, baseUrl) {
     </div>`;
 }
 
-function renderHomepage({ airlines, aircraft, manufacturers, baseUrl, sourceStats }) {
+function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
   const airlineCards = airlines.map(a => renderAirlineCard(a, baseUrl)).join('');
   // Show only first 6 aircraft as preview
   const aircraftPreview = aircraft.slice(0, 6).map(a => renderAircraftCard(a, baseUrl)).join('');
@@ -696,64 +688,6 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl, sourceStat
       </div>
     </section>
 
-    <!-- Sources Section -->
-    ${sourceStats && sourceStats.length > 0 ? `
-    <section class="mt-16">
-      <div class="pixel-clip p-1" style="background-color: #8b7355;">
-        <div class="pixel-clip px-6 py-6 md:px-8 md:py-8" style="background-color: #ffffff;">
-          <div class="flex items-start justify-between gap-4 mb-5">
-            <div>
-              <h2 class="font-display text-xl md:text-2xl font-semibold" style="color: #4a3f2f; font-family: Georgia, serif; font-style: italic;">Our Sources</h2>
-              <p class="text-sm mt-1" style="color: #8b7355;">Every spec verified against real aviation data.</p>
-            </div>
-            <div class="text-right shrink-0">
-              <span class="pixel-text uppercase block mb-1" style="font-size: 7px; color: #8b7355;">References</span>
-              <span class="text-2xl font-semibold" style="color: #4a3f2f; font-family: Georgia, serif;">${sourceStats.reduce((sum, s) => sum + s.times_used, 0)}</span>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4" style="border-top: 1px solid #e5e5e5; padding-top: 16px;">
-            <!-- Manufacturer Sources -->
-            <div>
-              <span class="pixel-text uppercase block mb-2" style="font-size: 7px; color: #8b7355; letter-spacing: 0.1em;">Manufacturers</span>
-              <ul class="space-y-1.5">
-                ${sourceStats.filter(s => s.source_type === 'manufacturer').map(s => `
-                  <li class="text-sm" style="color: #4a3f2f;">
-                    <a href="${escapeHtml(s.source_url)}" target="_blank" rel="noopener" class="hover:underline">${escapeHtml(s.source_name)}</a>
-                  </li>
-                `).join('') || '<li class="text-sm" style="color: #9a8b75;">Boeing, Airbus, Embraer</li>'}
-              </ul>
-            </div>
-
-            <!-- Aviation Databases -->
-            <div>
-              <span class="pixel-text uppercase block mb-2" style="font-size: 7px; color: #8b7355; letter-spacing: 0.1em;">Aviation Databases</span>
-              <ul class="space-y-1.5">
-                ${sourceStats.filter(s => s.source_type === 'aviation_db').slice(0, 8).map(s => `
-                  <li class="text-sm" style="color: #4a3f2f;">
-                    <a href="${escapeHtml(s.source_url)}" target="_blank" rel="noopener" class="hover:underline">${escapeHtml(s.source_name)}</a>
-                    <span class="text-xs" style="color: #9a8b75;">${s.times_used > 1 ? `(${s.times_used})` : ''}</span>
-                  </li>
-                `).join('')}
-              </ul>
-            </div>
-
-            <!-- News & Publications -->
-            <div>
-              <span class="pixel-text uppercase block mb-2" style="font-size: 7px; color: #8b7355; letter-spacing: 0.1em;">News & Publications</span>
-              <ul class="space-y-1.5">
-                ${sourceStats.filter(s => s.source_type === 'news').map(s => `
-                  <li class="text-sm" style="color: #4a3f2f;">
-                    <a href="${escapeHtml(s.source_url)}" target="_blank" rel="noopener" class="hover:underline">${escapeHtml(s.source_name)}</a>
-                  </li>
-                `).join('') || '<li class="text-sm" style="color: #9a8b75;">Aviation Week, Simple Flying</li>'}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    ` : ''}
   </main>
 
   <!-- Footer -->
@@ -765,6 +699,8 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl, sourceStat
           <a href="/airlines" class="text-white/90 hover:text-white text-sm transition-colors">Airlines</a>
           <a href="/aircraft" class="text-white/90 hover:text-white text-sm transition-colors">Aircraft</a>
           <a href="/manufacturer" class="text-white/90 hover:text-white text-sm transition-colors">Manufacturers</a>
+          <a href="/sources" class="text-white/90 hover:text-white text-sm transition-colors">Sources</a>
+          <a href="/about" class="text-white/90 hover:text-white text-sm transition-colors">About</a>
         </nav>
       </div>
       <div class="border-t border-white/20 mt-8 pt-8 text-center">

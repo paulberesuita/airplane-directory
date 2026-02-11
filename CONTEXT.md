@@ -6,6 +6,29 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ## 2026-02-09
 
+### Sources Page — Pilot's Flight Logbook
+
+Moved homepage sources section to a dedicated `/sources` page with a pilot's flight logbook visual metaphor.
+
+**Key decisions:**
+- **Logbook metaphor** over plain table — ruled horizontal lines, vertical column dividers, left brown margin accent (3px solid #8b7355), aged paper background (#f5f0e6). Feels like a real pilot's logbook.
+- **Cover header** uses pixel-clip + dark brown (#4a3f2f) background with cream pixel-text title, matching the site's pixel accent pattern.
+- **Type badges** are single-letter codes (M/D/N) in tiny pixel-text squares — matches the source type badges already used on aircraft detail pages.
+- **Mobile collapse** hides LOG# and ACCESSED columns (CSS class `hide-mobile` with `@media (max-width: 767px)`) — keeps source name and ref count visible.
+- **Removed homepage sources section** — it was duplicating data that now lives on `/sources`. Homepage is cleaner with just Airlines + Aircraft sections.
+- **Standardized all footers** — every page now has the same nav: Airlines, Aircraft, Sources, About. Previously footers were inconsistent (some had just a tagline, manufacturer had an icon+text logo, about had just copyright).
+
+**Files modified:**
+- `functions/sources.js` — NEW: full SSR sources page
+- `functions/index.js` — removed sourceStats query + sources section, added footer nav links
+- `functions/aircraft/[[slug]].js` — updated footer with nav links
+- `functions/airlines/[[slug]].js` — updated footer with nav links
+- `functions/manufacturer/[[slug]].js` — updated footer with nav links
+- `functions/about.js` — updated footer with nav links
+- `functions/sitemap.xml.js` — added /sources entry
+
+---
+
 ### SEO Audit — Gaps Found from Haunted Places & Latino Leaders
 
 Cross-referenced SEO implementations across all three directories. Found 6 gaps in airplane-directory. Fixed all quick wins plus WebP conversion.

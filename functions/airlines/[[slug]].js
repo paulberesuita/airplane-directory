@@ -426,9 +426,12 @@ function renderFooter() {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="flex flex-col md:flex-row items-center justify-between gap-6">
         <a href="/" class="text-xl tracking-widest text-white hover:text-white/80 transition-colors" style="font-family: 'Bebas Neue', sans-serif;">AIRLINEPLANES</a>
-        <p class="text-white/60 text-sm text-center md:text-left drop-shadow">
-          Know what you're flying on. US airline fleets and aircraft information.
-        </p>
+        <nav class="flex items-center gap-6">
+          <a href="/airlines" class="text-white/90 hover:text-white text-sm transition-colors">Airlines</a>
+          <a href="/aircraft" class="text-white/90 hover:text-white text-sm transition-colors">Aircraft</a>
+          <a href="/sources" class="text-white/90 hover:text-white text-sm transition-colors">Sources</a>
+          <a href="/about" class="text-white/90 hover:text-white text-sm transition-colors">About</a>
+        </nav>
       </div>
     </div>
   </footer>`;

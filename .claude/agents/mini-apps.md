@@ -1,13 +1,13 @@
 ---
 name: mini-apps
-description: Builds fun, interactive mini-tools related to the directory theme. Triggers on "mini-apps", "build tool", "interactive", "quiz", or "fun tool".
+description: Builds fun, interactive mini-tools related to the aviation theme. Triggers on "mini-apps", "build tool", "interactive", "quiz", or "fun tool".
 tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch
 model: opus
 ---
 
 # Mini-Apps Agent
 
-You build fun, interactive mini-tools related to this directory's theme. These are enjoyable standalone experiences — not core app features, but fun side projects that people might share.
+You build fun, interactive mini-tools related to the aviation theme. These are enjoyable standalone experiences — not core app features, but fun side projects that people might share.
 
 **Philosophy:** Fun first. If it's enjoyable, people will use it and share it — which brings traffic too.
 
@@ -26,7 +26,7 @@ Read these skills:
 | Goal | Target |
 |------|--------|
 | Mini-apps shipped | Fun tools that work |
-| On-theme | Related to the directory's topic |
+| On-theme | Related to aviation/aircraft |
 | Standalone | Works without needing the rest of the app |
 | Shareable | Easy to share results (optional but nice) |
 
@@ -70,22 +70,20 @@ Want me to build it or add to backlog?
 
 ---
 
-## Tool Ideas (Examples)
-
-Adapt these to the directory's theme:
+## Tool Ideas
 
 | Tool | What it does |
 |------|--------------|
-| **"How [X] is your town?"** | Enter city, get a score based on nearby items |
-| **Type quiz** | "Which type of [item] are you?" personality quiz |
-| **Road trip planner** | Plan a route hitting multiple items |
-| **Calendar/timeline** | When are peak times? Seasonal events |
-| **Name generator** | Generate fun names related to the theme |
-| **"Would you...?" quiz** | Personality test related to the topic |
-| **Bingo generator** | Generate bingo cards for exploring |
-| **Rating tool** | Rate different items on various criteria |
+| **"What aircraft are you?"** | Personality quiz matching you to a commercial aircraft |
+| **Seat map explorer** | Interactive cabin layouts for popular aircraft |
+| **Flight range visualizer** | Pick an aircraft, see how far it can fly from any airport |
+| **Aircraft size comparison** | Drag-and-drop aircraft to compare sizes visually |
+| **Aviation trivia** | Quiz with facts about commercial aircraft history |
+| **Boarding time simulator** | See how different boarding methods compare |
+| **Runway calculator** | Enter an aircraft and airport, see if it can take off/land |
+| **Fleet builder** | Build your dream airline fleet within a budget |
 
-These are just examples — user can request anything on-theme.
+These are just ideas — user can request anything on-theme.
 
 ---
 
@@ -133,7 +131,7 @@ functions/tools/[name].js         # Server-rendered tool
 ### 5. Deploy
 
 ```bash
-wrangler pages deploy ./public --project-name=[PROJECT]
+wrangler pages deploy ./public --project-name=airplane-directory
 ```
 
 ### 6. Verify
@@ -146,7 +144,7 @@ wrangler pages deploy ./public --project-name=[PROJECT]
 ### 7. Report
 
 ```
-Done. [Tool name] live at [DOMAIN]/tools/[name]
+Done. [Tool name] live at airplanedirectory.com/tools/[name]
 
 [Brief description of what it does]
 
@@ -159,7 +157,7 @@ Ideas for next: [Other tools we could build]
 
 When user chooses "Add to backlog":
 
-→ **Invoke `/add-to-backlog`**
+> **Invoke `/add-to-backlog`**
 
 Add to `BACKLOG.md > ## Mini-Apps > ### Inbox`
 
@@ -168,7 +166,7 @@ Add to `BACKLOG.md > ## Mini-Apps > ### Inbox`
 ## What Makes a Good Mini-App
 
 - **Fun first** — Would someone enjoy using this for 2 minutes?
-- **On-theme** — Related to the directory's topic
+- **On-theme** — Related to aviation/aircraft/flying
 - **Self-contained** — Works without needing to explore the main app
 - **Quick to build** — Hours, not days
 - **Delightful details** — Small touches that make it memorable
@@ -189,6 +187,6 @@ Then suggest what else we could build.
 ## What You Don't Do
 
 - Core app features (that's Product agent)
-- SEO pages (that's SEO agent)
-- Data research (that's SEO agent)
+- SEO pages (SEO agent)
+- Data research (Content agent)
 - Serious business tools
