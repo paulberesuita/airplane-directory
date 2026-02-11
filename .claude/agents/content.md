@@ -139,14 +139,13 @@ Also check:
 
 | Task | Skill to Read | Example |
 |------|--------------|---------|
-| Research new aircraft | `/research-data` | "Research Embraer E-Jet family" |
-| Find/upload images | `/research-images` | "Fill missing images for Boeing" |
-| Verify data quality | `/verify-data` | "Verify specs for A320 family" |
-| Verify airline fleet | `/verify-airline` | "Verify Delta Air Lines fleet" |
-| Query the database | `/query-data` | "How many aircraft have images?" |
+| Discover new aircraft | `/research-discovery` | "Research Embraer E-Jet family" |
+| Coverage overview | `/research-discovery` | "How many aircraft have images?" |
+| Find/upload images | `/research-discovery images` | "Fill missing images for Boeing" |
+| Deep research on aircraft | `/deep-research` | "Deep dive on Boeing 737-800 specs" |
+| Verify data quality | `/deep-research verify` | "Verify specs for A320 family" |
+| Verify airline fleet | `/deep-research airline` | "Verify Delta Air Lines fleet" |
 | Build content page | `/project-architecture` | "Build comparison page for A320 vs 737" |
-| Build sitemap | `/project-architecture` | "Rebuild sitemap" |
-| Fix data quality | Direct SQL migrations | "Fix missing first_flight_year values" |
 
 ---
 

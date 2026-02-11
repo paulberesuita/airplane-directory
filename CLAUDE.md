@@ -59,7 +59,7 @@ Skills are **detailed instructions** for specific tasks. Agents invoke skills wh
 **Agent-owned skills:**
 | Agent | Skills |
 |-------|--------|
-| **content** | `/research-data`, `/research-images`, `/verify-data`, `/verify-airline`, `/query-data` |
+| **content** | `/research-discovery`, `/deep-research` |
 | **product** | `/mini-tools`, `/delights` |
 | **seo** | `/seo-audit` |
 | **marketing** | `/outreach` |
@@ -82,6 +82,26 @@ After work completes, always update:
 
 **Tech:** Cloudflare Pages + D1 (SQLite) + R2 (images). Vanilla HTML/JS + Tailwind CDN. All pages server-side rendered. No local dev — deploy and test on production.
 
-**Architecture, DB schema, routing, shared modules:** `/project-architecture`
+**Project structure:**
+```
+functions/
+├── index.js              # GET /
+├── about.js              # GET /about
+├── sources.js            # GET /sources
+├── aircraft/[[slug]].js  # GET /aircraft AND /aircraft/[slug]
+├── airlines/[[slug]].js  # GET /airlines AND /airlines/[slug]
+├── manufacturer/[[slug]].js # GET /manufacturer AND /manufacturer/[slug]
+├── images/[[path]].js    # GET /images/* (R2 proxy)
+├── sitemap.xml.js        # GET /sitemap.xml
+├── llms-full.txt.js      # GET /llms-full.txt
+└── api/                  # JSON API endpoints
+```
 
-**Deploy, migrations, R2 uploads:** `/cloudflare-deploy`
+**Key patterns:**
+- `[[slug]].js` handles both index and detail routes — no `index.js` in same directory
+- `env.DB` for D1 queries, `env.IMAGES` for R2 storage
+- Images in templates: `/images/${aircraft.image_url}`
+
+**Environments:** Preview (`airplane-directory.pages.dev`) and Production (`airlineplanes.com`) — single deploy updates both.
+
+**Full details:** `/project-architecture` (architecture, DB schema, routing) | `/cloudflare-deploy` (deploy, migrations, R2 uploads)
