@@ -1,48 +1,31 @@
-# Directory Template
+# Airplane Directory
 
-A template for building directory-style apps with Claude agents.
+A directory of commercial aircraft with specs, history, and images. Browse by manufacturer, explore airline fleets, compare aircraft, and enjoy aviation mini-apps.
 
-## Quick Start
+**Live:** [airlineplanes.com](https://airlineplanes.com)
 
-1. Update `CLAUDE.md` with your project name and details
-2. Invoke **planner** to plan features
-3. Invoke **builder** to build from backlog
+## Tech Stack
 
-```bash
-# Local dev
-wrangler pages dev ./public --d1=DB=PROJECT-db --local
-
-# Deploy
-wrangler pages deploy ./public --project-name=PROJECT
-```
-
-## Project Structure
-
-```
-/
-├── public/                 # Static assets
-├── functions/              # Cloudflare Pages Functions
-├── specs/                  # Feature specifications
-├── examples/               # Starter templates
-├── .claude/
-│   ├── agents/             # planner, builder, researcher
-│   └── skills/             # design-system, coding-standards, cloudflare-deploy
-├── BACKLOG.md              # Work queue
-├── CHANGELOG.md            # What changed
-└── CONTEXT.md              # Decisions & lessons
-```
+Cloudflare Pages + D1 (SQLite) + R2 (images). Vanilla HTML/JS + Tailwind CDN. All pages server-side rendered.
 
 ## Agents
 
-| Agent | Purpose | Triggers |
-|-------|---------|----------|
-| **planner** | Plans features, maintains backlog | "plan", "backlog" |
-| **builder** | Builds from backlog, deploys | "build", "ship" |
-| **researcher** | Gathers data, stores in D1/R2 | "research", "populate" |
+| Agent | Purpose |
+|-------|---------|
+| **content** | Data + content pages (research, verify, build) |
+| **product** | UX features, interactive tools, delights |
+| **seo** | Technical SEO (audit, fix, deploy) |
+| **marketing** | Outreach, backlinks, campaigns |
+
+## Deploy
+
+```bash
+wrangler pages deploy ./public --project-name=airplane-directory
+```
 
 ## Docs
 
-- `CLAUDE.md` — Project overview, tech stack
-- `BACKLOG.md` — Work queue (Inbox → Done)
-- `CONTEXT.md` — Key decisions & lessons learned
+- `CLAUDE.md` — How we work, agents, skills
+- `BACKLOG.md` — Idea parking lot
 - `CHANGELOG.md` — What we shipped
+- `CONTEXT.md` — Key decisions & lessons learned

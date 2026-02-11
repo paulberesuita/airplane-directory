@@ -106,7 +106,7 @@ Find sites that would genuinely benefit from linking to Airplane Directory.
 
 ### 2. Build Campaign
 
-Invoke `/cold-campaign` for the full outreach workflow.
+Invoke `/outreach` for the full outreach workflow.
 
 ### 3. Track Results
 

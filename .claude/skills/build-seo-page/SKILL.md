@@ -85,8 +85,8 @@ Create `specs/[page-type]-[name].md`:
 ### 4. Load Design Standards
 
 **Read before building:**
-- `/design-system` — Colors, components, typography
-- `/coding-standards` — API patterns, D1/R2 usage
+- `/tasty-design` — Colors, components, typography
+- `/project-architecture` — DB schema, SSR patterns, D1/R2 usage
 
 ### 5. Build Cloudflare Pages Function
 
@@ -172,7 +172,7 @@ wrangler pages deploy ./public --project-name=airplane-directory
 
 ## Remember
 
-- Read `/design-system` before building any UI
+- Read `/tasty-design` before building any UI
 - Don't build pages without sufficient data
 - All pages need proper SEO elements
 - Test on mobile before deploying

@@ -1,12 +1,12 @@
 ---
-name: coding-standards
-description: Load API patterns, D1/R2 usage, SSR patterns. Usage: /coding-standards
+name: project-architecture
+description: DB schema, SSR patterns, routing, shared modules. Usage: /project-architecture
 user_invokable: true
 ---
 
-# Coding Standards
+# Project Architecture
 
-Technical patterns for the Airplane Directory on Cloudflare Pages.
+Technical patterns, routing, and architecture for the Airplane Directory on Cloudflare Pages.
 
 ---
 
@@ -24,7 +24,6 @@ Technical patterns for the Airplane Directory on Cloudflare Pages.
 │   └── api/            # JSON API endpoints
 ├── migrations/         # SQL migrations (numbered)
 ├── scripts/            # Seed SQL scripts
-├── specs/              # Feature specifications
 └── wrangler.toml       # Cloudflare config
 ```
 
@@ -64,7 +63,7 @@ function renderPage(data, baseUrl) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${escapeHtml(data.title)} | Airplane Directory</title>
 
-  <!-- Fonts & Tailwind (from /design-system) -->
+  <!-- Fonts & Tailwind (from /tasty-design) -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>

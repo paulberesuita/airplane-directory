@@ -1,15 +1,15 @@
 ---
-name: cold-campaign
-description: Run outreach campaigns to get links, mentions, and partnerships. Usage: /cold-campaign
+name: outreach
+description: Run outreach campaigns to get links, mentions, and partnerships. Usage: /outreach
 user_invokable: true
 agent: marketing
 ---
 
-# Cold Campaign
+# Outreach
 
-You've been invoked to **run a cold outreach campaign** to get links, mentions, and partnerships.
+You've been invoked to **run an outreach campaign** to get links, mentions, and partnerships.
 
-**Workflow:** Cold Campaign (from Marketing agent)
+**Workflow:** Outreach (from Marketing agent)
 
 ---
 

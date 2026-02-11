@@ -45,4 +45,4 @@ functions/tools/[name].js         # Server-rendered tool
 
 ## Before Building
 
-Read `/design-system` and `/coding-standards` first.
+Read `/tasty-design` and `/project-architecture` first.

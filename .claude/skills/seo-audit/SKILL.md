@@ -1,15 +1,15 @@
 ---
-name: optimize-seo
-description: Improve technical SEO and on-page optimization. Usage: /optimize-seo
+name: seo-audit
+description: Audit and fix technical SEO and on-page optimization. Usage: /seo-audit
 user_invokable: true
 agent: seo
 ---
 
-# Optimize SEO
+# SEO Audit
 
-You've been invoked to **optimize SEO** — improving technical SEO and on-page elements.
+You've been invoked to **audit and fix SEO** — improving technical SEO and on-page elements.
 
-**Workflow:** Optimize SEO (from SEO agent)
+**Workflow:** SEO Audit (from SEO agent)
 
 ---
 
@@ -207,5 +207,5 @@ curl -s https://airplane-directory.pages.dev/sitemap.xml | head -20
 
 - Verify changes with Google's testing tools
 - Submit sitemap to Google Search Console
-- Read `/coding-standards` before modifying functions
+- Read `/project-architecture` before modifying functions
 - Update CHANGELOG.md and CONTEXT.md when done

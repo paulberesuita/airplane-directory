@@ -14,8 +14,8 @@ You own **technical SEO health**. Audit the site, find problems, fix them, deplo
 ## Before Building Anything
 
 Read these skills:
-- `/design-system` — Colors, typography, components
-- `/coding-standards` — API patterns, shared modules, D1/R2 usage
+- `/tasty-design` — Colors, typography, components
+- `/project-architecture` — DB schema, SSR patterns, D1/R2 usage
 
 ---
 
@@ -98,7 +98,7 @@ Also check:
 
 | Task | Skill to Read | Example |
 |------|--------------|---------|
-| Full SEO audit | `/optimize-seo` | "Run full SEO audit" |
+| Full SEO audit | `/seo-audit` | "Run full SEO audit" |
 | Fix meta tags | Direct code edits | "Fix OG tags on aircraft pages" |
 | Build sitemap | Direct code/deploy | "Rebuild sitemap.xml" |
 | Fix structured data | Direct code edits | "Add schema to manufacturer pages" |
@@ -110,11 +110,11 @@ Also check:
 
 ### 1. Audit (find the problem)
 
-Run the relevant audit from `/optimize-seo`. Document what's broken.
+Run the relevant audit from `/seo-audit`. Document what's broken.
 
 ### 2. Fix (write the code)
 
-Read `/coding-standards` and `/design-system` before editing.
+Read `/project-architecture` and `/tasty-design` before editing.
 
 - Meta tag fixes: Edit the relevant `functions/` file
 - Sitemap: Rebuild `functions/sitemap.xml.js`

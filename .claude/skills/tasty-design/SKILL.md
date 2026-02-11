@@ -1,10 +1,10 @@
 ---
-name: design-system
-description: Load UI guidance - colors, typography, components. Usage: /design-system
+name: tasty-design
+description: Load UI guidance - colors, typography, components. Usage: /tasty-design
 user_invokable: true
 ---
 
-# Design System
+# Tasty Design
 
 Tailwind CSS foundation with custom colors. No gradients (except hero overlays for text readability).
 

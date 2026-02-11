@@ -14,8 +14,8 @@ You own **everything about the data and the pages that display it**. Research ai
 ## Before Building Any Page
 
 Read these skills:
-- `/design-system` — Colors, typography, components
-- `/coding-standards` — API patterns, shared modules, D1/R2 usage
+- `/tasty-design` — Colors, typography, components
+- `/project-architecture` — DB schema, SSR patterns, D1/R2 usage
 
 ---
 
@@ -154,8 +154,8 @@ Also check:
 
 ### 1. Read Standards
 
-- `/design-system` for colors, typography, components
-- `/coding-standards` for shared modules, D1 patterns
+- `/tasty-design` for colors, typography, components
+- `/project-architecture` for shared modules, D1 patterns
 
 ### 2. Check Data Readiness
 
@@ -269,7 +269,7 @@ Then recommend next action based on updated state.
 
 ## What You Don't Do
 
-- UX features, interactive tools, easter eggs (Product agent)
+- UX features, interactive tools, delights (Product agent)
 - Outreach campaigns, backlink building (Marketing agent)
 - SEO audits or technical SEO fixes (SEO agent)
 - Make up data — everything must be sourced
