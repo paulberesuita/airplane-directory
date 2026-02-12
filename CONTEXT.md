@@ -6,6 +6,18 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ## 2026-02-11
 
+### Image Skill Expanded — 6 to 12 Sources
+
+**Decision:** Expanded `/research-images` from 6 sources to 12 with aviation-specific additions, following HP's pattern of encoding accumulated knowledge into skills.
+
+**Added:** Openverse (CC aggregator with `license=by,by-sa,cc0,pdm` filtering), Jetphotos.com, SDASM Flickr (San Diego Air & Space Museum — massive public domain aviation archive, best source for historic/retired aircraft), Smithsonian NASM, Museum of Flight, Internet Archive (historical photos, manufacturer brochures, pre-1929 public domain), Library of Congress (government aviation photos), ATR and Bombardier press sites.
+
+**Added category tips:** Military-derived aircraft (KC-135, P-8) → US gov photos are public domain. Rare/low-production aircraft (VFW 614, Mercure) → aviation enthusiast Flickr accounts.
+
+**Lesson:** When agents would consistently need to discover sources ad-hoc across multiple image search runs, those sources should be in the skill. The skill should encode accumulated knowledge so each new run doesn't rediscover it.
+
+---
+
 ### Extracted `/research-images` from `/research-discovery`
 
 **Decision:** Created a standalone `/research-images` skill by extracting the ~30-line "Images Mode" section from `/research-discovery`. The discovery skill now just says "use `/research-images`."

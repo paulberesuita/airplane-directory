@@ -12,6 +12,9 @@ What we shipped. Builder appends here after each feature.
 - **`/research-images` skill** — Standalone image search skill extracted from `/research-discovery`. Supports both batch mode (`/research-images Boeing`) and single-aircraft mode (`/research-images boeing-737-800`). Full workflow: source priority list, download/upload R2/update D1, category-specific tips.
 
 **Changed:**
+- **`/research-images` expanded from 6 to 12 sources** — Added Openverse (CC aggregator with license filtering API), Jetphotos.com, SDASM Flickr (San Diego Air & Space Museum — thousands of public domain aviation photos), aviation museums (Smithsonian, Museum of Flight), Internet Archive (historical aviation photos, pre-1929 public domain), Library of Congress (government photos), more manufacturer press sites (ATR, Bombardier). Expanded category tips from 4 to 6 (added military-derived and rare/low-production aircraft).
+
+**Changed:**
 - **`/research-discovery` images section slimmed** — Now just says "use `/research-images`" instead of embedding the full workflow.
 - **Content agent task types** — Added `research-images` entries for batch and single modes.
 - **CLAUDE.md** — Added `/research-images` to content agent skills list.
