@@ -25,13 +25,28 @@ export async function onRequestGet(context) {
 async function renderListPage(context, baseUrl) {
   const { env } = context;
 
-  const { results: aircraft } = await env.DB.prepare(
-    'SELECT * FROM aircraft ORDER BY CASE WHEN image_url IS NOT NULL AND image_url != \'\' THEN 0 ELSE 1 END, manufacturer, name'
-  ).all();
+  const [{ results: aircraft }, { results: fleetRows }, { results: airlines }] = await Promise.all([
+    env.DB.prepare(
+      'SELECT * FROM aircraft ORDER BY CASE WHEN image_url IS NOT NULL AND image_url != \'\' THEN 0 ELSE 1 END, manufacturer, name'
+    ).all(),
+    env.DB.prepare(
+      'SELECT aircraft_slug, airline_slug FROM airline_fleet'
+    ).all(),
+    env.DB.prepare(
+      'SELECT slug, name, iata_code FROM airlines ORDER BY fleet_size DESC'
+    ).all()
+  ]);
+
+  // Build aircraft → airlines lookup
+  const aircraftAirlines = {};
+  for (const row of fleetRows) {
+    if (!aircraftAirlines[row.aircraft_slug]) aircraftAirlines[row.aircraft_slug] = [];
+    aircraftAirlines[row.aircraft_slug].push(row.airline_slug);
+  }
 
   const manufacturers = [...new Set(aircraft.map(a => a.manufacturer))].sort();
 
-  const filterButtons = manufacturers.map(m => `
+  const manufacturerButtons = manufacturers.map(m => `
     <button onclick="filterByManufacturer('${escapeHtml(m)}')"
             class="filter-btn px-3 py-1.5 text-sm font-medium transition-all"
             style="border: 1px solid #8b7355; color: #8b7355;"
@@ -40,10 +55,24 @@ async function renderListPage(context, baseUrl) {
     </button>
   `).join('');
 
+  const airlineButtons = airlines.map(al => {
+    const brandColor = airlineBrandColors[al.slug] || '#8b7355';
+    return `
+    <button onclick="filterByAirline('${escapeHtml(al.slug)}')"
+            class="airline-btn flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium transition-all"
+            style="border: 1px solid #d4c8b8; color: #6b5d4d;"
+            data-airline="${escapeHtml(al.slug)}">
+      <img src="${baseUrl}/images/airline-icons/${escapeHtml(al.slug)}.png?v=5" alt="" class="w-4 h-4 object-contain"
+           onerror="this.style.display='none';">
+      <span>${escapeHtml(al.iata_code || al.name)}</span>
+    </button>`;
+  }).join('');
+
   const cards = aircraft.map(a => {
     const rangeInMiles = kmToMiles(a.range_km);
     const speedInMph = kmhToMph(a.cruise_speed_kmh);
     const year = a.first_flight ? a.first_flight.split('-')[0] : '';
+    const airlineSlugs = (aircraftAirlines[a.slug] || []).join(',');
 
     const imageHtml = a.image_url
       ? `<img src="${baseUrl}/images/aircraft/${escapeHtml(a.slug)}.webp?v=5" alt="${escapeHtml(a.name)}"
@@ -55,7 +84,8 @@ async function renderListPage(context, baseUrl) {
     return `
       <div class="aircraft-card pixel-clip p-1 transition-transform duration-300 hover:scale-[1.02]"
            style="background-color: #8b7355;"
-           data-manufacturer="${escapeHtml(a.manufacturer)}">
+           data-manufacturer="${escapeHtml(a.manufacturer)}"
+           data-airlines="${escapeHtml(airlineSlugs)}">
         <a href="/aircraft/${escapeHtml(a.slug)}"
            class="group block pixel-clip p-3"
            style="background-color: #ffffff;">
@@ -117,6 +147,8 @@ async function renderListPage(context, baseUrl) {
     .aircraft-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     .filter-btn:hover { background-color: #f5f0e6; }
     .filter-btn.active { background-color: #8b7355 !important; color: #ffffff !important; border-color: #8b7355 !important; }
+    .airline-btn:hover { background-color: #f5f0e6; }
+    .airline-btn.active { background-color: #4a3f2f !important; color: #ffffff !important; border-color: #4a3f2f !important; }
     .line-clamp-2 {
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -156,6 +188,17 @@ async function renderListPage(context, baseUrl) {
 
         <!-- Filters -->
         <div style="border-top: 1px solid #e5e5e5; padding-top: 16px;">
+          <p class="pixel-text uppercase mb-3" style="font-size: 7px; color: #8b7355; letter-spacing: 0.1em;">Filter by airline</p>
+          <div id="airline-filters" class="flex flex-wrap gap-2 mb-4">
+            <button onclick="filterByAirline('')"
+                    class="airline-btn active flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium transition-all"
+                    style="border: 1px solid #d4c8b8; color: #6b5d4d;"
+                    data-airline="">
+              All Airlines
+            </button>
+            ${airlineButtons}
+          </div>
+
           <p class="pixel-text uppercase mb-3" style="font-size: 7px; color: #8b7355; letter-spacing: 0.1em;">Filter by manufacturer</p>
           <div id="manufacturer-filters" class="flex flex-wrap gap-2">
             <button onclick="filterByManufacturer('')"
@@ -164,7 +207,7 @@ async function renderListPage(context, baseUrl) {
                     data-manufacturer="">
               All
             </button>
-            ${filterButtons}
+            ${manufacturerButtons}
           </div>
         </div>
       </div>
@@ -205,9 +248,11 @@ async function renderListPage(context, baseUrl) {
     const emptyState = document.getElementById('empty-state');
     const resultsCount = document.getElementById('results-count');
     const clearFiltersBtn = document.getElementById('clear-filters-btn');
-    const filterBtns = document.querySelectorAll('.filter-btn');
+    const mfgBtns = document.querySelectorAll('.filter-btn');
+    const airlineBtns = document.querySelectorAll('.airline-btn');
 
     let selectedManufacturer = '';
+    let selectedAirline = '';
 
     function filterAircraft() {
       const cards = aircraftGrid.querySelectorAll('.aircraft-card');
@@ -215,9 +260,11 @@ async function renderListPage(context, baseUrl) {
 
       cards.forEach(card => {
         const manufacturer = card.dataset.manufacturer;
-        const matchesManufacturer = !selectedManufacturer || manufacturer === selectedManufacturer;
+        const airlines = card.dataset.airlines ? card.dataset.airlines.split(',') : [];
+        const matchesMfg = !selectedManufacturer || manufacturer === selectedManufacturer;
+        const matchesAirline = !selectedAirline || airlines.includes(selectedAirline);
 
-        if (matchesManufacturer) {
+        if (matchesMfg && matchesAirline) {
           card.style.display = '';
           visibleCount++;
         } else {
@@ -228,21 +275,33 @@ async function renderListPage(context, baseUrl) {
       resultsCount.textContent = visibleCount === 1 ? '1 aircraft' : visibleCount + ' aircraft';
       emptyState.classList.toggle('hidden', visibleCount > 0);
       aircraftGrid.classList.toggle('hidden', visibleCount === 0);
-      clearFiltersBtn.classList.toggle('hidden', !selectedManufacturer);
+      clearFiltersBtn.classList.toggle('hidden', !selectedManufacturer && !selectedAirline);
     }
 
     function filterByManufacturer(manufacturer) {
       selectedManufacturer = manufacturer;
-      filterBtns.forEach(btn => {
+      mfgBtns.forEach(btn => {
         btn.classList.toggle('active', btn.dataset.manufacturer === manufacturer);
+      });
+      filterAircraft();
+    }
+
+    function filterByAirline(airline) {
+      selectedAirline = airline;
+      airlineBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.airline === airline);
       });
       filterAircraft();
     }
 
     function clearFilters() {
       selectedManufacturer = '';
-      filterBtns.forEach(btn => {
+      selectedAirline = '';
+      mfgBtns.forEach(btn => {
         btn.classList.toggle('active', btn.dataset.manufacturer === '');
+      });
+      airlineBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.airline === '');
       });
       filterAircraft();
     }
