@@ -4,6 +4,34 @@ What we shipped. Builder appends here after each feature.
 
 ---
 
+## 2026-02-26
+
+### SEO & Code Gap Fixes (new-directory alignment)
+
+**Added:**
+- **`functions/404.js`** — Branded 404 page with noindex meta, pixel-text "404" label, sky shader background. Middleware intercepts all 404 responses and renders this page instead of Cloudflare's default.
+- **`functions/feed.xml.js`** — RSS feed at `/feed.xml` with 20 most recent aircraft. Atom self-link, manufacturer categories, 1-hour cache.
+- **RSS feed discovery** — `<link rel="alternate" type="application/rss+xml">` added to `renderHead()`, discoverable on every page.
+- **`/feed.xml` in sitemap** — Priority 0.3, daily changefreq.
+
+**Changed:**
+- **`rel="nofollow noopener noreferrer"` on all external links** — Sources page, aircraft source citations, aircraft source_url fallback, airline website links, manufacturer website links. Prevents link equity flowing to unvetted external URLs.
+- **Noindex on all error pages** — Aircraft, airlines, and manufacturer `renderErrorPage()` now pass `{ noindex: true }` to `renderHead()`. Previously these 404 pages were indexable.
+- **HTML cache bumped from 5min to 1h** — `htmlResponse()` default `cacheMaxAge` changed from 300 to 3600. `stale-while-revalidate` changed from `cacheMaxAge * 2` to fixed 86400 (24 hours). `_headers` file updated to match.
+- **Middleware now intercepts 404s** — Imports `404.js` handler, catches any 404 from `context.next()` before applying noindex logic.
+- **`renderBreadcrumbs()` merged into `layout.js`** — Eliminated separate `breadcrumbs.js` module. Barrel export updated to source from `layout.js`.
+- **robots.txt rewritten** — `Disallow: /api/` moved to top-level `*` block (was buried at bottom). LLM crawlers now get explicit `Allow: /llms.txt` + `Allow: /llms-full.txt` paths (matches new-directory pattern).
+- **`public/llms.txt` updated** — Restructured with Pages, API, Feeds, Full Data sections (was outdated free-form text).
+
+**Removed:**
+- **`functions/_shared/breadcrumbs.js`** — Merged into `layout.js`.
+
+**Files created (2):** `404.js`, `feed.xml.js`
+**Files modified (12):** `_middleware.js`, `_shared.js`, `_shared/layout.js`, `_shared/response.js`, `aircraft/[[slug]].js`, `airlines/[[slug]].js`, `manufacturer/[[slug]].js`, `sources.js`, `robots.txt.js`, `sitemap.xml.js`, `public/_headers`, `public/llms.txt`
+**Files deleted (1):** `_shared/breadcrumbs.js`
+
+---
+
 ## 2026-02-23
 
 ### SEO & Code Structure Overhaul

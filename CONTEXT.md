@@ -4,6 +4,32 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ---
 
+## 2026-02-26
+
+### SEO & Code Gap Fixes — new-directory Comparison
+
+**Problem:** Compared airplane-directory against the new-directory template (the standard for best practices). Found 9 SEO/code gaps despite the Feb 23 overhaul having already adopted the core patterns.
+
+**Key decisions:**
+
+- **Middleware 404 interception** — Middleware now imports `404.js` and intercepts any 404 response before applying noindex headers. This catches unmatched routes that Cloudflare would otherwise serve with a generic error page. Order matters: 404 check first, then noindex check (so the custom 404 page also gets noindex on preview domains).
+
+- **Nofollow on all external links** — Every `target="_blank"` link to an external URL now uses `rel="nofollow noopener noreferrer"`. This covers source citations on aircraft detail pages, airline website links, manufacturer website links, and the sources page. Internal links (to other pages on the site) are NOT nofollowed — only DB-sourced external URLs.
+
+- **Noindex on error pages** — All three detail page error renderers (aircraft, airlines, manufacturer) now pass `{ noindex: true }`. Previously, a 404 response for `/aircraft/nonexistent-slug` returned HTTP 404 status but the HTML had no noindex meta tag — Google could still index the error page content.
+
+- **Cache strategy aligned** — HTML pages now cache for 1 hour (was 5 minutes) with 24-hour stale-while-revalidate (was 10 minutes). The short cache was from early development when changes were frequent. Production content changes rarely — 1 hour is appropriate. SWR is fixed at 86400 instead of `cacheMaxAge * 2` so it doesn't scale linearly.
+
+- **RSS feed for crawl signal** — `/feed.xml` gives Google a chronological signal of when content was added. Also provides `<link rel="alternate">` discovery in every page head, which RSS readers and some crawlers use. Feed uses `escapeXml()` (not `escapeHtml()`) for proper XML entity encoding.
+
+- **Breadcrumbs merged into layout.js** — `renderBreadcrumbs()` was a 31-line file with a single function. Merging it into `layout.js` eliminates one module and one barrel export line. All pages already imported it via the barrel, so no import paths changed.
+
+- **robots.txt structure** — Previous version had `Disallow: /api/` buried at the bottom after 30 lines of AI crawler rules. Moved it right after `Allow: /` in the `*` block where crawlers read it first. LLM crawlers now get explicit `Allow: /llms.txt` paths instead of relying on the generic `Allow: /`.
+
+**Lesson:** The Feb 23 overhaul was infrastructure (shared modules, canonical URLs, middleware). This pass was the SEO polish that infrastructure enables — nofollow, noindex on errors, 404 pages, RSS feeds. Having shared modules made all these changes trivial (e.g., adding noindex to error pages was adding `{ noindex: true }` in 3 places because `renderHead` already supported it).
+
+---
+
 ## 2026-02-23
 
 ### SEO & Code Structure Overhaul — Adopted from new-directory
