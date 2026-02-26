@@ -1,8 +1,9 @@
 // GET /sitemap.xml - Dynamic XML sitemap
+import { PROD_BASE } from './_shared/config.js';
+
 export async function onRequestGet(context) {
-  const { env, request } = context;
-  const url = new URL(request.url);
-  const baseUrl = `${url.protocol}//${url.host}`;
+  const { env } = context;
+  const baseUrl = PROD_BASE;
 
   try {
     // Fetch all aircraft, airline, and manufacturer slugs with dates
@@ -34,6 +35,7 @@ export async function onRequestGet(context) {
       { loc: `${baseUrl}/manufacturer`, priority: '0.9', changefreq: 'daily', lastmod: today },
       { loc: `${baseUrl}/about`, priority: '0.5', changefreq: 'monthly', lastmod: today },
       { loc: `${baseUrl}/sources`, priority: '0.5', changefreq: 'monthly', lastmod: today },
+      { loc: `${baseUrl}/feed.xml`, priority: '0.3', changefreq: 'daily', lastmod: today },
 
       // Airline detail pages
       ...airlines.map(a => ({

@@ -1,7 +1,7 @@
 // GET / - Homepage with airlines and aircraft grid (SSR)
 import { escapeHtml, formatNumber, kmToMiles, kmhToMph } from './_shared/utils.js';
 import { airlineBrandColors } from './_shared/constants.js';
-import { renderHead, renderHeader, renderFooter } from './_shared/layout.js';
+import { renderHead, renderHeader, renderFooter, renderPage, htmlResponse, PROD_BASE } from './_shared.js';
 
 export async function onRequestGet(context) {
   const { env, request } = context;
@@ -31,19 +31,10 @@ export async function onRequestGet(context) {
     const manufacturers = [...new Set(aircraft.map(a => a.manufacturer))].sort();
 
     const html = renderHomepage({ airlines, aircraft, manufacturers, baseUrl });
-
-    return new Response(html, {
-      headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=600'
-      }
-    });
+    return htmlResponse(html);
   } catch (error) {
     console.error('Error loading homepage:', error);
-    return new Response(renderErrorPage(baseUrl), {
-      status: 500,
-      headers: { 'Content-Type': 'text/html; charset=utf-8' }
-    });
+    return htmlResponse(renderErrorPage(baseUrl), 500);
   }
 }
 
@@ -220,13 +211,13 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
     "@type": "WebSite",
     "name": "AirlinePlanes",
     "alternateName": "Airline Planes Directory",
-    "url": baseUrl,
+    "url": PROD_BASE,
     "description": "Explore airline fleets and aircraft specifications. Know what planes you're flying on.",
     "potentialAction": {
       "@type": "SearchAction",
       "target": {
         "@type": "EntryPoint",
-        "urlTemplate": `${baseUrl}/aircraft?q={search_term_string}`
+        "urlTemplate": `${PROD_BASE}/aircraft?q={search_term_string}`
       },
       "query-input": "required name=search_term_string"
     }
@@ -236,7 +227,7 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "AirlinePlanes",
-    "url": baseUrl,
+    "url": PROD_BASE,
     "description": "A curated directory of commercial aircraft and the airlines that fly them.",
     "sameAs": []
   };
@@ -251,7 +242,7 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
       "@type": "ListItem",
       "position": index + 1,
       "name": a.name,
-      "url": `${baseUrl}/airlines/${a.slug}`
+      "url": `${PROD_BASE}/airlines/${a.slug}`
     }))
   };
 
@@ -289,20 +280,15 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
     }
   `;
 
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  ${renderHead({
+  const head = renderHead({
     title: 'AirlinePlanes — Know What Airlines Fly',
     description: `Explore the fleets of ${airlines.length} major airlines with ${formatNumber(totalAircraft)}+ aircraft. See which planes Emirates, British Airways, Lufthansa, Singapore Airlines and more operate.`,
-    url: baseUrl,
-    image: aircraft[0]?.image_url ? `${baseUrl}/images/aircraft-styled/${aircraft[0].slug}.webp` : null,
+    url: PROD_BASE,
+    image: aircraft[0]?.image_url ? `${PROD_BASE}/images/aircraft-styled/${aircraft[0].slug}.webp` : null,
     jsonLd: null
-  }, { extraStyles, extraHead: multipleJsonLd })}
-</head>
-<body class="font-sans">
-  <canvas id="sky-canvas"></canvas>
-  <div class="window-frame">
+  }, { extraStyles, extraHead: multipleJsonLd });
+
+  const body = `
   ${renderHeader()}
 
   <!-- Hero Section -->
@@ -373,26 +359,20 @@ function renderHomepage({ airlines, aircraft, manufacturers, baseUrl }) {
 
   </main>
 
-  ${renderFooter()}
+  ${renderFooter()}`;
 
-  </div>
-</body>
-</html>`;
+  return renderPage(head, body);
 }
 
 function renderErrorPage(baseUrl) {
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  ${renderHead({
+  const head = renderHead({
     title: 'Error — AirlinePlanes',
     description: 'Something went wrong loading the page.',
-    url: baseUrl
-  })}
-</head>
-<body class="font-sans">
-  <canvas id="sky-canvas"></canvas>
-  <div class="window-frame flex items-center justify-center">
+    url: PROD_BASE
+  });
+
+  const body = `
+  <div class="flex items-center justify-center min-h-[60vh]">
   <div class="text-center px-4">
     <div class="inline-flex items-center justify-center w-24 h-24 bg-error-bg rounded-full mb-6">
       <span class="text-4xl">&#9992;</span>
@@ -403,7 +383,7 @@ function renderErrorPage(baseUrl) {
       Try Again
     </a>
   </div>
-  </div>
-</body>
-</html>`;
+  </div>`;
+
+  return renderPage(head, body);
 }

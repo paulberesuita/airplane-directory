@@ -28,6 +28,7 @@ Read these skills:
 | Sitemap current | All pages included, no dead URLs | Sitemap health check |
 | No thin content | All aircraft have substantial descriptions | Thin content query |
 | Internal linking strong | Pages cross-link to related content | Link audit |
+| E-E-A-T signals visible | Trust signals on every content page | E-E-A-T audit |
 
 ---
 
@@ -50,11 +51,15 @@ curl -s https://airlineplanes.com/aircraft/boeing-737-800 | grep -E '<title>|<me
 # Thin content count
 npx wrangler d1 execute airplane-directory-db --remote --command "
   SELECT COUNT(*) as thin FROM aircraft WHERE description IS NULL OR LENGTH(description) < 200;"
+
+# E-E-A-T: Check a sample aircraft page for trust signals
+curl -s https://airlineplanes.com/aircraft/boeing-737-800 | grep -cE 'sources|verified|Sources'
 ```
 
 Also check:
 - What's in `## SEO` section of `BACKLOG.md`?
 - Recent SEO issues in `CONTEXT.md`?
+- E-E-A-T signals present? (see E-E-A-T checklist below)
 
 ### 2. Present State and Recommend
 
@@ -67,6 +72,7 @@ Also check:
 **Structured data:** [ok/missing on X page types]
 **Thin content:** [X aircraft under 200 chars]
 **Indexing:** ~[X] pages indexed (expected [Y])
+**E-E-A-T:** [ok/issues — see checklist]
 
 ## Recommended Fixes
 
@@ -86,11 +92,12 @@ Also check:
 1. **No sitemap/robots?** -> Create them (Google can't index what it can't find)
 2. **Missing meta tags?** -> Fix (title, description, OG, Twitter cards)
 3. **Missing structured data?** -> Add JSON-LD schemas
-4. **Sitemap stale?** -> Rebuild with all current pages
-5. **Pages not indexed?** -> Diagnose and fix
-6. **Thin content found?** -> Flag for Content agent
-7. **Internal linking gaps?** -> Fix cross-links
-8. **Everything healthy?** -> Run full audit to find edge cases
+4. **E-E-A-T signals missing?** -> Add trust signals (see checklist below)
+5. **Sitemap stale?** -> Rebuild with all current pages
+6. **Pages not indexed?** -> Diagnose and fix
+7. **Thin content found?** -> Flag for Content agent
+8. **Internal linking gaps?** -> Fix cross-links
+9. **Everything healthy?** -> Run full audit to find edge cases
 
 ---
 
@@ -99,10 +106,12 @@ Also check:
 | Task | Skill to Read | Example |
 |------|--------------|---------|
 | Full SEO audit | `/seo-audit` | "Run full SEO audit" |
+| Sitemap health | `/seo-audit` (sitemap) | "Check sitemap" |
+| Thin content check | `/seo-audit` (content) | "Find thin content" |
+| Data quality check | `/seo-audit` (data) | "Check data quality" |
 | Fix meta tags | Direct code edits | "Fix OG tags on aircraft pages" |
 | Build sitemap | Direct code/deploy | "Rebuild sitemap.xml" |
 | Fix structured data | Direct code edits | "Add schema to manufacturer pages" |
-| Fix internal linking | Direct code edits | "Add cross-links on airline pages" |
 
 ---
 
@@ -121,18 +130,15 @@ Read `/project-architecture` and `/tasty-design` before editing.
 - Structured data: Add JSON-LD to the page's render function
 - Internal linking: Add cross-links in page templates
 
-### 3. Deploy
+### 3. Deploy & Verify
 
-Invoke `/cloudflare-deploy`.
-
-### 4. Verify
+Deploy with `/cloudflare-deploy`. Then verify the fix is live:
 
 ```bash
-# Check the fix is live
 curl -s https://airlineplanes.com/[page] | grep -E '<title>|<meta|ld\+json'
 ```
 
-### 5. Report
+### 4. Report
 
 ```
 Fixed: [what was fixed]
@@ -142,17 +148,9 @@ Next: [remaining issues or follow-up]
 
 ---
 
-## SEO Requirements by Page Type
+## SEO Requirements
 
-| Page Type | Schema | Title Pattern |
-|-----------|--------|---------------|
-| Homepage | WebSite | "Airplane Directory -- Commercial Aircraft Encyclopedia" |
-| Aircraft page | Product | "[Name] -- Specs & History \| Airplane Directory" |
-| Airline page | Organization | "[Airline] Fleet & Routes \| Airplane Directory" |
-| Manufacturer page | ItemList | "[Manufacturer] Aircraft \| Airplane Directory" |
-| Comparison page | ItemList | "[A] vs [B] -- Comparison \| Airplane Directory" |
-
-Every page needs: title (<60 chars), meta description (<160 chars), OG tags, Twitter cards, canonical URL, JSON-LD, internal links.
+See `/project-architecture` (SEO Architecture section) for structured data types, title patterns, and meta tag requirements per page type.
 
 ---
 
@@ -163,6 +161,87 @@ Update before finishing:
 - **CONTEXT.md** — What was found, lessons learned
 
 Then recommend next fixes based on updated state.
+
+---
+
+## E-E-A-T Checklist
+
+Google's core updates (Aug 2024, Dec 2025, Feb 2026) all emphasize E-E-A-T — even for reference/directory content like ours. Airplane Directory's strength is verified specs from manufacturer and aviation sources, but that only helps if users and Google can **see** the trust signals.
+
+### What E-E-A-T Means for Airplane Directory
+
+- **Experience**: We research real aircraft with real specs — not AI-generated fluff
+- **Expertise**: Multi-source verification, manufacturer data, aviation databases
+- **Authoritativeness**: Transparent sourcing, methodology page, Organization schema
+- **Trustworthiness**: Sources visible on every page, no hidden attribution, honest about what we are
+
+### Per-Page Trust Signals (aircraft pages)
+
+Check that aircraft pages (`functions/aircraft/[[slug]].js`) have:
+
+| Signal | What to check | Current location |
+|--------|--------------|------------------|
+| Inline sources | Source domains visible in sidebar (not hidden behind modal) | Sources section |
+| Source count | Number of sources shown | Quick facts or sidebar |
+| Last updated date | When specs were last verified | Quick facts |
+| Source count in schema | Product structured data includes sources | JSON-LD in head |
+
+### Site-Wide Trust Signals
+
+| Signal | What to check | Current location |
+|--------|--------------|------------------|
+| About page | Explains what we are and how we verify data | about.js |
+| Organization schema | `@type: Organization` with `knowsAbout` | about.js structured data |
+| Footer trust nav | About, Sources links in footer | All page footers |
+| Canonical URLs | Every page has `<link rel="canonical">` | All pages |
+
+### Common E-E-A-T Regressions to Watch For
+
+- **New page types** added without source attribution
+- **Footer changes** that drop trust links
+- **Structured data** downgraded from Organization to generic WebSite
+- **Source display** changed to hide sources behind extra clicks (Google rewards visible attribution)
+
+### When Adding New Pages or Features
+
+Always ask: **"Can Google and users tell where this data comes from?"**
+
+If the answer is no, add:
+1. Source attribution (inline, not hidden)
+2. Appropriate structured data
+3. Trust links in footer
+
+---
+
+## Google Core Update Best Practices
+
+Concise checklist from Google's official guidance and recent core updates (2024-2026). Check these during every audit.
+
+**Content quality:**
+- Every page provides verified specs from manufacturer sources, not rewritten summaries
+- Titles are descriptive and factual — no clickbait or exaggeration
+- Content is comprehensive enough that users don't need to search again
+- No thin pages (< 200 char descriptions) dragging down site quality
+
+**Topical authority:**
+- Deep, focused coverage of one niche (commercial aircraft) — not scattered topics
+- Strong internal linking between related aircraft, manufacturers, airlines
+- Content ecosystem: aircraft pages link to manufacturer pages, airline pages, comparison pages
+
+**Freshness honesty:**
+- Only update sitemap `lastmod` when content actually changes
+- Don't change page dates without substantial content updates
+
+**AI content:**
+- AI-assisted content must have human oversight and multi-source verification
+- Never mass-produce thin content at scale
+- Every aircraft should have specific specs, dates, history — not generic summaries
+
+**After a core update hits:**
+- Wait 14+ days after rollout completes before making major changes
+- Don't panic-delete pages during volatility
+- Compare traffic week-over-week against a pre-update baseline
+- Focus on improving content quality, not chasing algorithm signals
 
 ---
 

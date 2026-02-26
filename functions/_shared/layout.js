@@ -1,5 +1,6 @@
-// Shared layout components: renderHead, renderHeader, renderFooter
+// Shared layout components: renderHead, renderHeader, renderFooter, renderBreadcrumbs
 import { escapeHtml } from './utils.js';
+import { PROD_BASE } from './config.js';
 
 /**
  * Render <head> contents with all shared meta, fonts, Tailwind config, styles, and WebGL sky.
@@ -13,21 +14,36 @@ import { escapeHtml } from './utils.js';
  * @param {Object} [options]
  * @param {string} [options.extraStyles] - Additional CSS to inject
  * @param {string} [options.extraHead] - Additional HTML to inject at end of <head>
+ * @param {boolean} [options.noindex] - If true, add noindex/nofollow meta tag
  */
 export function renderHead({ title, description, url, image, jsonLd }, options = {}) {
-  const { extraStyles = '', extraHead = '' } = options;
+  const { extraStyles = '', extraHead = '', noindex = false } = options;
+
+  // Force canonical to production domain
+  let canonicalUrl = url;
+  try {
+    const parsed = new URL(url);
+    canonicalUrl = `${PROD_BASE}${parsed.pathname}`;
+  } catch {
+    // If url is already a path, prepend PROD_BASE
+    canonicalUrl = `${PROD_BASE}${url}`;
+  }
 
   return `
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(description)}">
-  <link rel="canonical" href="${escapeHtml(url)}">
+  ${noindex ? '<meta name="robots" content="noindex, nofollow">' : ''}
+  <link rel="canonical" href="${escapeHtml(canonicalUrl)}">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="AirlinePlanes" href="${PROD_BASE}/feed.xml">
 
   <!-- Preconnect to external origins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,7 +54,7 @@ export function renderHead({ title, description, url, image, jsonLd }, options =
   <!-- Open Graph -->
   <meta property="og:title" content="${escapeHtml(title)}">
   <meta property="og:description" content="${escapeHtml(description)}">
-  <meta property="og:url" content="${escapeHtml(url)}">
+  <meta property="og:url" content="${escapeHtml(canonicalUrl)}">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="AirlinePlanes">
   ${image ? `<meta property="og:image" content="${escapeHtml(image)}">` : ''}
@@ -304,4 +320,26 @@ export function renderFooter() {
       </div>
     </div>
   </footer>`;
+}
+
+/**
+ * Generate a BreadcrumbList JSON-LD script tag.
+ *
+ * @param {Array<{name: string, path: string}>} items - Breadcrumb trail
+ *   Each item has a `name` (display label) and `path` (URL path, e.g. '/aircraft').
+ *   Use path '' for the homepage.
+ * @returns {string} A <script type="application/ld+json"> tag
+ */
+export function renderBreadcrumbs(items) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": items.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": item.name,
+      "item": `${PROD_BASE}${item.path}`
+    }))
+  };
+  return `<script type="application/ld+json">${JSON.stringify(schema)}</script>`;
 }

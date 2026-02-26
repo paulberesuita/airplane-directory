@@ -1,7 +1,7 @@
 // GET /airlines and GET /airlines/[slug] - Airlines list and detail pages (SSR)
 import { escapeHtml, formatNumber, kmToMiles, kmhToMph } from '../_shared/utils.js';
 import { airlineBrandColors } from '../_shared/constants.js';
-import { renderHead, renderHeader, renderFooter } from '../_shared/layout.js';
+import { renderHead, renderHeader, renderFooter, renderPage, htmlResponse, renderBreadcrumbs, PROD_BASE } from '../_shared.js';
 
 export async function onRequestGet(context) {
   const { env, request, params } = context;
@@ -16,10 +16,7 @@ export async function onRequestGet(context) {
     return renderDetailPage(context, slug, baseUrl);
   } catch (error) {
     console.error('Error:', error);
-    return new Response(renderErrorPage(baseUrl, 'Something went wrong'), {
-      status: 500,
-      headers: { 'Content-Type': 'text/html; charset=utf-8' }
-    });
+    return htmlResponse(renderErrorPage(baseUrl, 'Something went wrong'), 500);
   }
 }
 
@@ -136,13 +133,10 @@ async function renderListPage(context, baseUrl) {
 
   const airlineCards = airlines.map(airline => renderAirlineCard(airline, baseUrl)).join('');
 
-  const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  ${renderHead({
+  const head = renderHead({
     title: 'Airlines Fleet Guide | AirlinePlanes',
     description: 'Explore the aircraft fleets of major airlines worldwide. Learn what planes Emirates, British Airways, Lufthansa, Singapore Airlines, and more fly.',
-    url: `${baseUrl}/airlines`,
+    url: `${PROD_BASE}/airlines`,
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "ItemList",
@@ -156,23 +150,22 @@ async function renderListPage(context, baseUrl) {
           "@type": "Airline",
           "name": a.name,
           "iataCode": a.iata_code,
-          "url": `${baseUrl}/airlines/${a.slug}`
+          "url": `${PROD_BASE}/airlines/${a.slug}`
         }
       }))
     }
-  })}
-  <style>
+  }, {
+    extraStyles: `
     .line-clamp-2 {
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-  </style>
-</head>
-<body class="font-sans">
-  <canvas id="sky-canvas"></canvas>
-  <div class="window-frame">
+  `
+  });
+
+  const body = `
   ${renderHeader('airlines')}
 
   <!-- Hero -->
@@ -191,17 +184,9 @@ async function renderListPage(context, baseUrl) {
     </div>
   </main>
 
-  ${renderFooter()}
-  </div>
-</body>
-</html>`;
+  ${renderFooter()}`;
 
-  return new Response(html, {
-    headers: {
-      'Content-Type': 'text/html; charset=utf-8',
-      'Cache-Control': 'public, max-age=300, stale-while-revalidate=600'
-    }
-  });
+  return htmlResponse(renderPage(head, body));
 }
 
 // === Detail Page ===
@@ -215,10 +200,7 @@ async function renderDetailPage(context, slug, baseUrl) {
   ).bind(slug).first();
 
   if (!airline) {
-    return new Response(renderErrorPage(baseUrl, 'Airline not found'), {
-      status: 404,
-      headers: { 'Content-Type': 'text/html; charset=utf-8' }
-    });
+    return htmlResponse(renderErrorPage(baseUrl, 'Airline not found'), 404);
   }
 
   // Get fleet with aircraft details
@@ -276,46 +258,22 @@ async function renderDetailPage(context, slug, baseUrl) {
     }
   };
 
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": baseUrl
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "Airlines",
-        "item": `${baseUrl}/airlines`
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": airline.name,
-        "item": `${baseUrl}/airlines/${slug}`
-      }
-    ]
-  };
-
   const multipleJsonLd = `
   <script type="application/ld+json">${JSON.stringify(airlineSchema)}</script>
-  <script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`;
+  ${renderBreadcrumbs([
+    { name: 'Home', path: '' },
+    { name: 'Airlines', path: '/airlines' },
+    { name: airline.name, path: `/airlines/${slug}` }
+  ])}`;
 
-  const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  ${renderHead({
+  const head = renderHead({
     title: `${airline.name} Fleet | AirlinePlanes`,
     description: `Explore ${airline.name}'s fleet of ${totalAircraft} aircraft. See what planes ${airline.iata_code} flies and learn about each aircraft type.`,
-    url: `${baseUrl}/airlines/${slug}`,
+    url: `${PROD_BASE}/airlines/${slug}`,
     jsonLd: null
-  })}
-  ${multipleJsonLd}
-  <style>
+  }, {
+    extraHead: multipleJsonLd,
+    extraStyles: `
     .pixel-clip {
       clip-path: polygon(
         0 8px, 4px 8px, 4px 4px, 8px 4px, 8px 0,
@@ -328,11 +286,10 @@ async function renderDetailPage(context, slug, baseUrl) {
       font-family: 'Press Start 2P', monospace;
       line-height: 1.6;
     }
-  </style>
-</head>
-<body class="font-sans">
-  <canvas id="sky-canvas"></canvas>
-  <div class="window-frame">
+  `
+  });
+
+  const body = `
   ${renderHeader('airlines')}
 
   <!-- Hero -->
@@ -362,7 +319,7 @@ async function renderDetailPage(context, slug, baseUrl) {
               <p class="leading-relaxed" style="color: #6b5d4d;">${escapeHtml(airline.description)}</p>
 
               ${airline.website ? `
-              <a href="${escapeHtml(airline.website)}" target="_blank" rel="noopener"
+              <a href="${escapeHtml(airline.website)}" target="_blank" rel="nofollow noopener noreferrer"
                  class="inline-flex items-center gap-2 mt-4 hover:opacity-70 transition-opacity text-sm font-medium" style="color: #8b7355;">
                 Visit website
                 <span class="pixel-text" style="font-size: 8px;">&gt;</span>
@@ -408,32 +365,19 @@ async function renderDetailPage(context, slug, baseUrl) {
     </div>
   </main>
 
-  ${renderFooter()}
-  </div>
-</body>
-</html>`;
+  ${renderFooter()}`;
 
-  return new Response(html, {
-    headers: {
-      'Content-Type': 'text/html; charset=utf-8',
-      'Cache-Control': 'public, max-age=300, stale-while-revalidate=600'
-    }
-  });
+  return htmlResponse(renderPage(head, body));
 }
 
 function renderErrorPage(baseUrl, message) {
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  ${renderHead({
+  const head = renderHead({
     title: 'Not Found | AirlinePlanes',
     description: message,
-    url: baseUrl
-  })}
-</head>
-<body class="font-sans">
-  <canvas id="sky-canvas"></canvas>
-  <div class="window-frame">
+    url: `${PROD_BASE}/airlines`
+  }, { noindex: true });
+
+  const body = `
   ${renderHeader('airlines')}
 
   <div class="max-w-6xl mx-auto px-4 py-20 text-center">
@@ -447,8 +391,7 @@ function renderErrorPage(baseUrl, message) {
     </a>
   </div>
 
-  ${renderFooter()}
-  </div>
-</body>
-</html>`;
+  ${renderFooter()}`;
+
+  return renderPage(head, body);
 }

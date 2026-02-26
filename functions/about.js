@@ -1,13 +1,10 @@
 // GET /about - About page (SSR)
-import { renderHead, renderHeader, renderFooter } from './_shared/layout.js';
+import { renderHead, renderHeader, renderFooter, renderPage, htmlResponse, renderBreadcrumbs, PROD_BASE } from './_shared.js';
 
 export async function onRequestGet(context) {
-  const { env, request } = context;
-  const url = new URL(request.url);
-  const baseUrl = `${url.protocol}//${url.host}`;
+  const { env } = context;
 
   try {
-    // Get stats for the about page
     const [{ results: aircraftStats }, { results: airlineStats }] = await Promise.all([
       env.DB.prepare('SELECT COUNT(*) as count, COUNT(DISTINCT manufacturer) as manufacturers FROM aircraft').all(),
       env.DB.prepare('SELECT COUNT(*) as count FROM airlines').all()
@@ -19,61 +16,43 @@ export async function onRequestGet(context) {
       airlines: airlineStats[0]?.count || 0
     };
 
-    const html = renderAboutPage(baseUrl, stats);
-
-    return new Response(html, {
-      headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600, stale-while-revalidate=7200'
-      }
-    });
+    const html = renderAboutPage(stats);
+    return htmlResponse(html, 200, 3600);
   } catch (error) {
     console.error('Error loading about page:', error);
-    return new Response('Error loading page', { status: 500 });
+    return htmlResponse('Error loading page', 500);
   }
 }
 
-function renderAboutPage(baseUrl, stats) {
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": baseUrl },
-      { "@type": "ListItem", "position": 2, "name": "About", "item": `${baseUrl}/about` }
-    ]
-  };
-
+function renderAboutPage(stats) {
   const aboutPageSchema = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
     "name": "About AirlinePlanes",
     "description": "Learn about AirlinePlanes, a comprehensive directory of commercial aircraft and airlines.",
-    "url": `${baseUrl}/about`,
+    "url": `${PROD_BASE}/about`,
     "mainEntity": {
       "@type": "WebSite",
       "name": "AirlinePlanes",
-      "url": baseUrl
+      "url": PROD_BASE
     }
   };
 
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  ${renderHead({
+  const head = renderHead({
     title: 'About | AirlinePlanes',
     description: 'AirlinePlanes is a comprehensive directory of commercial aircraft and the airlines that fly them. Learn about our mission to help travelers know what planes they fly on.',
-    url: `${baseUrl}/about`,
+    url: `${PROD_BASE}/about`,
     jsonLd: null
   }, {
     extraHead: `
-  <script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>
+  ${renderBreadcrumbs([
+    { name: 'Home', path: '' },
+    { name: 'About', path: '/about' }
+  ])}
   <script type="application/ld+json">${JSON.stringify(aboutPageSchema)}</script>`
-  })}
-</head>
-<body class="font-sans">
-  <canvas id="sky-canvas"></canvas>
-  <div class="window-frame">
+  });
 
+  const body = `
   ${renderHeader('about')}
 
   <!-- Hero -->
@@ -164,9 +143,7 @@ function renderAboutPage(baseUrl, stats) {
     </div>
   </main>
 
-  ${renderFooter()}
+  ${renderFooter()}`;
 
-  </div>
-</body>
-</html>`;
+  return renderPage(head, body);
 }

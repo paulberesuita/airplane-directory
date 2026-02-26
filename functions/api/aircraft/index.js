@@ -1,4 +1,6 @@
 // GET /api/aircraft - List all aircraft with optional search/filter
+import { jsonResponse } from '../../_shared/response.js';
+
 export async function onRequestGet(context) {
   const { env, request } = context;
   const url = new URL(request.url);
@@ -35,20 +37,12 @@ export async function onRequestGet(context) {
       'SELECT DISTINCT manufacturer FROM aircraft ORDER BY manufacturer'
     ).all();
 
-    return new Response(JSON.stringify({
+    return jsonResponse({
       aircraft: results,
       manufacturers: manufacturers.map(m => m.manufacturer),
       count: results.length
-    }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=300'
-      }
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Failed to fetch aircraft' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return jsonResponse({ error: 'Failed to fetch aircraft' }, 500);
   }
 }

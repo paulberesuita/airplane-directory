@@ -1,7 +1,7 @@
 // GET /aircraft and GET /aircraft/[slug] - Aircraft list and detail pages (SSR)
 import { escapeHtml, formatNumber, kmToMiles, kmhToMph, metersToFeet, kgToLbs, litersToGallons, formatPrice, formatDate } from '../_shared/utils.js';
 import { airlineBrandColors } from '../_shared/constants.js';
-import { renderHead, renderHeader, renderFooter } from '../_shared/layout.js';
+import { renderHead, renderHeader, renderFooter, renderPage, htmlResponse, renderBreadcrumbs, PROD_BASE } from '../_shared.js';
 
 export async function onRequestGet(context) {
   const { env, request, params } = context;
@@ -16,10 +16,7 @@ export async function onRequestGet(context) {
     return renderDetailPage(context, slug, baseUrl);
   } catch (error) {
     console.error('Error:', error);
-    return new Response(renderErrorPage(baseUrl, 'Something went wrong'), {
-      status: 500,
-      headers: { 'Content-Type': 'text/html; charset=utf-8' }
-    });
+    return htmlResponse(renderErrorPage(baseUrl, 'Something went wrong'), 500);
   }
 }
 
@@ -99,13 +96,10 @@ async function renderListPage(context, baseUrl) {
       </div>`;
   }).join('');
 
-  const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  ${renderHead({
+  const head = renderHead({
     title: 'Aircraft | AirlinePlanes',
     description: `Browse ${aircraft.length} commercial aircraft from ${manufacturers.join(', ')}. Every plane type flown by major airlines.`,
-    url: `${baseUrl}/aircraft`,
+    url: `${PROD_BASE}/aircraft`,
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "ItemList",
@@ -115,11 +109,11 @@ async function renderListPage(context, baseUrl) {
       "itemListElement": aircraft.slice(0, 10).map((a, i) => ({
         "@type": "ListItem",
         "position": i + 1,
-        "url": `${baseUrl}/aircraft/${a.slug}`
+        "url": `${PROD_BASE}/aircraft/${a.slug}`
       }))
     }
-  })}
-  <style>
+  }, {
+    extraStyles: `
     .aircraft-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     .filter-btn:hover { background-color: #f5f0e6; }
     .filter-btn.active { background-color: #8b7355 !important; color: #ffffff !important; border-color: #8b7355 !important; }
@@ -137,11 +131,10 @@ async function renderListPage(context, baseUrl) {
         8px 100%, 8px calc(100% - 4px), 4px calc(100% - 4px), 4px calc(100% - 8px), 0 calc(100% - 8px)
       );
     }
-  </style>
-</head>
-<body class="font-sans">
-  <canvas id="sky-canvas"></canvas>
-  <div class="window-frame">
+  `
+  });
+
+  const body = `
   ${renderHeader('aircraft')}
 
   <!-- Hero -->
@@ -253,17 +246,9 @@ async function renderListPage(context, baseUrl) {
       });
       filterAircraft();
     }
-  </script>
-  </div>
-</body>
-</html>`;
+  </script>`;
 
-  return new Response(html, {
-    headers: {
-      'Content-Type': 'text/html; charset=utf-8',
-      'Cache-Control': 'public, max-age=300, stale-while-revalidate=600'
-    }
-  });
+  return htmlResponse(renderPage(head, body));
 }
 
 // === Detail Page ===
@@ -282,10 +267,7 @@ async function renderDetailPage(context, slug, baseUrl) {
   ).bind(slug).first();
 
   if (!aircraft) {
-    return new Response(renderErrorPage(baseUrl, 'Aircraft not found'), {
-      status: 404,
-      headers: { 'Content-Type': 'text/html; charset=utf-8' }
-    });
+    return htmlResponse(renderErrorPage(baseUrl, 'Aircraft not found'), 404);
   }
 
   // Fetch history
@@ -327,7 +309,7 @@ async function renderDetailPage(context, slug, baseUrl) {
     ORDER BY f.count DESC
   `).bind(slug).all();
 
-  const imageUrl = aircraft.image_url ? `${baseUrl}/images/aircraft-styled/${aircraft.slug}.webp` : null;
+  const imageUrl = aircraft.image_url ? `${PROD_BASE}/images/aircraft-styled/${aircraft.slug}.webp` : null;
   const rangeInMiles = kmToMiles(aircraft.range_km);
   const speedInMph = kmhToMph(aircraft.cruise_speed_kmh);
   const year = aircraft.first_flight ? aircraft.first_flight.split('-')[0] : '';
@@ -358,47 +340,23 @@ async function renderDetailPage(context, slug, baseUrl) {
     ]
   };
 
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": baseUrl
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "Aircraft",
-        "item": `${baseUrl}/aircraft`
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": aircraft.name,
-        "item": `${baseUrl}/aircraft/${slug}`
-      }
-    ]
-  };
-
   const multipleJsonLd = `
   <script type="application/ld+json">${JSON.stringify(productSchema)}</script>
-  <script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`;
+  ${renderBreadcrumbs([
+    { name: 'Home', path: '' },
+    { name: 'Aircraft', path: '/aircraft' },
+    { name: aircraft.name, path: `/aircraft/${slug}` }
+  ])}`;
 
-  const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  ${renderHead({
+  const head = renderHead({
     title: `${aircraft.name} — Specs & History | AirlinePlanes`,
     description: aircraft.description?.substring(0, 155) || `Learn about the ${aircraft.name} from ${aircraft.manufacturer}. Specs, history, and fun facts.`,
-    url: `${baseUrl}/aircraft/${slug}`,
+    url: `${PROD_BASE}/aircraft/${slug}`,
     image: imageUrl,
     jsonLd: null
-  })}
-  ${multipleJsonLd}
-  <style>
+  }, {
+    extraHead: multipleJsonLd,
+    extraStyles: `
     .pixel-border {
       border: none;
       box-shadow:
@@ -418,11 +376,10 @@ async function renderDetailPage(context, slug, baseUrl) {
         8px 100%, 8px calc(100% - 4px), 4px calc(100% - 4px), 4px calc(100% - 8px), 0 calc(100% - 8px)
       );
     }
-  </style>
-</head>
-<body class="font-sans">
-  <canvas id="sky-canvas"></canvas>
-  <div class="window-frame">
+  `
+  });
+
+  const body = `
   <!-- Hero Header -->
   <header class="relative">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 relative">
@@ -803,7 +760,7 @@ async function renderDetailPage(context, slug, baseUrl) {
                 ${s.source_type === 'manufacturer' ? 'M' : s.source_type === 'aviation_db' ? 'D' : 'N'}
               </span>
               <div>
-                <a href="${escapeHtml(s.source_url)}" target="_blank" rel="noopener" class="font-medium underline underline-offset-2 transition-colors" style="color: #8b7355;">
+                <a href="${escapeHtml(s.source_url)}" target="_blank" rel="nofollow noopener noreferrer" class="font-medium underline underline-offset-2 transition-colors" style="color: #8b7355;">
                   ${escapeHtml(s.source_name)}
                 </a>
                 ${s.notes ? `<p class="text-xs mt-0.5" style="color: #9a8b75;">${escapeHtml(s.notes)}</p>` : ''}
@@ -823,7 +780,7 @@ async function renderDetailPage(context, slug, baseUrl) {
     <div class="text-center py-6" style="border-top: 1px dashed #c9b896;">
       <p class="text-sm" style="color: #7a6b55;">
         Data sourced from
-        <a href="${escapeHtml(aircraft.source_url)}" target="_blank" rel="noopener" class="font-medium underline underline-offset-2 transition-colors" style="color: #8b7355;">
+        <a href="${escapeHtml(aircraft.source_url)}" target="_blank" rel="nofollow noopener noreferrer" class="font-medium underline underline-offset-2 transition-colors" style="color: #8b7355;">
           ${escapeHtml(new URL(aircraft.source_url).hostname)}
         </a>
       </p>
@@ -841,17 +798,9 @@ async function renderDetailPage(context, slug, baseUrl) {
     </div>
   </main>
 
-  ${renderFooter()}
-  </div>
-</body>
-</html>`;
+  ${renderFooter()}`;
 
-  return new Response(html, {
-    headers: {
-      'Content-Type': 'text/html; charset=utf-8',
-      'Cache-Control': 'public, max-age=300, stale-while-revalidate=600'
-    }
-  });
+  return htmlResponse(renderPage(head, body));
 }
 
 function renderHistorySection(grouped) {
@@ -958,18 +907,13 @@ function renderHistorySection(grouped) {
 }
 
 function renderErrorPage(baseUrl, message) {
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  ${renderHead({
+  const head = renderHead({
     title: 'Not Found | AirlinePlanes',
     description: message,
-    url: baseUrl
-  })}
-</head>
-<body class="font-sans">
-  <canvas id="sky-canvas"></canvas>
-  <div class="window-frame">
+    url: `${PROD_BASE}/aircraft`
+  }, { noindex: true });
+
+  const body = `
   ${renderHeader('aircraft')}
 
   <div class="max-w-5xl mx-auto px-4 py-20 text-center">
@@ -983,8 +927,7 @@ function renderErrorPage(baseUrl, message) {
     </a>
   </div>
 
-  ${renderFooter()}
-  </div>
-</body>
-</html>`;
+  ${renderFooter()}`;
+
+  return renderPage(head, body);
 }

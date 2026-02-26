@@ -4,6 +4,34 @@ Key decisions, insights, and lessons learned. Update this when making significan
 
 ---
 
+## 2026-02-23
+
+### SEO & Code Structure Overhaul — Adopted from new-directory
+
+**Problem:** Three SEO issues: (1) preview domain URLs (`airplane-directory.pages.dev`) could get indexed by Google, (2) canonical URLs pointed to whatever domain served the request instead of always `airlineplanes.com`, (3) every page manually constructed `<!DOCTYPE html>` boilerplate and `new Response()` objects.
+
+**Solution:** Centralized configuration, middleware for noindex, forced canonical URLs, and shared response/page helpers.
+
+**Key decisions:**
+
+- **Middleware for noindex** — `_middleware.js` compares `url.hostname` against `DOMAIN` constant. Non-matching hosts (preview, branch deploys) get `X-Robots-Tag: noindex, nofollow` header added to every response. This is the single most important SEO fix — prevents Google from indexing duplicate content on preview URLs.
+
+- **Canonical URL forced in renderHead** — Instead of trusting callers to pass the right URL, `renderHead()` now extracts the pathname from whatever URL is passed and rebuilds it with `PROD_BASE`. Defense in depth: even if a page passes `baseUrl` by accident, the canonical still points to production.
+
+- **renderPage wraps the boilerplate** — Every page had identical `<!DOCTYPE html>` + `<canvas id="sky-canvas">` + `<div class="window-frame">` wrapping. Now `renderPage(head, body)` handles it. Manufacturer pages previously lacked the `<div class="window-frame">` wrapper — now they get it automatically.
+
+- **renderBreadcrumbs replaces 5+ hand-built schemas** — Takes `[{name, path}]` and returns a `<script type="application/ld+json">` tag. Uses `PROD_BASE` internally so breadcrumb URLs always point to production.
+
+- **Dynamic robots.txt** — Static `public/robots.txt` replaced by `functions/robots.txt.js` that uses `PROD_BASE` for sitemap URL. Dynamic means it stays in sync with config changes.
+
+- **baseUrl still used for images** — Page templates still compute `baseUrl` from the request for `<img src>` attributes. Images need to load from the current domain (works on both preview and production). Only canonical/og:url/JSON-LD use `PROD_BASE`.
+
+- **Barrel export** — `functions/_shared.js` re-exports everything from config, layout, response, and breadcrumbs. Pages import from one place: `import { renderHead, renderPage, htmlResponse, PROD_BASE } from '../_shared.js'`.
+
+**Lesson:** SEO fixes (noindex, canonical, sitemap) are infrastructure that should be baked into shared modules, not scattered across individual pages. A single middleware file prevents indexing issues across all current and future routes.
+
+---
+
 ## 2026-02-11
 
 ### Image Skill Expanded — 6 to 12 Sources

@@ -4,6 +4,38 @@ What we shipped. Builder appends here after each feature.
 
 ---
 
+## 2026-02-23
+
+### SEO & Code Structure Overhaul
+
+**Added:**
+- **`functions/_shared/config.js`** — Centralized `SITE_NAME`, `DOMAIN`, `PROD_BASE` constants
+- **`functions/_shared/response.js`** — `renderPage()`, `htmlResponse()`, `jsonResponse()`, `errorResponse()` helpers
+- **`functions/_shared/breadcrumbs.js`** — Shared `renderBreadcrumbs()` generates BreadcrumbList JSON-LD from simple `[{name, path}]` arrays
+- **`functions/_shared.js`** — Barrel re-export for single-import convenience
+- **`functions/_middleware.js`** — Adds `X-Robots-Tag: noindex, nofollow` on non-production domains (prevents preview/branch URLs from being indexed)
+- **`functions/robots.txt.js`** — Dynamic server-rendered robots.txt using `PROD_BASE`
+- **API CORS headers** in `public/_headers` — `/api/*` gets `Access-Control-Allow-Origin: *`
+
+**Changed:**
+- **Canonical URLs forced to production** — `renderHead()` now extracts pathname from any URL and rebuilds with `PROD_BASE`. All canonical and og:url tags always point to `airlineplanes.com`, never preview domains
+- **`noindex` parameter** added to `renderHead()` options for future use
+- **All page files** converted from manual `<!DOCTYPE html>` + `<canvas>` + `<div class="window-frame">` wrapping to `renderPage(head, body)` + `htmlResponse()`
+- **All JSON-LD schemas** now use `PROD_BASE` instead of request-derived `baseUrl`
+- **All breadcrumb schemas** replaced with `renderBreadcrumbs()` — about, sources, aircraft detail, airlines detail, manufacturer detail
+- **Sitemap** now uses `PROD_BASE` instead of request-derived URL
+- **API endpoints** use `jsonResponse()` with built-in CORS headers
+- **Manufacturer pages** now wrapped in `<div class="window-frame">` (previously missing)
+
+**Removed:**
+- **`public/robots.txt`** — replaced by dynamic `functions/robots.txt.js`
+
+**Files created (6):** `_shared/config.js`, `_shared/response.js`, `_shared/breadcrumbs.js`, `_shared.js`, `_middleware.js`, `robots.txt.js`
+**Files modified (10):** `_shared/layout.js`, `index.js`, `about.js`, `sources.js`, `aircraft/[[slug]].js`, `airlines/[[slug]].js`, `manufacturer/[[slug]].js`, `sitemap.xml.js`, `api/aircraft/index.js`, `api/aircraft/[slug].js`
+**Files deleted (1):** `public/robots.txt`
+
+---
+
 ## 2026-02-11
 
 ### Extracted `/research-images` from `/research-discovery`

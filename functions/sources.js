@@ -1,11 +1,9 @@
 // GET /sources - Sources page styled as a pilot's flight logbook (SSR)
 import { escapeHtml } from './_shared/utils.js';
-import { renderHead, renderHeader, renderFooter } from './_shared/layout.js';
+import { renderHead, renderHeader, renderFooter, renderPage, htmlResponse, renderBreadcrumbs, PROD_BASE } from './_shared.js';
 
 export async function onRequestGet(context) {
-  const { env, request } = context;
-  const url = new URL(request.url);
-  const baseUrl = `${url.protocol}//${url.host}`;
+  const { env } = context;
 
   try {
     const [{ results: sources }, { results: aircraftCount }] = await Promise.all([
@@ -19,29 +17,15 @@ export async function onRequestGet(context) {
       env.DB.prepare('SELECT COUNT(DISTINCT slug) as count FROM aircraft').all()
     ]);
 
-    const html = renderSourcesPage(baseUrl, sources, aircraftCount[0]?.count || 0);
-
-    return new Response(html, {
-      headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-        'Cache-Control': 'public, max-age=300, stale-while-revalidate=600'
-      }
-    });
+    const html = renderSourcesPage(sources, aircraftCount[0]?.count || 0);
+    return htmlResponse(html);
   } catch (error) {
     console.error('Error loading sources page:', error);
-    return new Response('Error loading page', { status: 500 });
+    return htmlResponse('Error loading page', 500);
   }
 }
 
-function renderSourcesPage(baseUrl, sources, aircraftVerified) {
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": baseUrl },
-      { "@type": "ListItem", "position": 2, "name": "Sources", "item": `${baseUrl}/sources` }
-    ]
-  };
+function renderSourcesPage(sources, aircraftVerified) {
 
   // Group sources by type
   const typeMap = {
@@ -77,7 +61,7 @@ function renderSourcesPage(baseUrl, sources, aircraftVerified) {
                   <span class="pixel-text inline-flex items-center justify-center" style="font-size: 8px; color: #8b7355; width: 22px; height: 22px; border: 1px solid #c9b896;">${code}</span>
                 </td>
                 <td class="logbook-col px-3 py-2" style="color: #4a3f2f;">
-                  <a href="${escapeHtml(s.source_url)}" target="_blank" rel="noopener" class="hover:underline" style="font-family: Inter, system-ui, sans-serif;">${escapeHtml(s.source_name)}</a>
+                  <a href="${escapeHtml(s.source_url)}" target="_blank" rel="nofollow noopener noreferrer" class="hover:underline" style="font-family: Inter, system-ui, sans-serif;">${escapeHtml(s.source_name)}</a>
                 </td>
                 <td class="px-3 py-2 font-mono text-center" style="color: #4a3f2f; width: 60px;">${s.times_used}</td>
               </tr>`;
@@ -133,23 +117,20 @@ function renderSourcesPage(baseUrl, sources, aircraftVerified) {
     }
   `;
 
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  ${renderHead({
+  const head = renderHead({
     title: 'Sources — Pilot\'s Research Log | AirlinePlanes',
     description: 'Every aircraft specification on AirlinePlanes is verified against manufacturer data, aviation databases, and industry publications. See all our sources.',
-    url: `${baseUrl}/sources`,
+    url: `${PROD_BASE}/sources`,
     jsonLd: null
   }, {
     extraStyles,
-    extraHead: `<script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`
-  })}
-</head>
-<body class="font-sans">
-  <canvas id="sky-canvas"></canvas>
-  <div class="window-frame">
+    extraHead: renderBreadcrumbs([
+      { name: 'Home', path: '' },
+      { name: 'Sources', path: '/sources' }
+    ])
+  });
 
+  const body = `
   ${renderHeader('sources')}
 
   <!-- Content -->
@@ -195,9 +176,7 @@ function renderSourcesPage(baseUrl, sources, aircraftVerified) {
 
   </main>
 
-  ${renderFooter()}
+  ${renderFooter()}`;
 
-  </div>
-</body>
-</html>`;
+  return renderPage(head, body);
 }

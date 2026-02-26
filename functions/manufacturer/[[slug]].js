@@ -1,7 +1,7 @@
 // GET /manufacturer and GET /manufacturer/[slug] - Manufacturer list and detail pages (SSR)
 import { escapeHtml, formatNumber, kmToMiles, kmhToMph } from '../_shared/utils.js';
 import { MANUFACTURER_DATA } from '../_shared/constants.js';
-import { renderHead, renderHeader, renderFooter } from '../_shared/layout.js';
+import { renderHead, renderHeader, renderFooter, renderPage, htmlResponse, renderBreadcrumbs, PROD_BASE } from '../_shared.js';
 
 export async function onRequestGet(context) {
   const { env, request, params } = context;
@@ -16,10 +16,7 @@ export async function onRequestGet(context) {
     return renderDetailPage(context, slug, baseUrl);
   } catch (error) {
     console.error('Error:', error);
-    return new Response(renderErrorPage(baseUrl, 'Something went wrong'), {
-      status: 500,
-      headers: { 'Content-Type': 'text/html; charset=utf-8' }
-    });
+    return htmlResponse(renderErrorPage(baseUrl, 'Something went wrong'), 500);
   }
 }
 
@@ -93,13 +90,10 @@ async function renderListPage(context, baseUrl) {
   const totalAircraft = manufacturerStats.reduce((sum, m) => sum + m.aircraft_count, 0);
   const totalInProduction = manufacturerStats.reduce((sum, m) => sum + m.in_production, 0);
 
-  const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  ${renderHead({
+  const head = renderHead({
     title: 'Aircraft Manufacturers | AirlinePlanes',
     description: `Browse ${manufacturerStats.length} major aircraft manufacturers including Boeing, Airbus, Embraer, and Bombardier. See their complete aircraft lineups and specs.`,
-    url: `${baseUrl}/manufacturer`,
+    url: `${PROD_BASE}/manufacturer`,
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "ItemList",
@@ -114,23 +108,23 @@ async function renderListPage(context, baseUrl) {
           "item": {
             "@type": "Organization",
             "name": m.manufacturer,
-            "url": `${baseUrl}/manufacturer/${data?.slug || m.manufacturer.toLowerCase()}`
+            "url": `${PROD_BASE}/manufacturer/${data?.slug || m.manufacturer.toLowerCase()}`
           }
         };
       })
     }
-  })}
-  <style>
+  }, {
+    extraStyles: `
     .line-clamp-2 {
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-  </style>
-</head>
-<body class="bg-background text-slate-800 min-h-screen font-sans">
-  <canvas id="sky-canvas"></canvas>
+  `
+  });
+
+  const body = `
   ${renderHeader('manufacturers')}
 
   <!-- Hero -->
@@ -166,16 +160,9 @@ async function renderListPage(context, baseUrl) {
     </div>
   </main>
 
-  ${renderFooter()}
-</body>
-</html>`;
+  ${renderFooter()}`;
 
-  return new Response(html, {
-    headers: {
-      'Content-Type': 'text/html; charset=utf-8',
-      'Cache-Control': 'public, max-age=300, stale-while-revalidate=600'
-    }
-  });
+  return htmlResponse(renderPage(head, body));
 }
 
 // === Detail Page ===
@@ -186,10 +173,7 @@ async function renderDetailPage(context, slug, baseUrl) {
   // Get manufacturer data
   const manufacturerData = MANUFACTURER_DATA[slug];
   if (!manufacturerData) {
-    return new Response(renderErrorPage(baseUrl, 'Manufacturer not found'), {
-      status: 404,
-      headers: { 'Content-Type': 'text/html; charset=utf-8' }
-    });
+    return htmlResponse(renderErrorPage(baseUrl, 'Manufacturer not found'), 404);
   }
 
   // Get all aircraft for this manufacturer
@@ -200,10 +184,7 @@ async function renderDetailPage(context, slug, baseUrl) {
   `).bind(slug).all();
 
   if (aircraft.length === 0) {
-    return new Response(renderErrorPage(baseUrl, 'Manufacturer not found'), {
-      status: 404,
-      headers: { 'Content-Type': 'text/html; charset=utf-8' }
-    });
+    return htmlResponse(renderErrorPage(baseUrl, 'Manufacturer not found'), 404);
   }
 
   // Calculate stats
@@ -273,61 +254,37 @@ async function renderDetailPage(context, slug, baseUrl) {
       "itemOffered": {
         "@type": "Product",
         "name": a.name,
-        "url": `${baseUrl}/aircraft/${a.slug}`
+        "url": `${PROD_BASE}/aircraft/${a.slug}`
       }
     }))
   };
 
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": baseUrl
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "Manufacturers",
-        "item": `${baseUrl}/manufacturer`
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": manufacturerData.name,
-        "item": `${baseUrl}/manufacturer/${slug}`
-      }
-    ]
-  };
-
   const multipleJsonLd = `
   <script type="application/ld+json">${JSON.stringify(organizationSchema)}</script>
-  <script type="application/ld+json">${JSON.stringify(breadcrumbSchema)}</script>`;
+  ${renderBreadcrumbs([
+    { name: 'Home', path: '' },
+    { name: 'Manufacturers', path: '/manufacturer' },
+    { name: manufacturerData.name, path: `/manufacturer/${slug}` }
+  ])}`;
 
-  const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  ${renderHead({
+  const head = renderHead({
     title: `${manufacturerData.name} Aircraft | AirlinePlanes`,
     description: `Explore all ${aircraft.length} ${manufacturerData.name} aircraft. ${inProduction} in production, ${inService} in service. See specs, history, and details for each model.`,
-    url: `${baseUrl}/manufacturer/${slug}`,
+    url: `${PROD_BASE}/manufacturer/${slug}`,
     jsonLd: null
-  })}
-  ${multipleJsonLd}
-  <style>
+  }, {
+    extraHead: multipleJsonLd,
+    extraStyles: `
     .line-clamp-2 {
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-  </style>
-</head>
-<body class="bg-background text-slate-800 min-h-screen font-sans">
-  <canvas id="sky-canvas"></canvas>
+  `
+  });
+
+  const body = `
   ${renderHeader('manufacturers')}
 
   <!-- Hero -->
@@ -346,7 +303,7 @@ async function renderDetailPage(context, slug, baseUrl) {
           <p class="text-white/80 mt-2 drop-shadow">${escapeHtml(manufacturerData.headquarters)} ${manufacturerData.founded ? `· Founded ${manufacturerData.founded}` : ''}</p>
         </div>
         ${manufacturerData.website ? `
-        <a href="${escapeHtml(manufacturerData.website)}" target="_blank" rel="noopener"
+        <a href="${escapeHtml(manufacturerData.website)}" target="_blank" rel="nofollow noopener noreferrer"
            class="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-medium px-4 py-2 rounded-lg transition-all border border-white/30">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
@@ -405,30 +362,19 @@ async function renderDetailPage(context, slug, baseUrl) {
     </div>
   </main>
 
-  ${renderFooter()}
-</body>
-</html>`;
+  ${renderFooter()}`;
 
-  return new Response(html, {
-    headers: {
-      'Content-Type': 'text/html; charset=utf-8',
-      'Cache-Control': 'public, max-age=300, stale-while-revalidate=600'
-    }
-  });
+  return htmlResponse(renderPage(head, body));
 }
 
 function renderErrorPage(baseUrl, message) {
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  ${renderHead({
+  const head = renderHead({
     title: 'Not Found | AirlinePlanes',
     description: message,
-    url: baseUrl
-  })}
-</head>
-<body class="bg-background text-slate-800 min-h-screen font-sans">
-  <canvas id="sky-canvas"></canvas>
+    url: `${PROD_BASE}/manufacturer`
+  }, { noindex: true });
+
+  const body = `
   ${renderHeader('manufacturers')}
 
   <div class="max-w-5xl mx-auto px-4 py-20 text-center">
@@ -442,7 +388,7 @@ function renderErrorPage(baseUrl, message) {
     </a>
   </div>
 
-  ${renderFooter()}
-</body>
-</html>`;
+  ${renderFooter()}`;
+
+  return renderPage(head, body);
 }
